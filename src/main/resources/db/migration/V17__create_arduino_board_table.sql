@@ -1,0 +1,6 @@
+CREATE TABLE arduino_board(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);
