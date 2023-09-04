@@ -4,10 +4,7 @@ import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "container")
 public class Container {
