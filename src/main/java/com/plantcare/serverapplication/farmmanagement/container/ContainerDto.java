@@ -22,5 +22,7 @@ public class ContainerDto {
 
     private int plantId;
 
+    private int farmId;
+
     private List<Task> tasks;
 }
