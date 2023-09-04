@@ -1,7 +1,9 @@
 package com.plantcare.serverapplication.farmmanagement.plant;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PlantServiceImpl implements PlantService {
 
     private final PlantRepository plantRepository;
