@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.print.attribute.standard.MediaSize;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -34,12 +36,14 @@ public class Farm {
     private Sensor roomTemperatureAndHumidity;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
-    private List<Pump> pumps;
+    private List<Pump> pumps = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
-    private List<Sensor> sensors;
+    private List<Sensor> sensors = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "farm")
-    private List<Task> tasks;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
+    private List<Task> tasks = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
+    private List<Container> containers = new ArrayList<>();
 }
