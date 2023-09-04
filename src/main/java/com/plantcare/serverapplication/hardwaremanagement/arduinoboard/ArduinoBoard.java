@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -28,5 +29,5 @@ public class ArduinoBoard {
     private String status;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "arduinoBoard")
-    private Set<ArduinoSensorMapping> sensorMappings;
+    private Set<ArduinoSensorMapping> sensorMappings = new HashSet<>();
 }
