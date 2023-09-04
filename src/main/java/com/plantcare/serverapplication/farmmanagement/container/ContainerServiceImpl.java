@@ -1,48 +1,52 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
+import com.plantcare.serverapplication.farmmanagement.plant.Plant;
+import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 @Service
 public class ContainerServiceImpl implements ContainerService {
     private final ContainerRepository containerRepository;
+    private final ArduinoBoardRepository arduinoBoardRepository;
+    private final PlantRepository plantRepository;
     private final ModelMapper modelMapper;
 
-    public ContainerServiceImpl(ContainerRepository containerRepository, ModelMapper modelMapper) {
+    public ContainerServiceImpl(
+            ContainerRepository containerRepository,
+            ArduinoBoardRepository arduinoBoardRepository,
+            PlantRepository plantRepository,
+            ModelMapper modelMapper
+    ) {
         this.containerRepository = containerRepository;
+        this.arduinoBoardRepository = arduinoBoardRepository;
+        this.plantRepository = plantRepository;
         this.modelMapper = modelMapper;
     }
 
-    // fix
+    // fix add farm get by id later
     @Override
     public ContainerDto addContainer(ContainerDto containerDto) {
 
-        /*
-        // inject arduinoboard repository and plantid repository here
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
 
-        int arduinoBoardId = containerDto.getArduinoBoardId();
-        int plantId = containerDto.getPlantId();
+        Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
+
+        //Farm farm = this.farmRepository.findById(containerDto.getFarmId()).orElseThrow();
 
         Container newContainer = Container
                 .builder()
                 .name(containerDto.getName())
-                .arduinoBoard()
-                .plant()
+                .arduinoBoard(arduinoBoard)
+                .plant(plant)
+//                .farm()
                 .build();
-
-
 
         Container savedContainer = this.containerRepository.save(newContainer);
 
-        ContainerDto containerDto1 = this.mapToDto(savedContainer);
-
-
-        return containerDto1;
-
-
-
-         */
-
-        return new ContainerDto();
+        return this.mapToDto(savedContainer);
     }
 
     private ContainerDto mapToDto(Container container) {
