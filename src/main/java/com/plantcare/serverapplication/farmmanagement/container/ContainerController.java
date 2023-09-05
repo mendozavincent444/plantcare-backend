@@ -31,9 +31,9 @@ public class ContainerController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteContainerListById(@RequestBody List<Integer> containerIds, @PathVariable("id") int farmId) {
+    public ResponseEntity<String> deleteContainerListById(@RequestBody DeleteContainersDto deleteContainersDto, @PathVariable("id") int farmId) {
 
-        this.containerService.deleteContainerListById(containerIds, farmId);
+        this.containerService.deleteContainerListById(deleteContainersDto, farmId);
 
         return new ResponseEntity<>("All items deleted.", HttpStatus.OK);
     }
