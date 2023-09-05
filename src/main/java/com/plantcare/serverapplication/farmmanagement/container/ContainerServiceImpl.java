@@ -34,17 +34,14 @@ public class ContainerServiceImpl implements ContainerService {
         this.modelMapper = modelMapper;
     }
 
-    // fix add farm get by id later
     @Override
     public ContainerDto addContainer(ContainerDto containerDto) {
 
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
 
         Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
-        // fix also add to parent list of containers in farm entity
+
         Farm farm = this.farmRepository.findById(containerDto.getFarmId()).orElseThrow();
-
-
 
         Container newContainer = Container
                 .builder()
@@ -53,6 +50,8 @@ public class ContainerServiceImpl implements ContainerService {
                 .plant(plant)
                 .farm(farm)
                 .build();
+
+        farm.getContainers().add(newContainer);
 
         Container savedContainer = this.containerRepository.save(newContainer);
 
