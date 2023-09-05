@@ -25,10 +25,10 @@ public class Farm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "location")
+    @Column(name = "location", nullable = false)
     private String location;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
