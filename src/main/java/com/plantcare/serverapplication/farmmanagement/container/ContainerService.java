@@ -6,4 +6,6 @@ public interface ContainerService {
     ContainerDto addContainer(ContainerDto containerDto);
 
     List<ContainerDto> getAllContainersByFarmId(int farmId);
+
+    void deleteContainerListById(List<Integer> containerIds);
 }

@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,4 +30,14 @@ public class ContainerController {
 
         return new ResponseEntity<>(containersByFarm, HttpStatus.OK);
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteContainerListById(@RequestBody List<Integer> containerIds) {
+
+        this.containerService.deleteContainerListById(containerIds);
+
+        return new ResponseEntity<>("All items deleted.", HttpStatus.OK);
+    }
+
+
 }

@@ -75,6 +75,11 @@ public class ContainerServiceImpl implements ContainerService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteContainerListById(List<Integer> containerIds) {
+        this.containerRepository.deleteAllById(containerIds);
+    }
+
     private ContainerDto mapToDto(Container container) {
         return this.modelMapper.map(container, ContainerDto.class);
     }
