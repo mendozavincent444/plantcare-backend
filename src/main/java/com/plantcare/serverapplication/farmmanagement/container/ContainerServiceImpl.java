@@ -90,6 +90,24 @@ public class ContainerServiceImpl implements ContainerService {
         this.containerRepository.deleteAllById(containerIds);
     }
 
+    @Override
+    public ContainerDto updateContainer(ContainerDto containerDto, int containerId) {
+
+        Container container = this.containerRepository.findById(containerId).orElseThrow();
+
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
+
+        Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
+
+        container.setName(containerDto.getName());
+        container.setArduinoBoard(arduinoBoard);
+        container.setPlant(plant);
+
+        Container updatedContainer = this.containerRepository.save(container);
+
+        return this.mapToDto(updatedContainer);
+    }
+
     private ContainerDto mapToDto(Container container) {
         return this.modelMapper.map(container, ContainerDto.class);
     }

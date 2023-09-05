@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
 import org.apache.coyote.Response;
+import org.hibernate.event.spi.PostDeleteEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,13 @@ public class ContainerController {
         this.containerService.deleteContainerListById(containerIds, farmId);
 
         return new ResponseEntity<>("All items deleted.", HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<ContainerDto> updateContainer(@RequestBody ContainerDto containerDto, @PathVariable("id") int containerId) {
+        ContainerDto updatedContainer = this.containerService.updateContainer(containerDto, containerId);
+
+        return new ResponseEntity<>(updatedContainer, HttpStatus.OK);
     }
 
 
