@@ -31,10 +31,10 @@ public class ContainerController {
         return new ResponseEntity<>(containersByFarm, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<String> deleteContainerListById(@RequestBody List<Integer> containerIds) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteContainerListById(@RequestBody List<Integer> containerIds, @PathVariable("id") int farmId) {
 
-        this.containerService.deleteContainerListById(containerIds);
+        this.containerService.deleteContainerListById(containerIds, farmId);
 
         return new ResponseEntity<>("All items deleted.", HttpStatus.OK);
     }
