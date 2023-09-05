@@ -31,7 +31,7 @@ public class Farm {
     @Column(name = "location", nullable = false)
     private String location;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "room_temp_and_humidity_sensor_id")
     private Sensor roomTemperatureAndHumidity;
 
