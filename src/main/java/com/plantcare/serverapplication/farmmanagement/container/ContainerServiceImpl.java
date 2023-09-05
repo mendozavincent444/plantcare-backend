@@ -76,13 +76,15 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public void deleteContainerListById(List<Integer> containerIds, int farmId) {
+    public void deleteContainerListById(DeleteContainersDto deleteContainersDto, int farmId) {
+
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        List<Integer> containerIds = deleteContainersDto.getContainerIds();
 
         containerIds.forEach((containerId) -> {
 
             Container container = this.containerRepository.findById(containerId).orElseThrow();
-
-            Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
             farm.getContainers().remove(container);
         });
