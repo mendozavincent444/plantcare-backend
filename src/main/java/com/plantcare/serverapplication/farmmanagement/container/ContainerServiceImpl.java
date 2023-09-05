@@ -8,6 +8,10 @@ import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBo
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ContainerServiceImpl implements ContainerService {
     private final ContainerRepository containerRepository;
@@ -37,8 +41,10 @@ public class ContainerServiceImpl implements ContainerService {
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
 
         Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
-
+        // fix also add to parent list of containers in farm entity
         Farm farm = this.farmRepository.findById(containerDto.getFarmId()).orElseThrow();
+
+
 
         Container newContainer = Container
                 .builder()
@@ -51,6 +57,23 @@ public class ContainerServiceImpl implements ContainerService {
         Container savedContainer = this.containerRepository.save(newContainer);
 
         return this.mapToDto(savedContainer);
+    }
+
+    @Override
+    public List<ContainerDto> getAllContainersByFarmId(int farmId) {
+        List<Container> containers = this.containerRepository.findAllByFarmId(farmId);
+
+
+        return containers.stream().map((container) -> {
+            return ContainerDto
+                    .builder()
+                    .id(container.getId())
+                    .name(container.getName())
+                    .arduinoBoardId(container.getArduinoBoard().getId())
+                    .plantId(container.getPlant().getId())
+                    .farmId(container.getFarm().getId())
+                    .build();
+        }).collect(Collectors.toList());
     }
 
     private ContainerDto mapToDto(Container container) {
