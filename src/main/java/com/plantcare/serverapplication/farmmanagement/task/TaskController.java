@@ -15,13 +15,13 @@ public class TaskController {
     }
 
     @PostMapping("/byFarm/{farmId}/byContainer/{containerId}")
-    public ResponseEntity<TaskOperationDto> addTasks(
+    public ResponseEntity<String> addTasks(
             @RequestBody TaskOperationDto taskOperationsDto,
             @PathVariable int containerId,
             @PathVariable int farmId
     ) {
-        TaskOperationDto savedTaskOperationDto = this.taskService.addTasks(taskOperationsDto, containerId, farmId);
+        this.taskService.addTasks(taskOperationsDto, containerId, farmId);
 
-        return new ResponseEntity<>(savedTaskOperationDto, HttpStatus.CREATED);
+        return new ResponseEntity<>("Tasks successfully added.", HttpStatus.CREATED);
     }
 }
