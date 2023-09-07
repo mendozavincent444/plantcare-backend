@@ -34,7 +34,7 @@ public class Container {
     private Plant plant;
 
     // update ERD
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 
