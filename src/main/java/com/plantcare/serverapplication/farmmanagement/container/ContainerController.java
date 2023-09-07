@@ -17,11 +17,11 @@ public class ContainerController {
     }
 
     @PostMapping
-    public ResponseEntity<ContainerDto> addContainer(@RequestBody ContainerDto containerDto) {
+    public ResponseEntity<String> addContainer(@RequestBody ContainerDto containerDto) {
 
-        ContainerDto savedContainer = this.containerService.addContainer(containerDto);
+        this.containerService.addContainer(containerDto);
 
-        return new ResponseEntity<>(savedContainer, HttpStatus.CREATED);
+        return new ResponseEntity<>("Container saved successfully.", HttpStatus.CREATED);
     }
     @GetMapping("/byFarm/{id}")
     public ResponseEntity<List<ContainerDto>> getAllContainersByFarmId(@PathVariable("id") int farmId) {
