@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/tasks")
 public class TaskController {
@@ -35,5 +37,12 @@ public class TaskController {
         this.taskService.deleteTasks(deleteTasksDto, containerId, farmId);
 
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
+    }
+    @GetMapping("/byFarm/{farmId}")
+    public ResponseEntity<List<TaskDto>> getAllTasksByFarmId(int farmId) {
+
+        List<TaskDto> tasks = this.taskService.getTasksByFarmId(farmId);
+
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 }
