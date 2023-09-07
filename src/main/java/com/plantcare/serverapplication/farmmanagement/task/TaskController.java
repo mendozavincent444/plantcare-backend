@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
+import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,5 +24,16 @@ public class TaskController {
         this.taskService.addTasks(taskOperationsDto, containerId, farmId);
 
         return new ResponseEntity<>("Tasks successfully added.", HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/byFarm/{farmId}/byContainer/{containerId}")
+    public ResponseEntity<String> deleteTasks(
+            @RequestBody DeleteTasksDto deleteTasksDto,
+            @PathVariable int containerId,
+            @PathVariable int farmId
+    ) {
+        this.taskService.deleteTasks(deleteTasksDto, containerId, farmId);
+
+        return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }
 }
