@@ -33,11 +33,11 @@ public class Task {
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 }
