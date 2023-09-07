@@ -4,16 +4,15 @@ import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "task")
 public class Task {
@@ -31,14 +30,14 @@ public class Task {
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "plant_id")
+    @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
 
-    @ManyToOne
-    @JoinColumn(name = "container_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 
-    @ManyToOne
-    @JoinColumn(name = "farm_id")
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 }
