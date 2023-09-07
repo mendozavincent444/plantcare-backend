@@ -109,18 +109,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDto> getTasksByContainerId(int containerId) {
         List<Task> tasks = this.taskRepository.findAllByContainerId(containerId);
 
-        return tasks.stream().map((task) -> {
-            return TaskDto
-                    .builder()
-                    .id(task.getId())
-                    .datePlanted(task.getDatePlanted())
-                    .harvestDate(task.getDatePlanted())
-                    .status(task.getStatus())
-                    .plantId(task.getPlant().getId())
-                    .containerId(task.getContainer().getId())
-                    .farmId(task.getFarm().getId())
-                    .build();
-        }).collect(Collectors.toList());
+        return tasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
     }
 
     @Override
@@ -143,20 +132,15 @@ public class TaskServiceImpl implements TaskService {
             newContainer.getTasks().add(task);
             this.containerRepository.save(newContainer);
 
-            return TaskDto
-                    .builder()
-                    .id(task.getId())
-                    .datePlanted(task.getDatePlanted())
-                    .harvestDate(task.getDatePlanted())
-                    .status(task.getStatus())
-                    .plantId(task.getPlant().getId())
-                    .containerId(task.getContainer().getId())
-                    .farmId(task.getFarm().getId())
-                    .build();
+            return convertToDto(task);
         }
 
         this.taskRepository.save(task);
 
+        return convertToDto(task);
+    }
+
+    private TaskDto convertToDto(Task task) {
         return TaskDto
                 .builder()
                 .id(task.getId())
