@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
     List<Task> findAllByFarmId(int farmId);
+    List<Task> findAllByContainerId(int containerId);
 }

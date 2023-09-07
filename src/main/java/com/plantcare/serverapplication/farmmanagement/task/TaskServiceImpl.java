@@ -104,4 +104,22 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public List<TaskDto> getTasksByContainerId(int containerId) {
+        List<Task> tasks = this.taskRepository.findAllByContainerId(containerId);
+
+        return tasks.stream().map((task) -> {
+            return TaskDto
+                    .builder()
+                    .id(task.getId())
+                    .datePlanted(task.getDatePlanted())
+                    .harvestDate(task.getDatePlanted())
+                    .status(task.getStatus())
+                    .plantId(task.getPlant().getId())
+                    .containerId(task.getContainer().getId())
+                    .farmId(task.getFarm().getId())
+                    .build();
+        }).collect(Collectors.toList());
+    }
 }

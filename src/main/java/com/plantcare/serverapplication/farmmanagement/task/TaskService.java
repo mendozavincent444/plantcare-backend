@@ -9,4 +9,6 @@ public interface TaskService {
     void deleteTasks(DeleteTasksDto deleteTasksDto, int containerId, int farmId);
 
     List<TaskDto> getTasksByFarmId(int farmId);
+
+    List<TaskDto> getTasksByContainerId(int containerId);
 }

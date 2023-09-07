@@ -45,4 +45,12 @@ public class TaskController {
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
+
+    @GetMapping("/byFarm/{containerId}")
+    public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(int containerId) {
+
+        List<TaskDto> tasks = this.taskService.getTasksByContainerId(containerId);
+
+        return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
 }
