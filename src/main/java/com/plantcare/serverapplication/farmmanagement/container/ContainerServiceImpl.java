@@ -57,14 +57,7 @@ public class ContainerServiceImpl implements ContainerService {
 
         newContainer = this.containerRepository.findById(newContainer.getId()).orElseThrow();
 
-        return ContainerDto
-                .builder()
-                .id(newContainer.getId())
-                .name(newContainer.getName())
-                .arduinoBoardId(newContainer.getArduinoBoard().getId())
-                .plantId(newContainer.getPlant().getId())
-                .farmId(newContainer.getFarm().getId())
-                .build();
+        return convertToDto(newContainer);
     }
 
     @Override
@@ -72,16 +65,7 @@ public class ContainerServiceImpl implements ContainerService {
         List<Container> containers = this.containerRepository.findAllByFarmId(farmId);
 
 
-        return containers.stream().map((container) -> {
-            return ContainerDto
-                    .builder()
-                    .id(container.getId())
-                    .name(container.getName())
-                    .arduinoBoardId(container.getArduinoBoard().getId())
-                    .plantId(container.getPlant().getId())
-                    .farmId(container.getFarm().getId())
-                    .build();
-        }).collect(Collectors.toList());
+        return containers.stream().map((container) -> convertToDto(container)).collect(Collectors.toList());
     }
 
     @Override
@@ -123,7 +107,15 @@ public class ContainerServiceImpl implements ContainerService {
         return this.modelMapper.map(container, ContainerDto.class);
     }
 
-    private Container mapToEntity(ContainerDto containerDto) {
-        return this.modelMapper.map(containerDto, Container.class);
+    private ContainerDto convertToDto(Container container) {
+        return ContainerDto
+                .builder()
+                .id(container.getId())
+                .name(container.getName())
+                .arduinoBoardId(container.getArduinoBoard().getId())
+                .plantId(container.getPlant().getId())
+                .farmId(container.getFarm().getId())
+                .build();
     }
+
 }
