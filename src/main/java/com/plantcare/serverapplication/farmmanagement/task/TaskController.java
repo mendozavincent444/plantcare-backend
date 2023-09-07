@@ -46,11 +46,22 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @GetMapping("/byFarm/{containerId}")
+    @GetMapping("/byContainer/{containerId}")
     public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(int containerId) {
 
         List<TaskDto> tasks = this.taskService.getTasksByContainerId(containerId);
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
+    }
+
+    @PutMapping("{taskId}/containers/{containerId}")
+    public ResponseEntity<TaskDto> updateTask(
+            @RequestBody TaskDto taskDto,
+            @PathVariable int taskId,
+            @PathVariable int containerId
+    ) {
+        TaskDto updatedTask = this.taskService.updateTask(taskDto, taskId, containerId);
+
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 }

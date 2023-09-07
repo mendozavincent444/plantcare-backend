@@ -122,4 +122,50 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public TaskDto updateTask(TaskDto taskDto, int taskToUpdateId, int containerId) {
+        Task task = this.taskRepository.findById(taskToUpdateId).orElseThrow();
+
+        Container newContainer = this.containerRepository.findById(taskDto.getContainerId()).orElseThrow();
+
+        Plant plant = this.plantRepository.findById(taskDto.getPlantId()).orElseThrow();
+
+        task.setPlant(plant);
+
+
+        if (task.getContainer() != newContainer) {
+
+            Container oldContainer = this.containerRepository.findById(containerId).orElseThrow();
+            oldContainer.getTasks().remove(task);
+
+            task.setContainer(newContainer);
+            newContainer.getTasks().add(task);
+            this.containerRepository.save(newContainer);
+
+            return TaskDto
+                    .builder()
+                    .id(task.getId())
+                    .datePlanted(task.getDatePlanted())
+                    .harvestDate(task.getDatePlanted())
+                    .status(task.getStatus())
+                    .plantId(task.getPlant().getId())
+                    .containerId(task.getContainer().getId())
+                    .farmId(task.getFarm().getId())
+                    .build();
+        }
+
+        this.taskRepository.save(task);
+
+        return TaskDto
+                .builder()
+                .id(task.getId())
+                .datePlanted(task.getDatePlanted())
+                .harvestDate(task.getDatePlanted())
+                .status(task.getStatus())
+                .plantId(task.getPlant().getId())
+                .containerId(task.getContainer().getId())
+                .farmId(task.getFarm().getId())
+                .build();
+    }
 }

@@ -11,4 +11,6 @@ public interface TaskService {
     List<TaskDto> getTasksByFarmId(int farmId);
 
     List<TaskDto> getTasksByContainerId(int containerId);
+
+    TaskDto updateTask(TaskDto taskDto, int taskId, int containerId);
 }
