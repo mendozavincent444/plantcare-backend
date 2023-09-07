@@ -6,6 +6,7 @@ import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -65,5 +66,24 @@ public class TaskServiceImpl implements TaskService {
 
         this.containerRepository.save(container);
         this.farmRepository.save(farm);
+    }
+
+    @Override
+    public void deleteTasks(DeleteTasksDto deleteTasksDto, int containerId, int farmId) {
+        List<Integer> taskIds = deleteTasksDto.getTaskIds();
+
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        Container container = this.containerRepository.findById(containerId).orElseThrow();
+
+        taskIds.forEach((taskId) -> {
+
+            Task task = this.taskRepository.findById(taskId).orElseThrow();
+
+            farm.getTasks().remove(task);
+            container.getTasks().remove(task);
+        });
+
+        this.taskRepository.deleteAllById(taskIds);
     }
 }
