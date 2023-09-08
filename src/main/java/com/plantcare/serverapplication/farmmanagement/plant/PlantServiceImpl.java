@@ -24,7 +24,9 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public PlantDto getPlantById(int plantId) {
+    public PlantDto getPlantById(int farmId, int plantId) {
+
+        // check if plant id is from a farm user has access to
 
         // fix handle exceptions
         Plant plant = this.plantRepository.findById(plantId).orElseThrow();

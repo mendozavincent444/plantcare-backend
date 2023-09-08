@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface PlantService {
 
-    PlantDto getPlantById(int plantId);
+    PlantDto getPlantById(int farmId, int plantId);
 
     List<PlantDto> getAllPlantsByFarmId(int farmId);
 
