@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.plant;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,4 +38,8 @@ public class Plant {
 
     @Column(name = "days_to_maturity", nullable = false, length = 20)
     private String daysToMaturity;
+
+    @ManyToOne
+    @JoinColumn(name = "farm_id", nullable = false)
+    private Farm farm;
 }
