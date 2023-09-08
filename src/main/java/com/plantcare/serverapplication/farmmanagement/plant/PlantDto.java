@@ -26,4 +26,5 @@ public class PlantDto {
 
     @Size(max = 20)
     private String daysToMaturity;
+    private int farmId;
 }
