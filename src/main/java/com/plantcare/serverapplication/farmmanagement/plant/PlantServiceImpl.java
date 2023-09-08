@@ -27,8 +27,8 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public List<PlantDto> getAllPlants() {
-        List<Plant> plants = this.plantRepository.findAll();
+    public List<PlantDto> getAllPlantsByFarmId(int farmId) {
+        List<Plant> plants = this.plantRepository.findAllByFarmId(farmId);
 
         return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
     }
