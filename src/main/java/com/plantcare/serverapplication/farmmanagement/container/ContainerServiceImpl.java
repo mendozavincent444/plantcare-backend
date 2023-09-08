@@ -19,20 +19,17 @@ public class ContainerServiceImpl implements ContainerService {
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final PlantRepository plantRepository;
     private final FarmRepository farmRepository;
-    private final ModelMapper modelMapper;
 
     public ContainerServiceImpl(
             ContainerRepository containerRepository,
             ArduinoBoardRepository arduinoBoardRepository,
             PlantRepository plantRepository,
-            FarmRepository farmRepository,
-            ModelMapper modelMapper
+            FarmRepository farmRepository
     ) {
         this.containerRepository = containerRepository;
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.plantRepository = plantRepository;
         this.farmRepository = farmRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -99,11 +96,7 @@ public class ContainerServiceImpl implements ContainerService {
 
         Container updatedContainer = this.containerRepository.save(container);
 
-        return this.mapToDto(updatedContainer);
-    }
-
-    private ContainerDto mapToDto(Container container) {
-        return this.modelMapper.map(container, ContainerDto.class);
+        return this.convertToDto(updatedContainer);
     }
 
     private ContainerDto convertToDto(Container container) {
