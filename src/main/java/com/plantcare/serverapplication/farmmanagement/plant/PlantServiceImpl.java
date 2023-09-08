@@ -3,6 +3,9 @@ package com.plantcare.serverapplication.farmmanagement.plant;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PlantServiceImpl implements PlantService {
 
@@ -21,6 +24,13 @@ public class PlantServiceImpl implements PlantService {
         Plant plant = this.plantRepository.findById(plantId).orElseThrow();
 
         return this.mapToDto(plant);
+    }
+
+    @Override
+    public List<PlantDto> getAllPlants() {
+        List<Plant> plants = this.plantRepository.findAll();
+
+        return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
     }
 
 
