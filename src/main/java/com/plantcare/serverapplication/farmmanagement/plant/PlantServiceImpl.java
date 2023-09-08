@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.plant;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
+import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +12,14 @@ import java.util.stream.Collectors;
 public class PlantServiceImpl implements PlantService {
 
     private final PlantRepository plantRepository;
+    private final FarmRepository farmRepository;
     private final ModelMapper modelMapper;
 
-    public PlantServiceImpl(PlantRepository plantRepository, ModelMapper modelMapper) {
+    public PlantServiceImpl(PlantRepository plantRepository,
+                            ModelMapper modelMapper,
+                            FarmRepository farmRepository) {
         this.plantRepository = plantRepository;
+        this.farmRepository = farmRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -31,6 +37,17 @@ public class PlantServiceImpl implements PlantService {
         List<Plant> plants = this.plantRepository.findAllByFarmId(farmId);
 
         return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void deletePlantById(int farmId, int plantId) {
+
+        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        farm.getPlants().remove(plant);
+
+        this.plantRepository.delete(plant);
     }
 
 
