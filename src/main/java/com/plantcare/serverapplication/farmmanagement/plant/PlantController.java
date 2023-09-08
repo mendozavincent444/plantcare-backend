@@ -40,4 +40,16 @@ public class PlantController {
 
         return new ResponseEntity<>("Plant successfully deleted.", HttpStatus.OK);
     }
+
+    @PutMapping("/{plantId}/byFarm/{farmId}")
+    public ResponseEntity<PlantDto> updatePlant(
+            @RequestBody PlantDto plantDto,
+            @PathVariable int plantId,
+            @PathVariable int farmId
+    ) {
+
+        PlantDto updatedPlant = this.plantService.updatePlant(plantDto, farmId, plantId);
+
+        return new ResponseEntity<>(updatedPlant, HttpStatus.OK);
+    }
 }
