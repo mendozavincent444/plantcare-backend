@@ -71,12 +71,9 @@ public class ContainerServiceImpl implements ContainerService {
 
         List<Integer> containerIds = deleteContainersDto.getContainerIds();
 
-        containerIds.forEach((containerId) -> {
+        List<Container> containers = this.containerRepository.findAllById(containerIds);
 
-            Container container = this.containerRepository.findById(containerId).orElseThrow();
-
-            farm.getContainers().remove(container);
-        });
+        farm.getContainers().removeAll(containers);
 
         this.containerRepository.deleteAllById(containerIds);
     }
