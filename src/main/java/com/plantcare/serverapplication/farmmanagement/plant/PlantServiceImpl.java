@@ -76,6 +76,26 @@ public class PlantServiceImpl implements PlantService {
         this.plantRepository.delete(plant);
     }
 
+    @Override
+    public PlantDto updatePlant(PlantDto plantDto, int farmId, int plantId) {
+
+        // check if user is authorized to update the plant
+        //Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+
+        plant.setName(plantDto.getName());
+        plant.setMaximumEc(plantDto.getMaximumEc());
+        plant.setMaximumPh(plantDto.getMaximumPh());
+        plant.setMinimumEc(plantDto.getMinimumEc());
+        plant.setMinimumPh(plantDto.getMinimumPh());
+        plant.setDaysToMaturity(plantDto.getDaysToMaturity());
+
+        Plant updatedPlant = this.plantRepository.save(plant);
+
+        return this.convertToDto(updatedPlant);
+    }
+
 
     private PlantDto mapToDto(Plant plant) {
         return this.modelMapper.map(plant, PlantDto.class);

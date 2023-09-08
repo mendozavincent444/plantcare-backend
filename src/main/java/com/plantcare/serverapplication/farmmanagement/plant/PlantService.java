@@ -11,4 +11,6 @@ public interface PlantService {
     List<PlantDto> getAllPlantsByFarmId(int farmId);
 
     void deletePlantById(int farmId, int plantId);
+
+    PlantDto updatePlant(PlantDto plantDto, int farmId, int plantId);
 }
