@@ -6,5 +6,5 @@ public interface PlantService {
 
     PlantDto getPlantById(int plantId);
 
-    List<PlantDto> getAllPlants();
+    List<PlantDto> getAllPlantsByFarmId(int farmId);
 }

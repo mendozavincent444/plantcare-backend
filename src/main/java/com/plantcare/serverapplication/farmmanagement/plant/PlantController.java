@@ -24,9 +24,9 @@ public class PlantController {
 
         return ResponseEntity.ok(this.plantService.getPlantById(plantId));
     }
-    @GetMapping
-    public ResponseEntity<List<PlantDto>> getAllPlants() {
-        List<PlantDto> plants = this.plantService.getAllPlants();
+    @GetMapping("/byFarm/{farmId}")
+    public ResponseEntity<List<PlantDto>> getAllPlantsByFarmId(@PathVariable int farmId) {
+        List<PlantDto> plants = this.plantService.getAllPlantsByFarmId(farmId);
 
         return new ResponseEntity<>(plants, HttpStatus.OK);
     }
