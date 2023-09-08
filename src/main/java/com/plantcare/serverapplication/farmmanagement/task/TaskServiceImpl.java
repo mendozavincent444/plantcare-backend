@@ -71,13 +71,10 @@ public class TaskServiceImpl implements TaskService {
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
 
-        taskIds.forEach((taskId) -> {
+        List<Task> tasks = this.taskRepository.findAllById(taskIds);
 
-            Task task = this.taskRepository.findById(taskId).orElseThrow();
-
-            farm.getTasks().remove(task);
-            container.getTasks().remove(task);
-        });
+        farm.getTasks().removeAll(tasks);
+        container.getTasks().removeAll(tasks);
 
         this.taskRepository.deleteAllById(taskIds);
     }
