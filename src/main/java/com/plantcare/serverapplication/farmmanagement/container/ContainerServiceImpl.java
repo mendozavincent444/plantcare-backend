@@ -6,6 +6,7 @@ import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +54,7 @@ public class ContainerServiceImpl implements ContainerService {
 
         farm.getContainers().add(newContainer);
 
-        this.farmRepository.save(farm);
-
-        newContainer = this.containerRepository.findById(newContainer.getId()).orElseThrow();
+        newContainer = this.containerRepository.saveAndFlush(newContainer);
 
         return convertToDto(newContainer);
     }
