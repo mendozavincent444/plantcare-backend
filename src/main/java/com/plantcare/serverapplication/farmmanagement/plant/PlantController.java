@@ -2,10 +2,7 @@ package com.plantcare.serverapplication.farmmanagement.plant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +26,11 @@ public class PlantController {
         List<PlantDto> plants = this.plantService.getAllPlantsByFarmId(farmId);
 
         return new ResponseEntity<>(plants, HttpStatus.OK);
+    }
+    @DeleteMapping("/{plantId}/byFarm/{farmId}")
+    public ResponseEntity<String> deletePlantById(@PathVariable int plantId, @PathVariable int farmId) {
+        this.plantService.deletePlantById(farmId, plantId);
+
+        return new ResponseEntity<>("Plant successfully deleted.", HttpStatus.OK);
     }
 }
