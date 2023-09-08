@@ -24,6 +24,30 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
+    public PlantDto addPlant(PlantDto plantDto, int farmId) {
+
+        // check if user has access to farm
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        Plant plant = Plant
+                .builder()
+                .name(plantDto.getName())
+                .maximumEc(plantDto.getMaximumEc())
+                .maximumPh(plantDto.getMaximumPh())
+                .minimumEc(plantDto.getMinimumEc())
+                .maximumPh(plantDto.getMaximumPh())
+                .daysToMaturity(plantDto.getDaysToMaturity())
+                .farm(farm)
+                .build();
+
+        farm.getPlants().add(plant);
+
+        Plant savedPlant = this.plantRepository.saveAndFlush(plant);
+
+        return this.convertToDto(savedPlant);
+    }
+
+    @Override
     public PlantDto getPlantById(int farmId, int plantId) {
 
         // check if plant id is from a farm user has access to
@@ -59,5 +83,19 @@ public class PlantServiceImpl implements PlantService {
 
     private Plant mapToEntity(PlantDto plantDto) {
         return this.modelMapper.map(plantDto, Plant.class);
+    }
+
+    private PlantDto convertToDto(Plant plant) {
+        return PlantDto
+                .builder()
+                .id(plant.getId())
+                .name(plant.getName())
+                .maximumEc(plant.getMaximumEc())
+                .maximumPh(plant.getMaximumPh())
+                .minimumEc(plant.getMinimumEc())
+                .maximumPh(plant.getMaximumPh())
+                .daysToMaturity(plant.getDaysToMaturity())
+                .farmId(plant.getFarm().getId())
+                .build();
     }
 }

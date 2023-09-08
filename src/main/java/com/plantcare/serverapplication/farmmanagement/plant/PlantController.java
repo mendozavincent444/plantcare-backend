@@ -16,8 +16,15 @@ public class PlantController {
         this.plantService = plantService;
     }
 
+    @PostMapping("/byFarm/{farmId}")
+    public ResponseEntity<PlantDto> addPlant(@RequestBody PlantDto plantDto, @PathVariable int farmId) {
+
+        PlantDto savedPlant = this.plantService.addPlant(plantDto, farmId);
+
+        return new ResponseEntity<>(savedPlant, HttpStatus.OK);
+    }
     @GetMapping("/{plantId}/byFarm/{farmId}")
-    public ResponseEntity<PlantDto> getPlantById(@PathVariable("plantId") int plantId, @PathVariable("farmId") int farmId) {
+    public ResponseEntity<PlantDto> getPlantById(@PathVariable int plantId, @PathVariable int farmId) {
 
         return ResponseEntity.ok(this.plantService.getPlantById(farmId, plantId));
     }
