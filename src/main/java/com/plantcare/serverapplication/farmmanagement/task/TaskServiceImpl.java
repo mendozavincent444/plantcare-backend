@@ -18,20 +18,17 @@ public class TaskServiceImpl implements TaskService {
     private final PlantRepository plantRepository;
     private final ContainerRepository containerRepository;
     private final FarmRepository farmRepository;
-    private final ModelMapper modelMapper;
 
     public TaskServiceImpl(
             TaskRepository taskRepository,
             PlantRepository plantRepository,
             ContainerRepository containerRepository,
-            FarmRepository farmRepository,
-            ModelMapper modelMapper
+            FarmRepository farmRepository
     ) {
         this.taskRepository = taskRepository;
         this.plantRepository = plantRepository;
         this.containerRepository = containerRepository;
         this.farmRepository = farmRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
