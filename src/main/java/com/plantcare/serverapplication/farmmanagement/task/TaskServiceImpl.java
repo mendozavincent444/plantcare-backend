@@ -115,9 +115,6 @@ public class TaskServiceImpl implements TaskService {
 
             task.setContainer(newContainer);
             newContainer.getTasks().add(task);
-            this.containerRepository.save(newContainer);
-
-            return convertToDto(task);
         }
 
         this.taskRepository.save(task);
