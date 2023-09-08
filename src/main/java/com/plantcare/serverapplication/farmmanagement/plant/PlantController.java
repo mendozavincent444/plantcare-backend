@@ -16,10 +16,10 @@ public class PlantController {
         this.plantService = plantService;
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<PlantDto> getPlantById(@PathVariable("id") int plantId) {
+    @GetMapping("/{plantId}/byFarm/{farmId}")
+    public ResponseEntity<PlantDto> getPlantById(@PathVariable("plantId") int plantId, @PathVariable("farmId") int farmId) {
 
-        return ResponseEntity.ok(this.plantService.getPlantById(plantId));
+        return ResponseEntity.ok(this.plantService.getPlantById(farmId, plantId));
     }
     @GetMapping("/byFarm/{farmId}")
     public ResponseEntity<List<PlantDto>> getAllPlantsByFarmId(@PathVariable int farmId) {
