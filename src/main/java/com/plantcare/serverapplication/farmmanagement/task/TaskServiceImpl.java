@@ -31,17 +31,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> addTasks(TaskOperationDto taskRequestDto, int containerId, int farmId) {
+    public List<TaskDto> addTasks(TaskOperationDto taskRequestDto, int farmId, int containerId) {
 
         List<TaskDto> taskDtoList = taskRequestDto.getTaskDtoList();
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
+
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
+        int plantId = taskDtoList.get(0).getPlantId();
+
+        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+
         List<Task> tasks = taskDtoList.stream().map((taskDto -> {
-
-            Plant plant = this.plantRepository.findById(taskDto.getPlantId()).orElseThrow();
-
             return Task
                     .builder()
                     .datePlanted(taskDto.getDatePlanted())
@@ -53,10 +55,8 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         })).collect(Collectors.toList());
 
-        tasks.forEach((task -> {
-            container.getTasks().add(task);
-            farm.getTasks().add(task);
-        }));
+        container.getTasks().addAll(tasks);
+        farm.getTasks().addAll(tasks);
 
         List<Task> savedTasks = this.taskRepository.saveAllAndFlush(tasks);
 
