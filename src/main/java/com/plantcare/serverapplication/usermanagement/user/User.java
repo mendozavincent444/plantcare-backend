@@ -25,10 +25,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true
+    )
     private String email;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Column(name = "first_name", nullable = false)
