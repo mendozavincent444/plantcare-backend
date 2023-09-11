@@ -60,7 +60,7 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantDto> getAllPlantsByFarmId(int farmId) {
-        List<Plant> plants = this.plantRepository.findAllByFarmId(farmId);
+        List<Plant> plants = this.plantRepository.findAllByFarmId(farmId).orElseThrow();
 
         return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
     }
