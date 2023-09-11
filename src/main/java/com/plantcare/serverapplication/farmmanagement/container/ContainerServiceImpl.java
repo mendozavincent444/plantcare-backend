@@ -58,7 +58,7 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public List<ContainerDto> getAllContainersByFarmId(int farmId) {
-        List<Container> containers = this.containerRepository.findAllByFarmId(farmId);
+        List<Container> containers = this.containerRepository.findAllByFarmId(farmId).orElseThrow();
 
 
         return containers.stream().map((container) -> convertToDto(container)).collect(Collectors.toList());
