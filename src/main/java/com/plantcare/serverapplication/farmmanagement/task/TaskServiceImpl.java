@@ -82,14 +82,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> getTasksByFarmId(int farmId) {
 
-        List<Task> tasks = this.taskRepository.findAllByFarmId(farmId);
+        List<Task> tasks = this.taskRepository.findAllByFarmId(farmId).orElseThrow();
 
         return tasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getTasksByContainerId(int containerId) {
-        List<Task> tasks = this.taskRepository.findAllByContainerId(containerId);
+        List<Task> tasks = this.taskRepository.findAllByContainerId(containerId).orElseThrow();
 
         return tasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
     }
