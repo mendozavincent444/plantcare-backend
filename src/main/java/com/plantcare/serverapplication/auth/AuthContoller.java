@@ -80,7 +80,7 @@ public class AuthContoller {
 
         Role userRole = null;
 
-        if (role.equals("ROLE_USER")) {
+        if (role.equals("ROLE_FARMER")) {
             userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_FARMER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
