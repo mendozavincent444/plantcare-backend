@@ -15,6 +15,7 @@ import lombok.Setter;
 public class Role {
     @Id
     private int id;
+    @Enumerated(EnumType.STRING)
     @Column(name = "role_name", nullable = false)
     private String roleName;
 }
