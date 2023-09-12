@@ -30,7 +30,8 @@ public class WebSecurityConfig {
             JwtUtils jwtUtils,
             UserDetailsServiceImpl userDetailsService,
             UserDetailsPasswordServiceImpl userDetailsPasswordService,
-            AuthEntryPointJwt unauthorizedHandler) {
+            AuthEntryPointJwt unauthorizedHandler
+    ) {
         this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
         this.userDetailsPasswordService = userDetailsPasswordService;
