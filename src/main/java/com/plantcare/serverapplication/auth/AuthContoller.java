@@ -95,7 +95,7 @@ public class AuthContoller {
                 .username(registerRequestDto.getUsername())
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())
-                .password(registerRequestDto.getPassword())
+                .password(this.passwordEncoder.encode(registerRequestDto.getPassword()))
                 .role(userRole)
                 .build();
 
