@@ -76,15 +76,6 @@ public class AuthContoller {
             return ResponseEntity.badRequest().body(new MessageResponseDto("Error: Email is already in use!"));
         }
 
-        User user = User
-                .builder()
-                .email(registerRequestDto.getEmail())
-                .username(registerRequestDto.getUsername())
-                .firstName(registerRequestDto.getFirstName())
-                .lastName(registerRequestDto.getLastName())
-                .password(registerRequestDto.getPassword())
-                .build();
-
         String role = registerRequestDto.getRole();
 
         Role userRole = null;
@@ -98,7 +89,16 @@ public class AuthContoller {
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         }
 
-        user.setRole(userRole);
+        User user = User
+                .builder()
+                .email(registerRequestDto.getEmail())
+                .username(registerRequestDto.getUsername())
+                .firstName(registerRequestDto.getFirstName())
+                .lastName(registerRequestDto.getLastName())
+                .password(registerRequestDto.getPassword())
+                .role(userRole)
+                .build();
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponseDto("User registered successfully!"));
