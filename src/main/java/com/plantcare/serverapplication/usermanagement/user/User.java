@@ -3,12 +3,8 @@ package com.plantcare.serverapplication.usermanagement.user;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
 import com.plantcare.serverapplication.usermanagement.role.Role;
-import jakarta.mail.Message;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.security.PrivateKey;
 import java.util.List;
@@ -17,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "user")
 public class User {
