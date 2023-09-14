@@ -1,4 +1,4 @@
-package com.plantcare.serverapplication.auth;
+package com.plantcare.serverapplication.shared;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
