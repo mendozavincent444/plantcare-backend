@@ -2,6 +2,8 @@ package com.plantcare.serverapplication.auth;
 
 import com.plantcare.serverapplication.security.jwt.JwtUtils;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.role.RoleRepository;
@@ -19,9 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/auth")
