@@ -47,14 +47,14 @@ public class AuthContoller {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto LoginRequestDto) {
 
-        Authentication authentication = authenticationManager
+        Authentication authentication = this.authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(LoginRequestDto.getUsername(), LoginRequestDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+        ResponseCookie jwtCookie = this.jwtUtils.generateJwtCookie(userDetails);
 
         String role = userDetails.getAuthorities().stream().toList().get(0).getAuthority();
 
@@ -67,11 +67,11 @@ public class AuthContoller {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequestDto registerRequestDto) {
-        if (userRepository.existsByUsername(registerRequestDto.getUsername())) {
+        if (this.userRepository.existsByUsername(registerRequestDto.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponseDto("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(registerRequestDto.getEmail())) {
+        if (this.userRepository.existsByEmail(registerRequestDto.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponseDto("Error: Email is already in use!"));
         }
 
@@ -98,14 +98,14 @@ public class AuthContoller {
                 .role(userRole)
                 .build();
 
-        userRepository.save(user);
+        this.userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponseDto("User registered successfully!"));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
-        ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
+        ResponseCookie cookie = this.jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new MessageResponseDto("You've been signed out!"));
     }
