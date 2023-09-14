@@ -37,6 +37,20 @@ public class FarmServiceImpl implements FarmService {
         return farmDto;
     }
 
+    @Override
+    public FarmDto addFarm(FarmDto farmDto) {
+
+        Farm farm = Farm
+                .builder()
+                .name(farmDto.getName())
+                .location(farmDto.getLocation())
+                .build();
+
+        Farm savedFarm = this.farmRepository.save(farm);
+
+        return this.mapToDto(savedFarm);
+    }
+
 
     private FarmDto mapToDto(Farm farm) {
         return this.modelMapper.map(farm, FarmDto.class);

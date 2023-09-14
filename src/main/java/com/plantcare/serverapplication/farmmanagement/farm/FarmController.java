@@ -1,10 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/farms")
@@ -20,5 +17,11 @@ public class FarmController {
     public ResponseEntity<FarmDto> getFarmById(@PathVariable("id") int farmId) {
 
         return ResponseEntity.ok(this.farmService.getFarmById(farmId));
+    }
+
+    @PostMapping
+    private ResponseEntity<FarmDto> addFarm(@RequestBody FarmDto farmDto) {
+
+        return ResponseEntity.ok(this.farmService.addFarm(farmDto));
     }
 }

@@ -6,10 +6,7 @@ import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.print.attribute.standard.MediaSize;
 import java.util.ArrayList;
@@ -19,6 +16,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "farm")
 public class Farm {
