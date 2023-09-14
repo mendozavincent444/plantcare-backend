@@ -5,6 +5,7 @@ import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
+import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -48,5 +49,13 @@ public class Farm {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
     private List<Plant> plants = new ArrayList<>();
+
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_farm",
+            joinColumns = @JoinColumn(name = "farm_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
+    private List<User> users;
 
 }
