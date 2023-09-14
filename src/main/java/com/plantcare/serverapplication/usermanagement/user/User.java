@@ -53,7 +53,7 @@ public class User {
     )
     private List<Notification> receivedNotifications;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_farm",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
