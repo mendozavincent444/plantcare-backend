@@ -30,12 +30,4 @@ public class FarmDto {
     private String location;
 
     private Integer roomTemperatureAndHumiditySensorId;
-
-    private List<Pump> pumps;
-
-    private List<Sensor> sensors;
-
-    private List<Task> tasks;
-
-    private List<Container> containers;
 }
