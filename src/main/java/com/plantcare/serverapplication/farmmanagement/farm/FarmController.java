@@ -58,4 +58,10 @@ public class FarmController {
         return ResponseEntity.ok(farmers);
     }
 
+    public ResponseEntity<String> removeFarmerByFarm(int farmId, int farmerId) {
+        this.farmService.removeFarmerByFarm(farmId, farmerId);
+
+        return ResponseEntity.ok("Farmer/s successfully removed from farm.");
+    }
+
 }
