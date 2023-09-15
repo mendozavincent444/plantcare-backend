@@ -2,6 +2,8 @@ package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.UserDto;
+import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -106,6 +108,32 @@ public class FarmServiceImpl implements FarmService {
         Farm savedFarm = this.farmRepository.save(farm);
 
         return this.mapToDto(savedFarm);
+    }
+
+    @Override
+    public List<UserDto> getAllFarmersByFarmId(int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        if (!currentUser.getFarms().contains(farm)) {
+            // fix - throw some exception
+        }
+
+        List<User> farmers = farm.getUsers()
+                .stream()
+                .filter(user -> user.getRole().getRoleName().equals(RoleEnum.ROLE_FARMER))
+                .collect(Collectors.toList());
+
+        return farmers.stream().map(farmer -> {
+           return UserDto
+                   .builder()
+                   .id(farmer.getId())
+                   .email(farmer.getEmail())
+                   .firstName(farmer.getFirstName())
+                   .lastName(farmer.getLastName())
+                   .build();
+        }).collect(Collectors.toList());
     }
 
 
