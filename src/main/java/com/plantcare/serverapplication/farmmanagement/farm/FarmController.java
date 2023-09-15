@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.shared.UserDto;
 import com.sun.mail.iap.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public class FarmController {
     @PostMapping
     public ResponseEntity<FarmDto> addFarm(@RequestBody FarmDto farmDto) {
 
-        return ResponseEntity.ok(this.farmService.addFarm(farmDto));
+        return new ResponseEntity<>(this.farmService.addFarm(farmDto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -42,10 +44,18 @@ public class FarmController {
         return ResponseEntity.ok("Farm deleted successfully.");
     }
     @PutMapping("{farmId}")
-    private ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId) {
+    public ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId) {
 
         FarmDto updatedFarm = this.farmService.updateFarm(farmDto, farmId);
 
         return ResponseEntity.ok(updatedFarm);
     }
+
+    @GetMapping("/{farmId}/farmers")
+    public ResponseEntity<List<UserDto>> getAllFarmersByFarmId(@PathVariable int farmId) {
+        List<UserDto> farmers = this.farmService.getAllFarmersByFarmId(farmId);
+
+        return ResponseEntity.ok(farmers);
+    }
+
 }
