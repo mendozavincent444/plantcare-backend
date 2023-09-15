@@ -56,6 +56,8 @@ public class FarmServiceImpl implements FarmService {
                 .build();
 
         currentUser.getFarms().add(farm);
+        farm.getUsers().add(currentUser);
+
         Farm savedFarm = this.farmRepository.save(farm);
 
         return this.mapToDto(savedFarm);
