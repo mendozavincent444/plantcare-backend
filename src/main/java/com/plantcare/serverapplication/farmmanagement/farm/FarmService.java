@@ -20,4 +20,6 @@ public interface FarmService {
     FarmDto updateFarm(FarmDto farmDto, int farmId);
 
     List<UserDto> getAllFarmersByFarmId(int farmId);
+
+    void removeFarmerByFarm(int farmId, int farmerId);
 }
