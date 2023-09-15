@@ -72,6 +72,23 @@ public class FarmServiceImpl implements FarmService {
         return currentUser.getFarms().stream().map((farm -> this.mapToDto(farm))).collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteFarmById(int farmId) {
+        
+        User currentUser = this.getCurrentUser();
+        
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        
+        if (!currentUser.getFarms().contains(farm)) {
+            // fix - throw some exception
+        } else {
+            currentUser.getFarms().remove(farm);
+            farm.getUsers().remove(currentUser);
+
+            this.farmRepository.delete(farm);
+        }
+    }
+
 
     private FarmDto mapToDto(Farm farm) {
         return this.modelMapper.map(farm, FarmDto.class);

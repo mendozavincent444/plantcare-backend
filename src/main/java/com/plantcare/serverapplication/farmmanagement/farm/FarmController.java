@@ -22,14 +22,22 @@ public class FarmController {
     }
 
     @PostMapping
-    private ResponseEntity<FarmDto> addFarm(@RequestBody FarmDto farmDto) {
+    public ResponseEntity<FarmDto> addFarm(@RequestBody FarmDto farmDto) {
 
         return ResponseEntity.ok(this.farmService.addFarm(farmDto));
     }
 
     @GetMapping
-    private ResponseEntity<List<FarmDto>> getAllFarmsByAdmin() {
+    public ResponseEntity<List<FarmDto>> getAllFarmsByAdmin() {
 
         return ResponseEntity.ok(this.farmService.getAllFarms());
+    }
+
+    @PostMapping("{farmId}")
+    public ResponseEntity<String> deleteFarmById(@PathVariable int farmId) {
+
+        this.farmService.deleteFarmById(farmId);
+
+        return ResponseEntity.ok("Farm deleted successfully.");
     }
 }
