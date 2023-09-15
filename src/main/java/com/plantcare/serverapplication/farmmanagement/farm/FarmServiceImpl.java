@@ -8,7 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FarmServiceImpl implements FarmService {
@@ -46,8 +48,7 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmDto addFarm(FarmDto farmDto) {
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+        User currentUser = this.getCurrentUser();
 
         Farm farm = Farm
                 .builder()
@@ -63,6 +64,14 @@ public class FarmServiceImpl implements FarmService {
         return this.mapToDto(savedFarm);
     }
 
+    @Override
+    public List<FarmDto> getAllFarms() {
+
+        User currentUser = this.getCurrentUser();
+
+        return currentUser.getFarms().stream().map((farm -> this.mapToDto(farm))).collect(Collectors.toList());
+    }
+
 
     private FarmDto mapToDto(Farm farm) {
         return this.modelMapper.map(farm, FarmDto.class);
@@ -70,5 +79,11 @@ public class FarmServiceImpl implements FarmService {
 
     private Farm mapToEntity(FarmDto farmDto) {
         return this.modelMapper.map(farmDto, Farm.class);
+    }
+
+    private User getCurrentUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }
