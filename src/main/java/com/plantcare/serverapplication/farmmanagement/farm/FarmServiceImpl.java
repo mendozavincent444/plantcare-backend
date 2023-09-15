@@ -89,6 +89,25 @@ public class FarmServiceImpl implements FarmService {
         }
     }
 
+    @Override
+    public FarmDto updateFarm(FarmDto farmDto, int farmId) {
+
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        if (!currentUser.getFarms().contains(farm)) {
+            // fix - throw some exception
+        } else {
+            farm.setName(farmDto.getName());
+            farm.setLocation(farmDto.getLocation());
+        }
+
+        Farm savedFarm = this.farmRepository.save(farm);
+
+        return this.mapToDto(savedFarm);
+    }
+
 
     private FarmDto mapToDto(Farm farm) {
         return this.modelMapper.map(farm, FarmDto.class);
