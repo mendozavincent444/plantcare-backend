@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.sun.mail.iap.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +40,12 @@ public class FarmController {
         this.farmService.deleteFarmById(farmId);
 
         return ResponseEntity.ok("Farm deleted successfully.");
+    }
+    @PutMapping("{farmId}")
+    private ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId) {
+
+        FarmDto updatedFarm = this.farmService.updateFarm(farmDto, farmId);
+
+        return ResponseEntity.ok(updatedFarm);
     }
 }
