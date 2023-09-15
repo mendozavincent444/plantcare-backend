@@ -80,15 +80,16 @@ public class FarmServiceImpl implements FarmService {
         User currentUser = this.getCurrentUser();
         
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
-        
-        if (!currentUser.getFarms().contains(farm)) {
-            // fix - throw some exception
-        } else {
-            currentUser.getFarms().remove(farm);
-            farm.getUsers().remove(currentUser);
 
-            this.farmRepository.delete(farm);
+        if (!isValidFarmAccess(currentUser, farm)) {
+            // fix - throw some exception
         }
+
+        currentUser.getFarms().remove(farm);
+        farm.getUsers().remove(currentUser);
+
+        this.farmRepository.delete(farm);
+
     }
 
     @Override
@@ -98,12 +99,13 @@ public class FarmServiceImpl implements FarmService {
 
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
-        if (!currentUser.getFarms().contains(farm)) {
+        if (!isValidFarmAccess(currentUser, farm)) {
             // fix - throw some exception
-        } else {
-            farm.setName(farmDto.getName());
-            farm.setLocation(farmDto.getLocation());
         }
+
+        farm.setName(farmDto.getName());
+        farm.setLocation(farmDto.getLocation());
+
 
         Farm savedFarm = this.farmRepository.save(farm);
 
@@ -116,7 +118,7 @@ public class FarmServiceImpl implements FarmService {
 
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
-        if (!currentUser.getFarms().contains(farm)) {
+        if (!isValidFarmAccess(currentUser, farm)) {
             // fix - throw some exception
         }
 
@@ -143,7 +145,7 @@ public class FarmServiceImpl implements FarmService {
 
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
-        if (!currentUser.getFarms().contains(farm)) {
+        if (!isValidFarmAccess(currentUser, farm)) {
             // fix - throw some exception
         }
 
@@ -156,6 +158,10 @@ public class FarmServiceImpl implements FarmService {
         this.userRepository.save(farmer);
     }
 
+
+    private boolean isValidFarmAccess(User currentUser, Farm farm) {
+        return currentUser.getFarms().contains(farm);
+    }
 
     private FarmDto mapToDto(Farm farm) {
         return this.modelMapper.map(farm, FarmDto.class);
