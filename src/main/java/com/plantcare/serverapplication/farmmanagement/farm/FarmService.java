@@ -9,4 +9,6 @@ public interface FarmService {
     FarmDto addFarm(FarmDto farmDto);
 
     List<FarmDto> getAllFarms();
+
+    void deleteFarmById(int farmId);
 }
