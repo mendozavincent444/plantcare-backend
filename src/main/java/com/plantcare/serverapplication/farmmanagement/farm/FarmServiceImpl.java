@@ -1,8 +1,11 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
+import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -43,12 +46,16 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmDto addFarm(FarmDto farmDto) {
 
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+
         Farm farm = Farm
                 .builder()
                 .name(farmDto.getName())
                 .location(farmDto.getLocation())
                 .build();
 
+        currentUser.getFarms().add(farm);
         Farm savedFarm = this.farmRepository.save(farm);
 
         return this.mapToDto(savedFarm);
