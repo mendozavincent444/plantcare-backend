@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
+import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +11,12 @@ import java.util.Optional;
 public class FarmServiceImpl implements FarmService {
 
     private final FarmRepository farmRepository;
+    private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public FarmServiceImpl(FarmRepository farmRepository, ModelMapper modelMapper) {
+    public FarmServiceImpl(FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.farmRepository = farmRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
