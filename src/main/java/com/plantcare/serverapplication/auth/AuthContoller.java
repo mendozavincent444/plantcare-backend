@@ -91,6 +91,7 @@ public class AuthContoller {
         User user = User
                 .builder()
                 .email(registerRequestDto.getEmail())
+                .status(true)
                 .username(registerRequestDto.getUsername())
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())

@@ -25,6 +25,9 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
+    @Column(name = "status", nullable = false)
+    private boolean status;
+
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
