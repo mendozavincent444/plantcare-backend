@@ -8,4 +8,6 @@ public interface UserService {
     List<UserDto> getAllAdmins(int roleId);
 
     UserDto banAdmin(UserDto admin, int adminId);
+
+    UserDto reactivateAdmin(UserDto admin, int adminId);
 }

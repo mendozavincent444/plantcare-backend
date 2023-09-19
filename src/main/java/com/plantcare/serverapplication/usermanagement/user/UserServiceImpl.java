@@ -32,10 +32,26 @@ public class UserServiceImpl implements UserService {
 
         User user = this.userRepository.findById(adminId).orElseThrow();
 
-        if (!user.isStatus()) {
-            user.setStatus(true);
+        if (user.isStatus()) {
+            user.setStatus(false);
         } else {
             //throw exception
+        }
+
+        User savedUser = this.userRepository.save(user);
+
+        return this.convertToDto(savedUser);
+    }
+
+    @Override
+    public UserDto reactivateAdmin(UserDto admin, int adminId) {
+
+        User user = this.userRepository.findById(adminId).orElseThrow();
+
+        if (user.isStatus()) {
+            // throw exception
+        } else {
+            user.setStatus(true);
         }
 
         User savedUser = this.userRepository.save(user);
