@@ -132,6 +132,7 @@ public class FarmServiceImpl implements FarmService {
                    .builder()
                    .id(farmer.getId())
                    .email(farmer.getEmail())
+                   .status(farmer.isStatus())
                    .firstName(farmer.getFirstName())
                    .lastName(farmer.getLastName())
                    .build();
