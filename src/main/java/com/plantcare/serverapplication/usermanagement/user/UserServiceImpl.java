@@ -21,17 +21,10 @@ public class UserServiceImpl implements UserService {
         List<User> admins = this.userRepository.findAllByRoleId(roleId).orElseThrow();
 
 
-        return admins.stream().map(admin -> {
-            return UserDto
-                    .builder()
-                    .id(admin.getId())
-                    .email(admin.getEmail())
-                    .status(admin.isStatus())
-                    .username(admin.getUsername())
-                    .firstName(admin.getFirstName())
-                    .lastName(admin.getLastName())
-                    .build();
-        }).collect(Collectors.toList());
+        return admins
+                .stream()
+                .map(admin -> this.convertToDto(admin))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,14 +40,18 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = this.userRepository.save(user);
 
+        return this.convertToDto(savedUser);
+    }
+
+    private UserDto convertToDto(User user) {
         return UserDto
                 .builder()
-                .id(savedUser.getId())
-                .email(savedUser.getEmail())
-                .status(savedUser.isStatus())
-                .username(savedUser.getUsername())
-                .firstName(savedUser.getFirstName())
-                .lastName(savedUser.getLastName())
+                .id(user.getId())
+                .email(user.getEmail())
+                .status(user.isStatus())
+                .username(user.getUsername())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .build();
     }
 }
