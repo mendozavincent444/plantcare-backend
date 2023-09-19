@@ -36,4 +36,19 @@ public class UserController {
 
         return ResponseEntity.ok(admins);
     }
+
+
+    @PutMapping("/admins/{adminId}/ban")
+    public ResponseEntity<UserDto> banAdmin(
+            @RequestBody UserDto admin,
+            @PathVariable int adminId
+    ) {
+        UserDto bannedAdmin = this.userService.banAdmin(admin, adminId);
+
+        return ResponseEntity.ok(bannedAdmin);
+    }
+
+
+
+
 }

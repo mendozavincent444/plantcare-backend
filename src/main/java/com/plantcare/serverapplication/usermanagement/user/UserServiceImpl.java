@@ -33,4 +33,28 @@ public class UserServiceImpl implements UserService {
                     .build();
         }).collect(Collectors.toList());
     }
+
+    @Override
+    public UserDto banAdmin(UserDto admin, int adminId) {
+
+        User user = this.userRepository.findById(adminId).orElseThrow();
+
+        if (!user.isStatus()) {
+            user.setStatus(true);
+        } else {
+            //throw exception
+        }
+
+        User savedUser = this.userRepository.save(user);
+
+        return UserDto
+                .builder()
+                .id(savedUser.getId())
+                .email(savedUser.getEmail())
+                .status(savedUser.isStatus())
+                .username(savedUser.getUsername())
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .build();
+    }
 }
