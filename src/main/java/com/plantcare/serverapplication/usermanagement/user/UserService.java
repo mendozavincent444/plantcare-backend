@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface UserService {
     List<UserDto> getAllAdmins(int roleId);
+
+    UserDto banAdmin(UserDto admin, int adminId);
 }
