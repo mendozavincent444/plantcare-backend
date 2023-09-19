@@ -48,6 +48,18 @@ public class UserController {
         return ResponseEntity.ok(bannedAdmin);
     }
 
+    @PutMapping("/admins/{adminId}/reactivate")
+    public ResponseEntity<UserDto> reactivateAdmin(
+            @RequestBody UserDto admin,
+            @PathVariable int adminId
+    ) {
+        UserDto reactivatedAdmin = this.userService.reactivateAdmin(admin, adminId);
+
+        return ResponseEntity.ok(reactivatedAdmin);
+    }
+
+
+
 
 
 
