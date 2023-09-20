@@ -36,7 +36,7 @@ public class FarmController {
         return ResponseEntity.ok(this.farmService.getAllFarms());
     }
 
-    @PostMapping("{farmId}")
+    @DeleteMapping("{farmId}")
     public ResponseEntity<String> deleteFarmById(@PathVariable int farmId) {
 
         this.farmService.deleteFarmById(farmId);
@@ -58,10 +58,19 @@ public class FarmController {
         return ResponseEntity.ok(farmers);
     }
 
+    @DeleteMapping("/{farmId}/farmers/{farmerId}")
     public ResponseEntity<String> removeFarmerByFarm(int farmId, int farmerId) {
         this.farmService.removeFarmerByFarm(farmId, farmerId);
 
         return ResponseEntity.ok("Farmer/s successfully removed from farm.");
+    }
+
+    @PutMapping("/{farmId}/change-owner/{newOwnerId}")
+    public ResponseEntity<String> changeFarmOwnership(int farmId, int newOwnerId) {
+
+        this.farmService.changeFarmOwnership(farmId, newOwnerId);
+
+        return ResponseEntity.ok("Farm ownership changed successfully.");
     }
 
 }
