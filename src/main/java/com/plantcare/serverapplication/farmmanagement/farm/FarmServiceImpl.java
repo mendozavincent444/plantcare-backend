@@ -55,6 +55,7 @@ public class FarmServiceImpl implements FarmService {
         Farm farm = Farm
                 .builder()
                 .name(farmDto.getName())
+                .owner(currentUser)
                 .location(farmDto.getLocation())
                 .build();
 
