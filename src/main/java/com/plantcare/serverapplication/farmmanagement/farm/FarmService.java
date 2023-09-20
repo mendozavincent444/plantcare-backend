@@ -22,4 +22,6 @@ public interface FarmService {
     List<UserDto> getAllFarmersByFarmId(int farmId);
 
     void removeFarmerByFarm(int farmId, int farmerId);
+
+    void changeFarmOwnership(int farmId, int newOwnerId);
 }
