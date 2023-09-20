@@ -35,6 +35,10 @@ public class Farm {
     @JoinColumn(name = "room_temp_and_humidity_sensor_id")
     private Sensor roomTemperatureAndHumidity;
 
+    @OneToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
     private List<Pump> pumps = new ArrayList<>();
 
