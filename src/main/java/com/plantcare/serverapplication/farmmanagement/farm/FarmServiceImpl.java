@@ -84,7 +84,7 @@ public class FarmServiceImpl implements FarmService {
         if (!isValidFarmAccess(currentUser, farm)) {
             // fix - throw some exception
         }
-
+        // fix also remove farm from different users use join select
         currentUser.getFarms().remove(farm);
         farm.getUsers().remove(currentUser);
 
