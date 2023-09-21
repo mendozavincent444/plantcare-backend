@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.auth;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
+import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.jwt.JwtUtils;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.security.service.UserDetailsPasswordServiceImpl;
@@ -20,16 +22,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/auth")
 public class AuthContoller {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final FarmRepository farmRepository;
     private final UserDetailsPasswordServiceImpl userDetailsPasswordService;
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
@@ -39,6 +45,7 @@ public class AuthContoller {
     public AuthContoller(
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
+            FarmRepository farmRepository,
             UserDetailsPasswordServiceImpl userDetailsPasswordService,
             UserDetailsServiceImpl userDetailsService,
             RoleRepository roleRepository,
@@ -47,6 +54,7 @@ public class AuthContoller {
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.farmRepository = farmRepository;
         this.userDetailsPasswordService = userDetailsPasswordService;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
@@ -112,6 +120,43 @@ public class AuthContoller {
         this.userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponseDto("User registered successfully!"));
+    }
+
+
+    @PostMapping("/farm/{farmId}/farmers/bulk-register")
+    public ResponseEntity<?> registerFarmerBulk(@RequestParam("file") MultipartFile file, @PathVariable int farmId) throws IOException {
+
+        if (!BulkRegisterCSVHelper.hasCSVFormat(file)) {
+            return ResponseEntity.badRequest().body(new MessageResponseDto("Error: File format is incorrect!"));
+        }
+
+        List<BulkRegisterFarmerRequestDto> requestDtos = BulkRegisterCSVHelper.csvToBulkRegisterFarmerRequest(file.getInputStream());
+
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+
+        List<Farm> farms = new ArrayList<>();
+        farms.add(farm);
+
+        Role role = this.roleRepository.findByRoleName(RoleEnum.ROLE_FARMER).orElseThrow();
+
+        List<User> farmers = requestDtos.stream().map(request -> {
+            return User
+                    .builder()
+                    .email(request.getEmail())
+                    .status(true)
+                    .username(request.getUsername())
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .password(request.getPassword())
+                    .role(role)
+                    .build();
+        }).collect(Collectors.toList());
+
+        farmers.forEach((farmer) -> farm.getUsers().add(farmer));
+
+        this.farmRepository.save(farm);
+
+        return ResponseEntity.ok(new MessageResponseDto("Farmers registered successfully!"));
     }
 
     @PostMapping("/logout")

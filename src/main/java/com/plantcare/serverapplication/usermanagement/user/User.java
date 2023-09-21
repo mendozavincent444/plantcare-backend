@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -46,7 +47,7 @@ public class User {
 
     // fix ERD
     @OneToMany(mappedBy = "sender")
-    private List<Notification> sentNotifications;
+    private List<Notification> sentNotifications = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
@@ -54,7 +55,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id")
     )
-    private List<Notification> receivedNotifications;
+    private List<Notification> receivedNotifications = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinTable(
@@ -62,5 +63,5 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "farm_id", referencedColumnName = "id")
     )
-    private List<Farm> farms;
+    private List<Farm> farms = new ArrayList<>();
 }
