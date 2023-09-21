@@ -32,8 +32,8 @@ public class UserServiceImpl implements UserService {
 
         User user = this.userRepository.findById(adminId).orElseThrow();
 
-        if (user.isStatus()) {
-            user.setStatus(false);
+        if (user.isAccountNonLocked()) {
+            user.setAccountNonLocked(false);
         } else {
             //throw exception
         }
@@ -48,10 +48,10 @@ public class UserServiceImpl implements UserService {
 
         User user = this.userRepository.findById(adminId).orElseThrow();
 
-        if (user.isStatus()) {
+        if (user.isAccountNonLocked()) {
             // throw exception
         } else {
-            user.setStatus(true);
+            user.setAccountNonLocked(true);
         }
 
         User savedUser = this.userRepository.save(user);
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 .builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .status(user.isStatus())
+                .status(user.isAccountNonLocked())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())

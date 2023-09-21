@@ -109,7 +109,7 @@ public class AuthContoller {
         User user = User
                 .builder()
                 .email(registerRequestDto.getEmail())
-                .status(true)
+                .isAccountNonLocked(true)
                 .username(registerRequestDto.getUsername())
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())
@@ -143,7 +143,7 @@ public class AuthContoller {
             return User
                     .builder()
                     .email(request.getEmail())
-                    .status(true)
+                    .isAccountNonLocked(true)
                     .username(request.getUsername())
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
