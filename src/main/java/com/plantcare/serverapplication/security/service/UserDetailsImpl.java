@@ -42,7 +42,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.isStatus(),
+                user.isAccountNonLocked(),
                 user.getPassword(),
                 authorities);
     }

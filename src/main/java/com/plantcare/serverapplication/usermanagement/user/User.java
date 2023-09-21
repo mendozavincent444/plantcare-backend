@@ -6,7 +6,6 @@ import com.plantcare.serverapplication.usermanagement.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class User {
     private String email;
 
     @Column(name = "status", nullable = false)
-    private boolean status;
+    private boolean isAccountNonLocked;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
