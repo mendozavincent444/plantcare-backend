@@ -147,7 +147,7 @@ public class AuthContoller {
                     .username(request.getUsername())
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
-                    .password(request.getPassword())
+                    .password(this.passwordEncoder.encode(request.getPassword()))
                     .role(role)
                     .build();
         }).collect(Collectors.toList());
