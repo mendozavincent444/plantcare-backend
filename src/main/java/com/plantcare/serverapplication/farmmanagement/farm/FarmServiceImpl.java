@@ -61,7 +61,6 @@ public class FarmServiceImpl implements FarmService {
                 .users(new ArrayList<>())
                 .build();
 
-        //currentUser.getFarms().add(farm);
         farm.getUsers().add(currentUser);
 
         Farm savedFarm = this.farmRepository.save(farm);
