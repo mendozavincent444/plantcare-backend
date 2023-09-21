@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,9 +58,10 @@ public class FarmServiceImpl implements FarmService {
                 .name(farmDto.getName())
                 .owner(currentUser)
                 .location(farmDto.getLocation())
+                .users(new ArrayList<>())
                 .build();
 
-        currentUser.getFarms().add(farm);
+        //currentUser.getFarms().add(farm);
         farm.getUsers().add(currentUser);
 
         Farm savedFarm = this.farmRepository.save(farm);

@@ -60,6 +60,6 @@ public class Farm {
             joinColumns = @JoinColumn(name = "farm_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
 }
