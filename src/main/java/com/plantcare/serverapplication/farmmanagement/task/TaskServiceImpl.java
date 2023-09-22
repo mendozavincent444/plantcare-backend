@@ -52,12 +52,10 @@ public class TaskServiceImpl implements TaskService {
                     .status(taskDto.getStatus())
                     .plant(plant)
                     .container(container)
-                    .farm(farm)
                     .build();
         })).collect(Collectors.toList());
 
         container.getTasks().addAll(tasks);
-        farm.getTasks().addAll(tasks);
 
         List<Task> savedTasks = this.taskRepository.saveAllAndFlush(tasks);
 
@@ -74,7 +72,6 @@ public class TaskServiceImpl implements TaskService {
 
         List<Task> tasks = this.taskRepository.findAllById(taskIds);
 
-        farm.getTasks().removeAll(tasks);
         container.getTasks().removeAll(tasks);
 
         this.taskRepository.deleteAllById(taskIds);
@@ -133,7 +130,6 @@ public class TaskServiceImpl implements TaskService {
                 .status(task.getStatus())
                 .plantId(task.getPlant().getId())
                 .containerId(task.getContainer().getId())
-                .farmId(task.getFarm().getId())
                 .build();
     }
 }

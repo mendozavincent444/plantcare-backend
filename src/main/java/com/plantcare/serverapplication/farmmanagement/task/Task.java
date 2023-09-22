@@ -36,8 +36,4 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
-
-    @ManyToOne
-    @JoinColumn(name = "farm_id", nullable = false)
-    private Farm farm;
 }
