@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/tasks")
+@RequestMapping("api/v1/farms/{farmId}/containers/{containerId}/tasks")
 public class TaskController {
 
     private final TaskService taskService;
@@ -17,7 +17,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping("/byFarm/{farmId}/byContainer/{containerId}")
+    @PostMapping
     public ResponseEntity<List<TaskDto>> addTasks(
             @RequestBody TaskOperationDto taskOperationsDto,
             @PathVariable int containerId,
@@ -28,7 +28,7 @@ public class TaskController {
         return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/byFarm/{farmId}/byContainer/{containerId}")
+    @DeleteMapping
     public ResponseEntity<String> deleteTasks(
             @RequestBody DeleteTasksDto deleteTasksDto,
             @PathVariable int containerId,
@@ -38,15 +38,15 @@ public class TaskController {
 
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }
-    @GetMapping("/byFarm/{farmId}")
-    public ResponseEntity<List<TaskDto>> getAllTasksByFarmId(int farmId) {
+    @GetMapping("/all")
+    public ResponseEntity<List<TaskDto>> getAllTasksFromAllContainers(int farmId) {
 
         List<TaskDto> tasks = this.taskService.getTasksByFarmId(farmId);
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @GetMapping("/byContainer/{containerId}")
+    @GetMapping
     public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(int containerId) {
 
         List<TaskDto> tasks = this.taskService.getTasksByContainerId(containerId);
@@ -54,7 +54,7 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @PutMapping("{taskId}/containers/{containerId}")
+    @PutMapping("/{taskId}")
     public ResponseEntity<TaskDto> updateTask(
             @RequestBody TaskDto taskDto,
             @PathVariable int taskId,
