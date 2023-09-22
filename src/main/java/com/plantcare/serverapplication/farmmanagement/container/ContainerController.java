@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/containers")
+@RequestMapping("/api/v1/farms/{farmId}")
 public class ContainerController {
 
     private final ContainerService containerService;
@@ -16,10 +16,10 @@ public class ContainerController {
         this.containerService = containerService;
     }
 
-    @PostMapping
-    public ResponseEntity<ContainerDto> addContainer(@RequestBody ContainerDto containerDto) {
+    @PostMapping("/containers")
+    public ResponseEntity<ContainerDto> addContainer(@RequestBody ContainerDto containerDto, @PathVariable int farmId) {
 
-        ContainerDto savedContainerDto = this.containerService.addContainer(containerDto);
+        ContainerDto savedContainerDto = this.containerService.addContainer(containerDto, farmId);
 
         return new ResponseEntity<>(savedContainerDto, HttpStatus.CREATED);
     }
