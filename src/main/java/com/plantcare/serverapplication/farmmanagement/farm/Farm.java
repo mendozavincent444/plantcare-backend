@@ -46,9 +46,6 @@ public class Farm {
     private List<Sensor> sensors = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
-    private List<Task> tasks = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
     private List<Container> containers = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
