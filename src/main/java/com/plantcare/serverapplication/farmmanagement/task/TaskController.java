@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/farms/{farmId}/containers/{containerId}/tasks")
+@RequestMapping("api/v1/farms/{farmId}")
 public class TaskController {
 
     private final TaskService taskService;
@@ -17,7 +17,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @PostMapping
+    @PostMapping("/containers/{containerId}/tasks")
     public ResponseEntity<List<TaskDto>> addTasks(
             @RequestBody TaskOperationDto taskOperationsDto,
             @PathVariable int containerId,
@@ -28,7 +28,7 @@ public class TaskController {
         return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/containers/{containerId}/tasks")
     public ResponseEntity<String> deleteTasks(
             @RequestBody DeleteTasksDto deleteTasksDto,
             @PathVariable int containerId,
@@ -46,7 +46,7 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/containers/{containerId}/tasks")
     public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(int containerId) {
 
         List<TaskDto> tasks = this.taskService.getTasksByContainerId(containerId);
@@ -54,7 +54,7 @@ public class TaskController {
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
-    @PutMapping("/{taskId}")
+    @PutMapping("/containers/{containerId}/tasks/{taskId}")
     public ResponseEntity<TaskDto> updateTask(
             @RequestBody TaskDto taskDto,
             @PathVariable int taskId,
