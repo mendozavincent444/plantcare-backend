@@ -38,10 +38,10 @@ public class TaskController {
 
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }
-    @GetMapping("/all")
+    @GetMapping("/containers/tasks/all")
     public ResponseEntity<List<TaskDto>> getAllTasksFromAllContainers(int farmId) {
 
-        List<TaskDto> tasks = this.taskService.getTasksByFarmId(farmId);
+        List<TaskDto> tasks = this.taskService.getAllTasksFromAllContainers(farmId);
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
