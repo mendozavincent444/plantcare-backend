@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/plants")
+@RequestMapping("api/v1/farms/{farmId}/plants")
 public class PlantController {
 
     private final PlantService plantService;
@@ -16,32 +16,32 @@ public class PlantController {
         this.plantService = plantService;
     }
 
-    @PostMapping("/byFarm/{farmId}")
+    @PostMapping
     public ResponseEntity<PlantDto> addPlant(@RequestBody PlantDto plantDto, @PathVariable int farmId) {
 
         PlantDto savedPlant = this.plantService.addPlant(plantDto, farmId);
 
         return new ResponseEntity<>(savedPlant, HttpStatus.OK);
     }
-    @GetMapping("/{plantId}/byFarm/{farmId}")
+    @GetMapping("/{plantId}")
     public ResponseEntity<PlantDto> getPlantById(@PathVariable int plantId, @PathVariable int farmId) {
 
         return ResponseEntity.ok(this.plantService.getPlantById(farmId, plantId));
     }
-    @GetMapping("/byFarm/{farmId}")
+    @GetMapping
     public ResponseEntity<List<PlantDto>> getAllPlantsByFarmId(@PathVariable int farmId) {
         List<PlantDto> plants = this.plantService.getAllPlantsByFarmId(farmId);
 
         return new ResponseEntity<>(plants, HttpStatus.OK);
     }
-    @DeleteMapping("/{plantId}/byFarm/{farmId}")
+    @DeleteMapping("/{plantId}")
     public ResponseEntity<String> deletePlantById(@PathVariable int plantId, @PathVariable int farmId) {
         this.plantService.deletePlantById(farmId, plantId);
 
         return new ResponseEntity<>("Plant successfully deleted.", HttpStatus.OK);
     }
 
-    @PutMapping("/{plantId}/byFarm/{farmId}")
+    @PutMapping("/{plantId}")
     public ResponseEntity<PlantDto> updatePlant(
             @RequestBody PlantDto plantDto,
             @PathVariable int plantId,
