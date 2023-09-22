@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/auth")
-public class AuthContoller {
+public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
@@ -42,7 +42,7 @@ public class AuthContoller {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    public AuthContoller(
+    public AuthController(
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
             FarmRepository farmRepository,
