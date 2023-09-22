@@ -33,13 +33,13 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public ContainerDto addContainer(ContainerDto containerDto) {
+    public ContainerDto addContainer(ContainerDto containerDto, int farmId) {
 
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
 
         Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
 
-        Farm farm = this.farmRepository.findById(containerDto.getFarmId()).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
         Container newContainer = Container
                 .builder()

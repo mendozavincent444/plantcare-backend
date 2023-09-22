@@ -3,7 +3,7 @@ package com.plantcare.serverapplication.farmmanagement.container;
 import java.util.List;
 
 public interface ContainerService {
-    ContainerDto addContainer(ContainerDto containerDto);
+    ContainerDto addContainer(ContainerDto containerDto, int farmId);
 
     List<ContainerDto> getAllContainersByFarmId(int farmId);
 
