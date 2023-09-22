@@ -8,6 +8,7 @@ import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,11 +81,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getTasksByFarmId(int farmId) {
+    public List<TaskDto> getAllTasksFromAllContainers(int farmId) {
 
-        List<Task> tasks = this.taskRepository.findAllByFarmId(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
-        return tasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
+        List<Task> allTasks = new ArrayList<>();
+
+        farm.getContainers().forEach((container -> allTasks.addAll(container.getTasks())));
+
+        return allTasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
     }
 
     @Override
