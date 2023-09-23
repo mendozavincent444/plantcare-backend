@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.plant;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
@@ -8,6 +9,7 @@ import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,10 +39,11 @@ public class PlantServiceImpl implements PlantService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // to fix - throw exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
         Plant plant = Plant
@@ -66,14 +69,15 @@ public class PlantServiceImpl implements PlantService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // to fix - throw exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        // fix handle exceptions
-        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+        Plant plant = this.plantRepository.findById(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
         return this.mapToDto(plant);
     }
@@ -83,13 +87,15 @@ public class PlantServiceImpl implements PlantService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // to fix - throw exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        List<Plant> plants = this.plantRepository.findAllByFarmId(farmId).orElseThrow();
+        List<Plant> plants = this.plantRepository.findAllByFarmId(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "farm id", farmId));
 
         return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
     }
@@ -99,13 +105,15 @@ public class PlantServiceImpl implements PlantService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // to fix - throw exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+        Plant plant = this.plantRepository.findById(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
         farm.getPlants().remove(plant);
 
@@ -117,13 +125,15 @@ public class PlantServiceImpl implements PlantService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // to fix - throw exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+        Plant plant = this.plantRepository.findById(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
         plant.setName(plantDto.getName());
         plant.setMaximumEc(plantDto.getMaximumEc());

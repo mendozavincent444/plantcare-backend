@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.UserDto;
@@ -9,6 +10,7 @@ import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +34,8 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmDto getFarmById(int farmId) {
 
-        // fix catch exceptions
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         Optional<Sensor> temperatureAndHumiditySensor = Optional.of(farm.getRoomTemperatureAndHumidity());
 
@@ -81,10 +83,11 @@ public class FarmServiceImpl implements FarmService {
         
         User currentUser = this.getCurrentUser();
         
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // fix - throw some exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
         currentUser.getFarms().remove(farm);
@@ -98,10 +101,11 @@ public class FarmServiceImpl implements FarmService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // fix - throw some exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
         farm.setName(farmDto.getName());
@@ -117,10 +121,11 @@ public class FarmServiceImpl implements FarmService {
     public List<UserDto> getAllFarmersByFarmId(int farmId) {
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // fix - throw some exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
         List<User> farmers = farm.getUsers()
@@ -145,13 +150,15 @@ public class FarmServiceImpl implements FarmService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // fix - throw some exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        User farmer = this.userRepository.findById(farmerId).orElseThrow();
+        User farmer = this.userRepository.findById(farmerId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", farmerId));
 
         farm.getUsers().remove(farmer);
         farmer.getFarms().remove(farm);
@@ -165,13 +172,15 @@ public class FarmServiceImpl implements FarmService {
 
         User currentUser = this.getCurrentUser();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
-            // fix - throw some exception
+            throw new ResourceAccessException("User access to resource is forbidden");
         }
 
-        User newOwner = this.userRepository.findById(newOwnerId).orElseThrow();
+        User newOwner = this.userRepository.findById(newOwnerId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", newOwnerId));
 
         farm.setOwner(newOwner);
         this.farmRepository.save(farm);

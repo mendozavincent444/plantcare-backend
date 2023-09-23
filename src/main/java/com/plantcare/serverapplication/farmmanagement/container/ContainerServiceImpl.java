@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
@@ -37,9 +38,11 @@ public class ContainerServiceImpl implements ContainerService {
 
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
 
-        Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
+        Plant plant = this.plantRepository.findById(containerDto.getPlantId())
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantId()));
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         Container newContainer = Container
                 .builder()
@@ -67,7 +70,8 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void deleteContainerListById(DeleteContainersDto deleteContainersDto, int farmId) {
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         List<Integer> containerIds = deleteContainersDto.getContainerIds();
 
@@ -83,9 +87,11 @@ public class ContainerServiceImpl implements ContainerService {
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
 
-        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId())
+                .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", containerDto.getArduinoBoardId()));
 
-        Plant plant = this.plantRepository.findById(containerDto.getPlantId()).orElseThrow();
+        Plant plant = this.plantRepository.findById(containerDto.getPlantId())
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantId()));
 
         container.setName(containerDto.getName());
         container.setArduinoBoard(arduinoBoard);

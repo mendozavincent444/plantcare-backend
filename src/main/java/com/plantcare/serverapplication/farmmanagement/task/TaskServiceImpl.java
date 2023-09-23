@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.container.ContainerRepository;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
@@ -36,13 +37,16 @@ public class TaskServiceImpl implements TaskService {
 
         List<TaskDto> taskDtoList = taskRequestDto.getTaskDtoList();
 
-        Container container = this.containerRepository.findById(containerId).orElseThrow();
+        Container container = this.containerRepository.findById(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         int plantId = taskDtoList.get(0).getPlantId();
 
-        Plant plant = this.plantRepository.findById(plantId).orElseThrow();
+        Plant plant = this.plantRepository.findById(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
         List<Task> tasks = taskDtoList.stream().map((taskDto -> {
             return Task
@@ -66,9 +70,11 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTasks(DeleteTasksDto deleteTasksDto, int containerId, int farmId) {
         List<Integer> taskIds = deleteTasksDto.getTaskIds();
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        Container container = this.containerRepository.findById(containerId).orElseThrow();
+        Container container = this.containerRepository.findById(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
 
         List<Task> tasks = this.taskRepository.findAllById(taskIds);
 
@@ -80,7 +86,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> getAllTasksFromAllContainers(int farmId) {
 
-        Farm farm = this.farmRepository.findById(farmId).orElseThrow();
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         List<Task> allTasks = new ArrayList<>();
 
@@ -91,25 +98,31 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getTasksByContainerId(int containerId) {
-        List<Task> tasks = this.taskRepository.findAllByContainerId(containerId).orElseThrow();
+        List<Task> tasks = this.taskRepository.findAllByContainerId(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task", "container id", containerId));
 
         return tasks.stream().map((task) -> convertToDto(task)).collect(Collectors.toList());
     }
 
     @Override
     public TaskDto updateTask(TaskDto taskDto, int taskToUpdateId, int containerId) {
-        Task task = this.taskRepository.findById(taskToUpdateId).orElseThrow();
+        Task task = this.taskRepository.findById(taskToUpdateId)
+                .orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskToUpdateId));
 
-        Container newContainer = this.containerRepository.findById(taskDto.getContainerId()).orElseThrow();
+        Container newContainer = this.containerRepository.findById(taskDto.getContainerId())
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", taskDto.getContainerId()));
 
-        Plant plant = this.plantRepository.findById(taskDto.getPlantId()).orElseThrow();
+        Plant plant = this.plantRepository.findById(taskDto.getPlantId())
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", taskDto.getPlantId()));
 
         task.setPlant(plant);
 
 
         if (task.getContainer() != newContainer) {
 
-            Container oldContainer = this.containerRepository.findById(containerId).orElseThrow();
+            Container oldContainer = this.containerRepository.findById(containerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
+
             oldContainer.getTasks().remove(task);
 
             task.setContainer(newContainer);

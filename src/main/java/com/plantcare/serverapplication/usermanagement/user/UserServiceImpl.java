@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.usermanagement.user;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.shared.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllAdmins(int roleId) {
-        List<User> admins = this.userRepository.findAllByRoleId(roleId).orElseThrow();
+        List<User> admins = this.userRepository.findAllByRoleId(roleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Users", "role id", roleId));
 
 
         return admins
@@ -30,7 +32,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto banAdmin(UserDto admin, int adminId) {
 
-        User user = this.userRepository.findById(adminId).orElseThrow();
+        User user = this.userRepository.findById(adminId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
 
         if (user.isAccountNonLocked()) {
             user.setAccountNonLocked(false);
@@ -46,7 +49,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto reactivateAdmin(UserDto admin, int adminId) {
 
-        User user = this.userRepository.findById(adminId).orElseThrow();
+        User user = this.userRepository.findById(adminId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
 
         if (user.isAccountNonLocked()) {
             // throw exception
