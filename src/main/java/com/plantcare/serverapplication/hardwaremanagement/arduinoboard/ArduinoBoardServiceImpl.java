@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,8 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     @Override
     public ArduinoBoardDto getArduinoBoardById(int arduinoBoardId) {
-        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(arduinoBoardId).orElseThrow();
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(arduinoBoardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", arduinoBoardId));
 
         return this.mapToDto(arduinoBoard);
     }
