@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.farmmanagement.container.Container;
+import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
@@ -59,4 +60,6 @@ public class Farm {
     )
     private List<User> users = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farm")
+    private List<HarvestLog> harvestLogs = new ArrayList<>();
 }

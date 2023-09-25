@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.harvestlog;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
@@ -28,8 +29,11 @@ public class HarvestLog {
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 
-    // EDIT ERD RELATIONSHIP TO USER
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "farmer_id", nullable = false)
     private User farmer;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "farm_id")
+    private Farm farm;
 }
