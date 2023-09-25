@@ -33,7 +33,6 @@ public class Container {
     @JoinColumn(name = "plant_id")
     private Plant plant;
 
-    // update ERD
     @ManyToOne
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
