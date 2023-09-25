@@ -31,12 +31,9 @@ public class OrderItem {
     @Column(name = "unit_price", nullable = false)
     private BigDecimal unitPrice;
 
-    // fix, create bidirectional one to many between order and orderitem
-    /*
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
-     */
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
