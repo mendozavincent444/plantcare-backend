@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.ordermanagement.address;
 
+import com.plantcare.serverapplication.ordermanagement.order.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,4 +29,8 @@ public class Address {
 
     @Column(name = "zip_code")
     private String zipCode;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Order order;
 }
