@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.ordermanagement.order;
 
 import com.plantcare.serverapplication.ordermanagement.address.Address;
+import com.plantcare.serverapplication.ordermanagement.orderitem.OrderItem;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -53,4 +56,7 @@ public class Order {
     @OneToOne(optional = false)
     @JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
