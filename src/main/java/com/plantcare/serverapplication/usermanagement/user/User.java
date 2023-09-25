@@ -46,7 +46,6 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    // fix ERD
     @OneToMany(mappedBy = "sender")
     private List<Notification> sentNotifications = new ArrayList<>();
 
