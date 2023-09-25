@@ -2,6 +2,8 @@ package com.plantcare.serverapplication.usermanagement.user;
 
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
+import com.plantcare.serverapplication.ordermanagement.order.Order;
+import com.plantcare.serverapplication.ordermanagement.transaction.Transaction;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -63,4 +65,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "farm_id", referencedColumnName = "id")
     )
     private List<Farm> farms = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Transaction> transactions = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "orderedByUser")
+    private List<Order> orders = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
+import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,4 +39,8 @@ public class Transaction {
 
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
