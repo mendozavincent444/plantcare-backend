@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import com.plantcare.serverapplication.farmmanagement.plant.PlantDto;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardDto;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -18,9 +20,9 @@ public class ContainerDto {
     @Size(max = 20)
     private String name;
 
-    private int arduinoBoardId;
+    private ArduinoBoardDto arduinoBoardDto;
 
-    private int plantId;
+    private PlantDto plantDto;
 
     private int farmId;
 }

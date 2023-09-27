@@ -5,8 +5,12 @@ import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import com.plantcare.serverapplication.farmmanagement.plant.PlantService;
+import com.plantcare.serverapplication.farmmanagement.plant.PlantServiceImpl;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardServiceImpl;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -20,26 +24,32 @@ public class ContainerServiceImpl implements ContainerService {
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final PlantRepository plantRepository;
     private final FarmRepository farmRepository;
+    private final ArduinoBoardServiceImpl arduinoBoardServiceImpl;
+    private final PlantServiceImpl plantServiceImpl;
 
     public ContainerServiceImpl(
             ContainerRepository containerRepository,
             ArduinoBoardRepository arduinoBoardRepository,
             PlantRepository plantRepository,
-            FarmRepository farmRepository
+            FarmRepository farmRepository,
+            ArduinoBoardServiceImpl arduinoBoardServiceImpl,
+            PlantServiceImpl plantServiceImpl
     ) {
         this.containerRepository = containerRepository;
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.plantRepository = plantRepository;
         this.farmRepository = farmRepository;
+        this.arduinoBoardServiceImpl = arduinoBoardServiceImpl;
+        this.plantServiceImpl = plantServiceImpl;
     }
 
     @Override
     public ContainerDto addContainer(ContainerDto containerDto, int farmId) {
 
-        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId()).orElseThrow();
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardDto().getId()).orElseThrow();
 
-        Plant plant = this.plantRepository.findById(containerDto.getPlantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantId()));
+        Plant plant = this.plantRepository.findById(containerDto.getPlantDto().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantDto().getId()));
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -62,7 +72,6 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public List<ContainerDto> getAllContainersByFarmId(int farmId) {
         List<Container> containers = this.containerRepository.findAllByFarmId(farmId).orElseThrow();
-
 
         return containers.stream().map((container) -> convertToDto(container)).collect(Collectors.toList());
     }
@@ -87,11 +96,11 @@ public class ContainerServiceImpl implements ContainerService {
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
 
-        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardId())
-                .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", containerDto.getArduinoBoardId()));
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardDto().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", containerDto.getArduinoBoardDto().getId()));
 
-        Plant plant = this.plantRepository.findById(containerDto.getPlantId())
-                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantId()));
+        Plant plant = this.plantRepository.findById(containerDto.getPlantDto().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantDto().getId()));
 
         container.setName(containerDto.getName());
         container.setArduinoBoard(arduinoBoard);
@@ -107,10 +116,11 @@ public class ContainerServiceImpl implements ContainerService {
                 .builder()
                 .id(container.getId())
                 .name(container.getName())
-                .arduinoBoardId(container.getArduinoBoard().getId())
-                .plantId(container.getPlant().getId())
+                .arduinoBoardDto(this.arduinoBoardServiceImpl.mapToDto(container.getArduinoBoard()))
+                .plantDto(this.plantServiceImpl.mapToDto(container.getPlant()))
                 .farmId(container.getFarm().getId())
                 .build();
+
     }
 
 }

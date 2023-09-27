@@ -23,7 +23,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         return this.mapToDto(arduinoBoard);
     }
 
-    private ArduinoBoardDto mapToDto(ArduinoBoard arduinoBoard) {
+    public ArduinoBoardDto mapToDto(ArduinoBoard arduinoBoard) {
         return this.modelMapper.map(arduinoBoard, ArduinoBoardDto.class);
     }
 
