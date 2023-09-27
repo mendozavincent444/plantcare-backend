@@ -28,7 +28,7 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "is_account_non_locked", nullable = false)
     private boolean isAccountNonLocked;
 
     @Column(name = "username", nullable = false, unique = true)
