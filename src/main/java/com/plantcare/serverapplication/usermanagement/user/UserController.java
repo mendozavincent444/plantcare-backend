@@ -6,6 +6,7 @@ import com.plantcare.serverapplication.security.service.UserDetailsPasswordServi
 import com.plantcare.serverapplication.security.service.UserDetailsServiceImpl;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -28,6 +29,15 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<UserDto> getCurrentUserProfile() {
+
+        UserDto currentUser = this.userService.getCurrentUserProfile();
+
+        return ResponseEntity.ok(currentUser);
+    }
+
 
     @GetMapping("/admins/{roleId}")
     public ResponseEntity<List<UserDto>> getAllAdmins(@PathVariable int roleId) {

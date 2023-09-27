@@ -1,7 +1,9 @@
 package com.plantcare.serverapplication.usermanagement.user;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.UserDto;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+
+    @Override
+    public UserDto getCurrentUserProfile() {
+
+        User currentUser = this.getCurrentUser();
+
+        return this.convertToDto(currentUser);
+    }
 
     @Override
     public List<UserDto> getAllAdmins(int roleId) {
@@ -63,15 +73,22 @@ public class UserServiceImpl implements UserService {
         return this.convertToDto(savedUser);
     }
 
+    private User getCurrentUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+    }
+
     private UserDto convertToDto(User user) {
         return UserDto
                 .builder()
                 .id(user.getId())
                 .email(user.getEmail())
-                .status(user.isAccountNonLocked())
+                .isAccountNonLocked(user.isAccountNonLocked())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .role(user.getRole().getRoleName().name())
                 .build();
     }
 }

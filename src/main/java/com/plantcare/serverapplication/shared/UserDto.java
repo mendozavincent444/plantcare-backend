@@ -10,9 +10,9 @@ import lombok.Setter;
 public class UserDto {
     private int id;
     private String email;
-    private boolean status;
+    private boolean isAccountNonLocked;
     private String username;
     private String firstName;
     private String lastName;
-    private int roleId;
+    private String role;
 }

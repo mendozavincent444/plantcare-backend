@@ -138,7 +138,7 @@ public class FarmServiceImpl implements FarmService {
                    .builder()
                    .id(farmer.getId())
                    .email(farmer.getEmail())
-                   .status(farmer.isAccountNonLocked())
+                   .isAccountNonLocked(farmer.isAccountNonLocked())
                    .firstName(farmer.getFirstName())
                    .lastName(farmer.getLastName())
                    .build();
