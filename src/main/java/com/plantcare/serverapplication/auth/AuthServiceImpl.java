@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.auth;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.jwt.JwtUtils;
@@ -75,9 +76,18 @@ public class AuthServiceImpl implements AuthService {
 
         ResponseCookie jwtCookie = this.jwtUtils.generateJwtCookie(userDetails);
 
+        User currentUser = this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
+
         String role = userDetails.getAuthorities().stream().toList().get(0).getAuthority();
 
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), role);
+        UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.builder()
+                .id(currentUser.getId())
+                .firstName(currentUser.getFirstName())
+                .lastName(currentUser.getLastName())
+                .email(currentUser.getEmail())
+                .username(currentUser.getUsername())
+                .role(currentUser.getRole().getRoleName().name())
+                .build();
 
         return new AuthServiceLoginData(jwtCookie.toString(), userInfoResponseDto);
     }
