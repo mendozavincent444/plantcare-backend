@@ -148,7 +148,7 @@ public class PlantServiceImpl implements PlantService {
     }
 
 
-    private PlantDto mapToDto(Plant plant) {
+    public PlantDto mapToDto(Plant plant) {
         return this.modelMapper.map(plant, PlantDto.class);
     }
 
