@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.auth;
 
 import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.shared.UserDto;
+import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +70,14 @@ public class AuthController {
                 .ok()
                 .header(HttpHeaders.SET_COOKIE, authServiceUpdatePasswordData.getUpdatedJwtCookie())
                 .body(authServiceUpdatePasswordData.getMessageResponseDto());
+    }
+
+    @PutMapping("/update-profile")
+    public ResponseEntity<?> updateUserProfile(@RequestBody UserDto userDto) {
+
+        UserInfoResponseDto userInfoResponseDto = this.authService.updateUserInfo(userDto);
+
+        return ResponseEntity.ok(userInfoResponseDto);
     }
 
 }
