@@ -8,6 +8,7 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.security.service.UserDetailsPasswordServiceImpl;
 import com.plantcare.serverapplication.security.service.UserDetailsServiceImpl;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
@@ -15,12 +16,14 @@ import com.plantcare.serverapplication.usermanagement.role.RoleRepository;
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import jakarta.mail.Message;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,8 +36,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class AuthServiceImpl implements AuthService {
-
-
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
@@ -200,5 +201,32 @@ public class AuthServiceImpl implements AuthService {
         MessageResponseDto messageResponseDto = new MessageResponseDto("Password updated successfully!");
 
         return new AuthServiceUpdatePasswordData(jwtCookie.toString(), messageResponseDto);
+    }
+
+    @Override
+    public UserInfoResponseDto updateUserInfo(UserDto userDto) {
+        User currentUser = this.getCurrentUser();
+
+        currentUser.setFirstName(userDto.getFirstName());
+        currentUser.setLastName(userDto.getLastName());
+
+        User savedUser = this.userRepository.save(currentUser);
+
+        UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.builder()
+                .id(savedUser.getId())
+                .firstName(savedUser.getFirstName())
+                .lastName(savedUser.getLastName())
+                .email(savedUser.getEmail())
+                .username(savedUser.getUsername())
+                .role(savedUser.getRole().getRoleName().name())
+                .build();
+
+        return userInfoResponseDto;
+    }
+
+    private User getCurrentUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }
