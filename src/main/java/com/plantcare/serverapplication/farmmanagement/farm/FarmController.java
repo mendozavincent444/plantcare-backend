@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.sun.mail.iap.Response;
 import org.springframework.http.HttpStatus;
@@ -37,11 +38,11 @@ public class FarmController {
     }
 
     @DeleteMapping("/{farmId}")
-    public ResponseEntity<String> deleteFarmById(@PathVariable int farmId) {
+    public ResponseEntity<MessageResponseDto> deleteFarmById(@PathVariable int farmId) {
 
         this.farmService.deleteFarmById(farmId);
 
-        return ResponseEntity.ok("Farm deleted successfully.");
+        return ResponseEntity.ok(new MessageResponseDto("Farm deleted successfully."));
     }
     @PutMapping("/{farmId}")
     public ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId) {
@@ -59,18 +60,18 @@ public class FarmController {
     }
 
     @DeleteMapping("/{farmId}/farmers/{farmerId}")
-    public ResponseEntity<String> removeFarmerByFarm(@PathVariable int farmId, @PathVariable int farmerId) {
+    public ResponseEntity<MessageResponseDto> removeFarmerByFarm(@PathVariable int farmId, @PathVariable int farmerId) {
         this.farmService.removeFarmerByFarm(farmId, farmerId);
 
-        return ResponseEntity.ok("Farmer/s successfully removed from farm.");
+        return ResponseEntity.ok(new MessageResponseDto("Farmer/s successfully removed from farm."));
     }
 
     @PutMapping("/{farmId}/change-owner/{newOwnerId}")
-    public ResponseEntity<String> changeFarmOwnership(@PathVariable int farmId, @PathVariable int newOwnerId) {
+    public ResponseEntity<MessageResponseDto> changeFarmOwnership(@PathVariable int farmId, @PathVariable int newOwnerId) {
 
         this.farmService.changeFarmOwnership(farmId, newOwnerId);
 
-        return ResponseEntity.ok("Farm ownership changed successfully.");
+        return ResponseEntity.ok(new MessageResponseDto("Farm ownership changed successfully."));
     }
 
 }
