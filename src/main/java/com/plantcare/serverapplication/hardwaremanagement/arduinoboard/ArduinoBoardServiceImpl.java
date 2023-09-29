@@ -23,6 +23,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         return this.mapToDto(arduinoBoard);
     }
 
+    @Override
     public ArduinoBoardDto mapToDto(ArduinoBoard arduinoBoard) {
         return this.modelMapper.map(arduinoBoard, ArduinoBoardDto.class);
     }
