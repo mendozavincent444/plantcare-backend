@@ -79,7 +79,8 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 
-    private UserDto convertToDto(User user) {
+    @Override
+    public UserDto convertToDto(User user) {
         return UserDto
                 .builder()
                 .id(user.getId())

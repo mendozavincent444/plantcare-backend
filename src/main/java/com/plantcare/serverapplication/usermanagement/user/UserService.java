@@ -11,4 +11,6 @@ public interface UserService {
     UserDto banAdmin(UserDto admin, int adminId);
 
     UserDto reactivateAdmin(UserDto admin, int adminId);
+
+    UserDto convertToDto(User user);
 }

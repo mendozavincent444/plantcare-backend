@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
+import com.plantcare.serverapplication.shared.UserDto;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,6 +29,8 @@ public class FarmDto {
 
     @NotNull
     private String location;
+
+    private UserDto owner;
 
     private Integer roomTemperatureAndHumiditySensorId;
 }
