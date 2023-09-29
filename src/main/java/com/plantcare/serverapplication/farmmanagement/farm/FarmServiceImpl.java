@@ -69,7 +69,7 @@ public class FarmServiceImpl implements FarmService {
 
         Farm savedFarm = this.farmRepository.save(farm);
 
-        return this.mapToDto(savedFarm);
+        return this.convertToDto(savedFarm);
     }
 
     @Override
@@ -77,15 +77,7 @@ public class FarmServiceImpl implements FarmService {
 
         User currentUser = this.getCurrentUser();
 
-        return currentUser.getFarms().stream().map((farm -> {
-            return FarmDto
-                    .builder()
-                    .id(farm.getId())
-                    .name(farm.getName())
-                    .location(farm.getLocation())
-                    .owner(this.userService.convertToDto(farm.getOwner()))
-                    .build();
-        })).collect(Collectors.toList());
+        return currentUser.getFarms().stream().map((farm -> this.convertToDto(farm))).collect(Collectors.toList());
     }
 
     @Override
@@ -122,9 +114,9 @@ public class FarmServiceImpl implements FarmService {
         farm.setLocation(farmDto.getLocation());
 
 
-        Farm savedFarm = this.farmRepository.save(farm);
+        Farm updatedFarm = this.farmRepository.save(farm);
 
-        return this.mapToDto(savedFarm);
+        return this.convertToDto(updatedFarm);
     }
 
     @Override
@@ -201,8 +193,14 @@ public class FarmServiceImpl implements FarmService {
         return currentUser.getFarms().contains(farm);
     }
 
-    private FarmDto mapToDto(Farm farm) {
-        return this.modelMapper.map(farm, FarmDto.class);
+    private FarmDto convertToDto(Farm farm) {
+        return FarmDto
+                .builder()
+                .id(farm.getId())
+                .name(farm.getName())
+                .location(farm.getLocation())
+                .owner(this.userService.convertToDto(farm.getOwner()))
+                .build();
     }
 
     private Farm mapToEntity(FarmDto farmDto) {
