@@ -7,6 +7,7 @@ import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,16 +21,17 @@ import java.util.stream.Collectors;
 @Service
 public class FarmServiceImpl implements FarmService {
 
+    private final UserService userService;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public FarmServiceImpl(FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
+        this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
-
 
     @Override
     public FarmDto getFarmById(int farmId) {
@@ -75,7 +77,15 @@ public class FarmServiceImpl implements FarmService {
 
         User currentUser = this.getCurrentUser();
 
-        return currentUser.getFarms().stream().map((farm -> this.mapToDto(farm))).collect(Collectors.toList());
+        return currentUser.getFarms().stream().map((farm -> {
+            return FarmDto
+                    .builder()
+                    .id(farm.getId())
+                    .name(farm.getName())
+                    .location(farm.getLocation())
+                    .owner(this.userService.convertToDto(farm.getOwner()))
+                    .build();
+        })).collect(Collectors.toList());
     }
 
     @Override
