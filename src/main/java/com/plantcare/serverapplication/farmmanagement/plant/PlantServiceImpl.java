@@ -147,7 +147,7 @@ public class PlantServiceImpl implements PlantService {
         return this.convertToDto(updatedPlant);
     }
 
-
+    @Override
     public PlantDto mapToDto(Plant plant) {
         return this.modelMapper.map(plant, PlantDto.class);
     }

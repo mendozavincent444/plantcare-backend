@@ -24,23 +24,23 @@ public class ContainerServiceImpl implements ContainerService {
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final PlantRepository plantRepository;
     private final FarmRepository farmRepository;
-    private final ArduinoBoardServiceImpl arduinoBoardServiceImpl;
-    private final PlantServiceImpl plantServiceImpl;
+    private final ArduinoBoardService arduinoBoardService;
+    private final PlantService plantService;
 
     public ContainerServiceImpl(
             ContainerRepository containerRepository,
             ArduinoBoardRepository arduinoBoardRepository,
             PlantRepository plantRepository,
             FarmRepository farmRepository,
-            ArduinoBoardServiceImpl arduinoBoardServiceImpl,
-            PlantServiceImpl plantServiceImpl
+            ArduinoBoardService arduinoBoardService,
+            PlantService plantService
     ) {
         this.containerRepository = containerRepository;
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.plantRepository = plantRepository;
         this.farmRepository = farmRepository;
-        this.arduinoBoardServiceImpl = arduinoBoardServiceImpl;
-        this.plantServiceImpl = plantServiceImpl;
+        this.arduinoBoardService = arduinoBoardService;
+        this.plantService = plantService;
     }
 
     @Override
@@ -116,8 +116,8 @@ public class ContainerServiceImpl implements ContainerService {
                 .builder()
                 .id(container.getId())
                 .name(container.getName())
-                .arduinoBoardDto(this.arduinoBoardServiceImpl.mapToDto(container.getArduinoBoard()))
-                .plantDto(this.plantServiceImpl.mapToDto(container.getPlant()))
+                .arduinoBoardDto(this.arduinoBoardService.mapToDto(container.getArduinoBoard()))
+                .plantDto(this.plantService.mapToDto(container.getPlant()))
                 .farmId(container.getFarm().getId())
                 .build();
 
