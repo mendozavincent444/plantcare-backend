@@ -108,9 +108,16 @@ public class AuthServiceImpl implements AuthService {
 
         Role userRole = null;
 
+        List<Farm> farms = new ArrayList<>();
+
         if (role.equals("ROLE_FARMER")) {
             userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_FARMER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+            Farm farm = this.farmRepository.findById(registerRequestDto.getFarmId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", registerRequestDto.getFarmId()));
+
+            farms.add(farm);
 
         } else if (role.equals("ROLE_ADMIN")) {
             userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_ADMIN)
@@ -126,6 +133,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(registerRequestDto.getLastName())
                 .password(this.passwordEncoder.encode(registerRequestDto.getPassword()))
                 .role(userRole)
+                .farms(farms)
                 .build();
 
         this.userRepository.save(user);
