@@ -110,20 +110,6 @@ public class AuthServiceImpl implements AuthService {
 
         List<Farm> farms = new ArrayList<>();
 
-        if (role.equals("ROLE_FARMER")) {
-            userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_FARMER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-
-            Farm farm = this.farmRepository.findById(registerRequestDto.getFarmId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", registerRequestDto.getFarmId()));
-
-            farms.add(farm);
-
-        } else if (role.equals("ROLE_ADMIN")) {
-            userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        }
-
         User user = User
                 .builder()
                 .email(registerRequestDto.getEmail())
@@ -132,9 +118,24 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())
                 .password(this.passwordEncoder.encode(registerRequestDto.getPassword()))
-                .role(userRole)
                 .farms(farms)
                 .build();
+
+        if (role.equals("ROLE_FARMER")) {
+            userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_FARMER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+            Farm farm = this.farmRepository.findById(registerRequestDto.getFarmId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", registerRequestDto.getFarmId()));
+
+            farm.getUsers().add(user);
+
+        } else if (role.equals("ROLE_ADMIN")) {
+            userRole = this.roleRepository.findByRoleName(RoleEnum.ROLE_ADMIN)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        }
+
+        user.setRole(userRole);
 
         this.userRepository.save(user);
 
