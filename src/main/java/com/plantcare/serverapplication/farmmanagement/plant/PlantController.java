@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.plant;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +35,10 @@ public class PlantController {
         return new ResponseEntity<>(plants, HttpStatus.OK);
     }
     @DeleteMapping("/{plantId}")
-    public ResponseEntity<String> deletePlantById(@PathVariable int plantId, @PathVariable int farmId) {
+    public ResponseEntity<MessageResponseDto> deletePlantById(@PathVariable int plantId, @PathVariable int farmId) {
         this.plantService.deletePlantById(farmId, plantId);
 
-        return new ResponseEntity<>("Plant successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponseDto("Plant successfully deleted."), HttpStatus.OK);
     }
 
     @PutMapping("/{plantId}")
