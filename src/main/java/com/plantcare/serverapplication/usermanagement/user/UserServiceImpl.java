@@ -73,6 +73,16 @@ public class UserServiceImpl implements UserService {
         return this.convertToDto(savedUser);
     }
 
+    @Override
+    public UserDto getAdminByUsername(String username) {
+
+       // fix orElseThrow
+        User admin = this.userRepository.findByUsername(username)
+                .orElseThrow();
+
+        return this.convertToDto(admin);
+    }
+
     private User getCurrentUser() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 

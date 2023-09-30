@@ -38,7 +38,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/admins/{roleId}")
+    @GetMapping("/roles/{roleId}")
     public ResponseEntity<List<UserDto>> getAllAdmins(@PathVariable int roleId) {
 
         List<UserDto> admins = this.userService.getAllAdmins(roleId);
@@ -65,6 +65,14 @@ public class UserController {
         UserDto reactivatedAdmin = this.userService.reactivateAdmin(admin, adminId);
 
         return ResponseEntity.ok(reactivatedAdmin);
+    }
+
+    @GetMapping("/admins/{adminUsername}")
+    public ResponseEntity<UserDto> getAdminByUsername(@PathVariable String adminUsername) {
+
+        UserDto admin = this.userService.getAdminByUsername(adminUsername);
+
+        return ResponseEntity.ok(admin);
     }
 
 

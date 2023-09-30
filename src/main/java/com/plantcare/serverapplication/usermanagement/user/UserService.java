@@ -13,4 +13,5 @@ public interface UserService {
     UserDto reactivateAdmin(UserDto admin, int adminId);
 
     UserDto convertToDto(User user);
+    UserDto getAdminByUsername(String username);
 }
