@@ -108,8 +108,6 @@ public class AuthServiceImpl implements AuthService {
 
         Role userRole = null;
 
-        List<Farm> farms = new ArrayList<>();
-
         User user = User
                 .builder()
                 .email(registerRequestDto.getEmail())
@@ -118,7 +116,6 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())
                 .password(this.passwordEncoder.encode(registerRequestDto.getPassword()))
-                .farms(farms)
                 .build();
 
         if (role.equals("ROLE_FARMER")) {
