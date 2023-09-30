@@ -52,7 +52,7 @@ public class PlantServiceImpl implements PlantService {
                 .maximumEc(plantDto.getMaximumEc())
                 .maximumPh(plantDto.getMaximumPh())
                 .minimumEc(plantDto.getMinimumEc())
-                .maximumPh(plantDto.getMaximumPh())
+                .minimumPh(plantDto.getMaximumPh())
                 .daysToMaturity(plantDto.getDaysToMaturity())
                 .farm(farm)
                 .build();
