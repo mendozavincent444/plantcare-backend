@@ -2,6 +2,7 @@ package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
+import com.plantcare.serverapplication.hardwaremanagement.sensor.SensorService;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
@@ -15,7 +16,6 @@ import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,12 +24,14 @@ public class FarmServiceImpl implements FarmService {
     private final UserService userService;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
+    private final SensorService sensorService;
     private final ModelMapper modelMapper;
 
-    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, SensorService sensorService, ModelMapper modelMapper) {
         this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
+        this.sensorService = sensorService;
         this.modelMapper = modelMapper;
     }
 
@@ -39,14 +41,19 @@ public class FarmServiceImpl implements FarmService {
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        Optional<Sensor> temperatureAndHumiditySensor = Optional.of(farm.getRoomTemperatureAndHumidity());
+        Sensor roomTemperatureAndHumiditySensor = null;
+
+        if (farm.getRoomTemperatureAndHumiditySensor() != null) {
+            roomTemperatureAndHumiditySensor = farm.getRoomTemperatureAndHumiditySensor();
+        }
 
         FarmDto farmDto = FarmDto
                 .builder()
                 .id(farm.getId())
                 .name(farm.getName())
+                .owner(this.userService.convertToDto(farm.getOwner()))
                 .location(farm.getLocation())
-                .roomTemperatureAndHumiditySensorId(temperatureAndHumiditySensor.get().getId())
+                .roomTemperatureAndHumiditySensor(this.sensorService.convertToDto(roomTemperatureAndHumiditySensor))
                 .build();
 
         return farmDto;
