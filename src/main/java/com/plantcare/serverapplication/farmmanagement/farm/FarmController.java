@@ -58,6 +58,13 @@ public class FarmController {
         return ResponseEntity.ok(farmers);
     }
 
+    @GetMapping("/{farmId}/admins")
+    public ResponseEntity<List<UserDto>> getAllAdminsByFarmId(@PathVariable int farmId) {
+        List<UserDto> admins = this.farmService.getAllAdminsByFarmId(farmId);
+
+        return ResponseEntity.ok(admins);
+    }
+
     @DeleteMapping("/{farmId}/farmers/{farmerId}")
     public ResponseEntity<MessageResponseDto> removeFarmerByFarm(@PathVariable int farmId, @PathVariable int farmerId) {
         this.farmService.removeFarmerByFarm(farmId, farmerId);
