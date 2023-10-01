@@ -34,7 +34,7 @@ public class Farm {
 
     @OneToOne
     @JoinColumn(name = "room_temp_and_humidity_sensor_id")
-    private Sensor roomTemperatureAndHumidity;
+    private Sensor roomTemperatureAndHumiditySensor;
 
     @OneToOne
     @JoinColumn(name = "owner_id")
