@@ -155,6 +155,34 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
+    public List<UserDto> getAllAdminsByFarmId(int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        List<User> farmers = farm.getUsers()
+                .stream()
+                .filter(user -> user.getRole().getRoleName().equals(RoleEnum.ROLE_ADMIN))
+                .collect(Collectors.toList());
+
+        return farmers.stream().map(farmer -> {
+            return UserDto
+                    .builder()
+                    .id(farmer.getId())
+                    .email(farmer.getEmail())
+                    .isAccountNonLocked(farmer.isAccountNonLocked())
+                    .firstName(farmer.getFirstName())
+                    .lastName(farmer.getLastName())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
+    @Override
     public void removeFarmerByFarm(int farmId, int farmerId) {
 
         User currentUser = this.getCurrentUser();
