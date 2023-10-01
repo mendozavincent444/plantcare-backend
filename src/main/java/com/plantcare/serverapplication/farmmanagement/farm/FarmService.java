@@ -17,13 +17,11 @@ public interface FarmService {
 
     void deleteFarmById(int farmId);
 
-    FarmDto updateFarm(FarmDto farmDto, int farmId);
+    FarmDto updateFarm(FarmDto farmDto, int farmId, int newOwnerId);
 
     List<UserDto> getAllFarmersByFarmId(int farmId);
 
     void removeFarmerByFarm(int farmId, int farmerId);
-
-    void changeFarmOwnership(int farmId, int newOwnerId);
 
     List<UserDto> getAllAdminsByFarmId(int farmId);
 }
