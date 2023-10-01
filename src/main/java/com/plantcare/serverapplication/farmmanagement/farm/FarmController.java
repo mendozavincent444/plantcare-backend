@@ -43,10 +43,10 @@ public class FarmController {
 
         return ResponseEntity.ok(new MessageResponseDto("Farm deleted successfully."));
     }
-    @PutMapping("/{farmId}")
-    public ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId) {
+    @PutMapping("/{farmId}/new-owner/{newOwnerId}")
+    public ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId, @PathVariable int newOwnerId) {
 
-        FarmDto updatedFarm = this.farmService.updateFarm(farmDto, farmId);
+        FarmDto updatedFarm = this.farmService.updateFarm(farmDto, farmId, newOwnerId);
 
         return ResponseEntity.ok(updatedFarm);
     }
@@ -71,13 +71,4 @@ public class FarmController {
 
         return ResponseEntity.ok(new MessageResponseDto("Farmer/s successfully removed from farm."));
     }
-
-    @PutMapping("/{farmId}/change-owner/{newOwnerId}")
-    public ResponseEntity<MessageResponseDto> changeFarmOwnership(@PathVariable int farmId, @PathVariable int newOwnerId) {
-
-        this.farmService.changeFarmOwnership(farmId, newOwnerId);
-
-        return ResponseEntity.ok(new MessageResponseDto("Farm ownership changed successfully."));
-    }
-
 }

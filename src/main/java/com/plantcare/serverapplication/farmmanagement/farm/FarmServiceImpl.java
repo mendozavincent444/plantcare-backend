@@ -106,7 +106,7 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
-    public FarmDto updateFarm(FarmDto farmDto, int farmId) {
+    public FarmDto updateFarm(FarmDto farmDto, int farmId, int newOwnerId) {
 
         User currentUser = this.getCurrentUser();
 
@@ -117,9 +117,12 @@ public class FarmServiceImpl implements FarmService {
             throw new ResourceAccessException("User access to resource is forbidden");
         }
 
+        User newOwner = this.userRepository.findById(newOwnerId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", newOwnerId));
+
         farm.setName(farmDto.getName());
         farm.setLocation(farmDto.getLocation());
-
+        farm.setOwner(newOwner);
 
         Farm updatedFarm = this.farmRepository.save(farm);
 
@@ -203,26 +206,6 @@ public class FarmServiceImpl implements FarmService {
         this.farmRepository.save(farm);
         this.userRepository.save(farmer);
     }
-
-    @Override
-    public void changeFarmOwnership(int farmId, int newOwnerId) {
-
-        User currentUser = this.getCurrentUser();
-
-        Farm farm = this.farmRepository.findById(farmId)
-                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
-
-        if (!isValidFarmAccess(currentUser, farm)) {
-            throw new ResourceAccessException("User access to resource is forbidden");
-        }
-
-        User newOwner = this.userRepository.findById(newOwnerId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", newOwnerId));
-
-        farm.setOwner(newOwner);
-        this.farmRepository.save(farm);
-    }
-
 
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
