@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
+import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.hardwaremanagement.arduinosensormapping.ArduinoSensorMapping;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import jakarta.persistence.*;
@@ -30,4 +31,8 @@ public class ArduinoBoard {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "arduinoBoard")
     private Set<ArduinoSensorMapping> sensorMappings = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "farm_id", nullable = false)
+    private Farm farm;
 }
