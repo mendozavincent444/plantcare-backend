@@ -22,9 +22,6 @@ public class Sensor {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "type", nullable = false, length = 20)
-    private String type;
-
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 

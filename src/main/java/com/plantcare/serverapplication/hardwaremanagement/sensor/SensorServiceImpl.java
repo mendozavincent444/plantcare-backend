@@ -16,7 +16,6 @@ public class SensorServiceImpl implements SensorService {
                 .builder()
                 .id(sensor.getId())
                 .name(sensor.getName())
-                .type(sensor.getType())
                 .status(sensor.getStatus())
                 .build();
     }
