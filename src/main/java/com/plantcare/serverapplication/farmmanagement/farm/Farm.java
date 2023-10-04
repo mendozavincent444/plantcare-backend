@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.task.Task;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.pump.Pump;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import com.plantcare.serverapplication.usermanagement.user.User;
@@ -33,8 +34,8 @@ public class Farm {
     private String location;
 
     @OneToOne
-    @JoinColumn(name = "room_temp_and_humidity_sensor_id")
-    private Sensor roomTemperatureAndHumiditySensor;
+    @JoinColumn(name = "main_arduino_board_id")
+    private ArduinoBoard mainArduinoBoard;
 
     @OneToOne
     @JoinColumn(name = "owner_id")

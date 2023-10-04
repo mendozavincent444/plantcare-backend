@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import com.plantcare.serverapplication.hardwaremanagement.sensor.SensorService;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
@@ -24,14 +25,12 @@ public class FarmServiceImpl implements FarmService {
     private final UserService userService;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
-    private final SensorService sensorService;
     private final ModelMapper modelMapper;
 
-    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, SensorService sensorService, ModelMapper modelMapper) {
+    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
-        this.sensorService = sensorService;
         this.modelMapper = modelMapper;
     }
 
@@ -41,10 +40,10 @@ public class FarmServiceImpl implements FarmService {
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        Sensor roomTemperatureAndHumiditySensor = null;
+        int mainArduinoBoardId = 0;
 
-        if (farm.getRoomTemperatureAndHumiditySensor() != null) {
-            roomTemperatureAndHumiditySensor = farm.getRoomTemperatureAndHumiditySensor();
+        if (farm.getMainArduinoBoard() != null) {
+            mainArduinoBoardId = farm.getMainArduinoBoard().getId();
         }
 
         FarmDto farmDto = FarmDto
@@ -53,7 +52,7 @@ public class FarmServiceImpl implements FarmService {
                 .name(farm.getName())
                 .owner(this.userService.convertToDto(farm.getOwner()))
                 .location(farm.getLocation())
-                .roomTemperatureAndHumiditySensor(this.sensorService.convertToDto(roomTemperatureAndHumiditySensor))
+                .mainArduinoBoardId(mainArduinoBoardId)
                 .build();
 
         return farmDto;
