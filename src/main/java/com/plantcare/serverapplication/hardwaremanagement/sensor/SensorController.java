@@ -23,6 +23,6 @@ public class SensorController {
     public ResponseEntity<List<SensorDto>> getAllSensorsByFarmId(@PathVariable int farmId) {
         List<SensorDto> sensors = this.sensorService.getAllSensorsByFarmId(farmId);
 
-        return new ResponseEntity<>(sensors, HttpStatus.ACCEPTED);
+        return ResponseEntity.ok(sensors);
     }
 }
