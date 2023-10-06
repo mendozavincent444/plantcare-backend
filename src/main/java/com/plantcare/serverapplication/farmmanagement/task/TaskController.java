@@ -1,8 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
 import com.plantcare.serverapplication.shared.HarvestLogDto;
-import com.plantcare.serverapplication.shared.HarvestTasksDto;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +29,11 @@ public class TaskController {
 
     @DeleteMapping("/containers/{containerId}/tasks")
     public ResponseEntity<String> deleteTasks(
-            @RequestBody DeleteTasksDto deleteTasksDto,
+            @RequestBody TaskIdsDto taskIdsDto,
             @PathVariable int containerId,
             @PathVariable int farmId
     ) {
-        this.taskService.deleteTasks(deleteTasksDto, containerId, farmId);
+        this.taskService.deleteTasks(taskIdsDto, containerId, farmId);
 
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }
@@ -68,12 +66,12 @@ public class TaskController {
 
     @PostMapping("/containers/{containerId}/tasks/harvest")
     public ResponseEntity<List<HarvestLogDto>> harvestTasksById(
-            @RequestBody HarvestTasksDto harvestTasksDto,
+            @RequestBody TaskIdsDto taskIdsDto,
             @PathVariable int farmId,
             @PathVariable int containerId
             ) {
 
-        List<HarvestLogDto> harvestLogDtos = this.taskService.harvestTasksByTaskIds(harvestTasksDto, farmId, containerId);
+        List<HarvestLogDto> harvestLogDtos = this.taskService.harvestTasksByTaskIds(taskIdsDto, farmId, containerId);
 
         return new ResponseEntity<>(harvestLogDtos, HttpStatus.CREATED);
     }

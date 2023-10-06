@@ -7,7 +7,6 @@ import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLogRepository;
-import com.plantcare.serverapplication.shared.HarvestTasksDto;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
 import com.plantcare.serverapplication.shared.HarvestLogDto;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,8 +74,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTasks(DeleteTasksDto deleteTasksDto, int containerId, int farmId) {
-        List<Integer> taskIds = deleteTasksDto.getTaskIds();
+    public void deleteTasks(TaskIdsDto taskIdsDto, int containerId, int farmId) {
+        List<Integer> taskIds = taskIdsDto.getTaskIds();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -144,14 +142,14 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<HarvestLogDto> harvestTasksByTaskIds(HarvestTasksDto harvestTasksDto, int farmId, int containerId) {
+    public List<HarvestLogDto> harvestTasksByTaskIds(TaskIdsDto taskIdsDto, int farmId, int containerId) {
 
         // fix - if farm is accessible and container has all the tasks
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        List<Integer> taskIdsToHarvest = harvestTasksDto.getTaskIds();
+        List<Integer> taskIdsToHarvest = taskIdsDto.getTaskIds();
 
         List<Task> tasksToHarvest = this.taskRepository.findAllById(taskIdsToHarvest);
 
