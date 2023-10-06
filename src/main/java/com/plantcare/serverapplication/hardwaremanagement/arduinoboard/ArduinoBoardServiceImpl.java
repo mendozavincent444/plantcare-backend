@@ -15,7 +15,6 @@ import java.util.List;
 
 @Service
 public class ArduinoBoardServiceImpl implements ArduinoBoardService {
-
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
@@ -38,12 +37,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(arduinoBoardId)
                 .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", arduinoBoardId));
 
-        return this.mapToDto(arduinoBoard);
-    }
-
-    @Override
-    public ArduinoBoardDto mapToDto(ArduinoBoard arduinoBoard) {
-        return this.modelMapper.map(arduinoBoard, ArduinoBoardDto.class);
+        return this.convertToDto(arduinoBoard);
     }
 
     @Override
@@ -63,7 +57,8 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         return arduinoBoards.stream().map((arduinoBoard -> this.convertToDto(arduinoBoard))).toList();
     }
 
-    private ArduinoBoardDto convertToDto(ArduinoBoard arduinoBoard) {
+    @Override
+    public ArduinoBoardDto convertToDto(ArduinoBoard arduinoBoard) {
         return ArduinoBoardDto
                 .builder()
                 .id(arduinoBoard.getId())

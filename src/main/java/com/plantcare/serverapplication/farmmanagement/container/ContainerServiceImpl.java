@@ -116,7 +116,7 @@ public class ContainerServiceImpl implements ContainerService {
                 .builder()
                 .id(container.getId())
                 .name(container.getName())
-                .arduinoBoardDto(this.arduinoBoardService.mapToDto(container.getArduinoBoard()))
+                .arduinoBoardDto(this.arduinoBoardService.convertToDto(container.getArduinoBoard()))
                 .plantDto(this.plantService.mapToDto(container.getPlant()))
                 .farmId(container.getFarm().getId())
                 .build();
