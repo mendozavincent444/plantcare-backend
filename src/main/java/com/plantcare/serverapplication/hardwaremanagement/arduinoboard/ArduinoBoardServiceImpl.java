@@ -18,18 +18,15 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
-    private final ModelMapper modelMapper;
 
     public ArduinoBoardServiceImpl(
             ArduinoBoardRepository arduinoBoardRepository,
             UserRepository userRepository,
-            FarmRepository farmRepository,
-            ModelMapper modelMapper
+            FarmRepository farmRepository
     ) {
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.userRepository = userRepository;
         this.farmRepository = farmRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -42,7 +39,6 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     @Override
     public List<ArduinoBoardDto> getAllArduinoBoardsByFarmId(int farmId) {
-
         User currentUser = this.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
@@ -67,9 +63,6 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
                 .build();
     }
 
-    private ArduinoBoard mapToEntity(ArduinoBoardDto arduinoBoardDto) {
-        return this.modelMapper.map(arduinoBoardDto, ArduinoBoard.class);
-    }
 
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);

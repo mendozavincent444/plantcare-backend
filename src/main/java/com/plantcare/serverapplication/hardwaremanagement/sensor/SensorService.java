@@ -1,6 +1,10 @@
 package com.plantcare.serverapplication.hardwaremanagement.sensor;
 
+import java.util.List;
+
 public interface SensorService {
 
-    public SensorDto convertToDto(Sensor sensor);
+    SensorDto convertToDto(Sensor sensor);
+
+    List<SensorDto> getAllSensorsByFarmId(int farmId);
 }

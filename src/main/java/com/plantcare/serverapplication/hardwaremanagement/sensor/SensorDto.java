@@ -7,4 +7,5 @@ public class SensorDto {
     private int id;
     private String name;
     private String status;
+    private String sensorTypeName;
 }

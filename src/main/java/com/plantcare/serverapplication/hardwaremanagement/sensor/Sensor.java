@@ -14,7 +14,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "sensor")
 public class Sensor {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
