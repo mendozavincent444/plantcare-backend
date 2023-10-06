@@ -6,7 +6,7 @@ public interface ArduinoBoardService {
 
     ArduinoBoardDto getArduinoBoardById(int arduinoBoardId);
 
-    ArduinoBoardDto mapToDto(ArduinoBoard arduinoBoard);
+    ArduinoBoardDto convertToDto(ArduinoBoard arduinoBoard);
 
     List<ArduinoBoardDto> getAllArduinoBoardsByFarmId(int farmId);
 }
