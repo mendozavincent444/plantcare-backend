@@ -14,7 +14,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "pump")
 public class Pump {
-
     @Id
     private int id;
 
