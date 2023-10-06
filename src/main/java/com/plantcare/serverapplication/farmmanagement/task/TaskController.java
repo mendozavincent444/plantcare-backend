@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
+import com.plantcare.serverapplication.shared.HarvestLogDto;
+import com.plantcare.serverapplication.shared.HarvestTasksDto;
 import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +64,17 @@ public class TaskController {
         TaskDto updatedTask = this.taskService.updateTask(taskDto, taskId, containerId);
 
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+    }
+
+    @PostMapping("/containers/{containerId}/tasks/harvest")
+    public ResponseEntity<List<HarvestLogDto>> harvestTasksById(
+            @RequestBody HarvestTasksDto harvestTasksDto,
+            @PathVariable int farmId,
+            @PathVariable int containerId
+            ) {
+
+        List<HarvestLogDto> harvestLogDtos = this.taskService.harvestTasksByTaskIds(harvestTasksDto, farmId, containerId);
+
+        return new ResponseEntity<>(harvestLogDtos, HttpStatus.CREATED);
     }
 }

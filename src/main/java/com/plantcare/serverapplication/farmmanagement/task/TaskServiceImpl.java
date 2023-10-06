@@ -5,11 +5,17 @@ import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.farmmanagement.container.ContainerRepository;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
+import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
+import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLogRepository;
+import com.plantcare.serverapplication.shared.HarvestTasksDto;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import com.plantcare.serverapplication.shared.HarvestLogDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,17 +25,20 @@ public class TaskServiceImpl implements TaskService {
     private final PlantRepository plantRepository;
     private final ContainerRepository containerRepository;
     private final FarmRepository farmRepository;
+    private final HarvestLogRepository harvestLogRepository;
 
     public TaskServiceImpl(
             TaskRepository taskRepository,
             PlantRepository plantRepository,
             ContainerRepository containerRepository,
-            FarmRepository farmRepository
+            FarmRepository farmRepository,
+            HarvestLogRepository harvestLogRepository
     ) {
         this.taskRepository = taskRepository;
         this.plantRepository = plantRepository;
         this.containerRepository = containerRepository;
         this.farmRepository = farmRepository;
+        this.harvestLogRepository = harvestLogRepository;
     }
 
     @Override
@@ -132,6 +141,42 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository.save(task);
 
         return convertToDto(task);
+    }
+
+    @Override
+    public List<HarvestLogDto> harvestTasksByTaskIds(HarvestTasksDto harvestTasksDto, int farmId, int containerId) {
+
+        // fix - if farm is accessible and container has all the tasks
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        List<Integer> taskIdsToHarvest = harvestTasksDto.getTaskIds();
+
+        List<Task> tasksToHarvest = this.taskRepository.findAllById(taskIdsToHarvest);
+
+        List<HarvestLog> harvestLogList = tasksToHarvest.stream().map((task) -> {
+
+            return HarvestLog
+                    .builder()
+                    .harvestedDate(new Date())
+                    .task(task)
+                    .farmer(task.getFarmer())
+                    .farm(farm)
+                    .build();
+        }).toList();
+
+        List<HarvestLog> savedHarvestLogs = this.harvestLogRepository.saveAll(harvestLogList);
+
+        return savedHarvestLogs.stream().map((harvestLog -> {
+            return HarvestLogDto
+                    .builder()
+                    .id(harvestLog.getId())
+                    .harvestedDate(harvestLog.getHarvestedDate())
+                    .plantName(harvestLog.getTask().getPlant().getName())
+                    .farmerLastName(harvestLog.getFarmer().getLastName())
+                    .build();
+        })).toList();
     }
 
     private TaskDto convertToDto(Task task) {
