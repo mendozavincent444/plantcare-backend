@@ -1,6 +1,5 @@
 package com.plantcare.serverapplication.hardwaremanagement.sensor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,5 +23,12 @@ public class SensorController {
         List<SensorDto> sensors = this.sensorService.getAllSensorsByFarmId(farmId);
 
         return ResponseEntity.ok(sensors);
+    }
+
+    @GetMapping("/{sensorId}")
+    public ResponseEntity<SensorDto> getSensorById(@PathVariable int farmId, @PathVariable int sensorId) {
+        SensorDto sensor = this.sensorService.getSensorById(farmId, sensorId);
+
+        return ResponseEntity.ok(sensor);
     }
 }
