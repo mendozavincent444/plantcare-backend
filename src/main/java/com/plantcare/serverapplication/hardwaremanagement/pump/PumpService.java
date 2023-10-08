@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface PumpService {
     List<PumpDto> getAllPumpsByFarmId(int farmId);
+
+    PumpDto getPumpById(int farmId, int pumpId);
 }
