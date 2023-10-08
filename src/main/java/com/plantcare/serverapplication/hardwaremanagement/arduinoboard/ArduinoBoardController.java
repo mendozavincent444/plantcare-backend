@@ -19,11 +19,10 @@ public class ArduinoBoardController {
         this.arduinoBoardService = arduinoBoardService;
     }
 
-    // fix - might not need feature
-    @GetMapping("{id}")
-    public ResponseEntity<ArduinoBoardDto> getArduinoBoardById(@PathVariable("id") int arduinoBoardId) {
+    @GetMapping("/{arduinoBoardId}")
+    public ResponseEntity<ArduinoBoardDto> getArduinoBoardById(int farmId, int arduinoBoardId) {
 
-        return ResponseEntity.ok(this.arduinoBoardService.getArduinoBoardById(arduinoBoardId));
+        return ResponseEntity.ok(this.arduinoBoardService.getArduinoBoardById(farmId, arduinoBoardId));
     }
 
     @GetMapping

@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ArduinoBoardService {
 
-    ArduinoBoardDto getArduinoBoardById(int arduinoBoardId);
+    ArduinoBoardDto getArduinoBoardById(int farmId, int arduinoBoardId);
 
     ArduinoBoardDto convertToDto(ArduinoBoard arduinoBoard);
 
