@@ -1,7 +1,5 @@
 package com.plantcare.serverapplication.hardwaremanagement.pump;
 
-import org.apache.coyote.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,5 +23,12 @@ public class PumpController {
         List<PumpDto> pumps = this.pumpService.getAllPumpsByFarmId(farmId);
 
         return ResponseEntity.ok(pumps);
+    }
+
+    @GetMapping("/{pumpId}")
+    public ResponseEntity<PumpDto> getPumpById(@PathVariable int farmId, @PathVariable int pumpId) {
+        PumpDto pump = this.pumpService.getPumpById(farmId, pumpId);
+
+        return ResponseEntity.ok(pump);
     }
 }

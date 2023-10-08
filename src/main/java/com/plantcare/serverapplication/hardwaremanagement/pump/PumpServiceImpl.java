@@ -43,6 +43,23 @@ public class PumpServiceImpl implements PumpService {
         return pumps.stream().map(pump -> this.convertToDto(pump)).toList();
     }
 
+    @Override
+    public PumpDto getPumpById(int farmId, int pumpId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        Pump pump = this.pumpRepository.findById(pumpId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pump", "id", pumpId));
+
+        return this.convertToDto(pump);
+    }
+
 
     private PumpDto convertToDto(Pump pump) {
         return PumpDto
