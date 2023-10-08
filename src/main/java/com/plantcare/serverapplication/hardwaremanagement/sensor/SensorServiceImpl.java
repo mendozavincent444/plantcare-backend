@@ -59,6 +59,23 @@ public class SensorServiceImpl implements SensorService {
         return sensors.stream().map((sensor -> this.convertToDto(sensor))).toList();
     }
 
+    @Override
+    public SensorDto getSensorById(int farmId, int sensorId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        Sensor sensor = this.sensorRepository.findById(sensorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sensor", "id", sensorId));
+
+        return this.convertToDto(sensor);
+    }
+
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
     }
