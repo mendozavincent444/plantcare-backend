@@ -1,7 +1,9 @@
 package com.plantcare.serverapplication.ordermanagement.product;
 
-import java.util.List;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+@Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
