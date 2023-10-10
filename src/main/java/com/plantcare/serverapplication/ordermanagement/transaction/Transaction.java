@@ -1,12 +1,10 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
+import com.plantcare.serverapplication.ordermanagement.address.Address;
 import com.plantcare.serverapplication.ordermanagement.orderitem.OrderItem;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "transaction")
 public class Transaction {
@@ -31,6 +30,14 @@ public class Transaction {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "billing_address_id", nullable = false)
+    private Address billing_address;
+
+    @OneToOne(optional = false)
+    @JoinColumn(name = "shipping_address_id", nullable = false)
+    private Address shippingAddress;
 
     @Column(name = "description", nullable = false)
     private String description;
