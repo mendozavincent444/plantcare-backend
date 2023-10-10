@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,7 +32,7 @@ public class Transaction {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "billing_address_id", nullable = false)
-    private Address billing_address;
+    private Address billingAddress;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "shipping_address_id", nullable = false)

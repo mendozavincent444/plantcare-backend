@@ -91,7 +91,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .builder()
                 .date(new Date())
                 .name("Buy products")
-                .billing_address(savedBillingAddress)
+                .billingAddress(savedBillingAddress)
                 .shippingAddress(savedShippingAddress)
                 .description("Buy devices for hydroponics farming")
                 .amount(totalAmountCost)
