@@ -1,6 +1,6 @@
 package com.plantcare.serverapplication.ordermanagement.address;
 
-import com.plantcare.serverapplication.ordermanagement.order.Order;
+import com.plantcare.serverapplication.ordermanagement.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,5 +32,5 @@ public class Address {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private Order order;
+    private Transaction transaction;
 }
