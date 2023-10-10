@@ -30,4 +30,12 @@ public class TransactionController {
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
+
+    @GetMapping("/{transactionId}")
+    public ResponseEntity<TransactionDto> getTransactionById(@PathVariable int transactionId) {
+
+        TransactionDto transaction = this.transactionService.getTransactionById(transactionId);
+
+        return ResponseEntity.ok(transaction);
+    }
 }
