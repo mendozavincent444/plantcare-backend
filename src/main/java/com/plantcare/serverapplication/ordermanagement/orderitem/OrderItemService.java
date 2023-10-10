@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.ordermanagement.orderitem;
 
+import java.util.List;
+
 public interface OrderItemService {
 
-    OrderItemDto convertToDto(OrderItem orderItem);
+    List<OrderItemDto> convertListToDto(List<OrderItem> orderItems);
 }

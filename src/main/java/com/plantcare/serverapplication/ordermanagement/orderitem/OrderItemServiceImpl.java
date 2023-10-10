@@ -3,6 +3,8 @@ package com.plantcare.serverapplication.ordermanagement.orderitem;
 import com.plantcare.serverapplication.ordermanagement.product.ProductService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderItemServiceImpl implements OrderItemService {
 
@@ -13,7 +15,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
 
     @Override
-    public OrderItemDto convertToDto(OrderItem orderItem) {
+    public List<OrderItemDto> convertListToDto(List<OrderItem> orderItems) {
+        return orderItems.stream().map(orderItem -> this.convertToDto(orderItem)).toList();
+    }
+
+    private OrderItemDto convertToDto(OrderItem orderItem) {
         return OrderItemDto
                 .builder()
                 .quantity(orderItem.getQuantity())

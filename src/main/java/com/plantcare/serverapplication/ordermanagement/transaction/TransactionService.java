@@ -9,4 +9,6 @@ public interface TransactionService {
     void createTransaction(PurchaseDto purchaseDto);
 
     List<TransactionDto> getAllTransactions();
+
+    TransactionDto getTransactionById(int transactionId);
 }

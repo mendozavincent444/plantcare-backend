@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.ordermanagement.address.Address;
 import com.plantcare.serverapplication.ordermanagement.address.AddressDto;
 import com.plantcare.serverapplication.ordermanagement.address.AddressRepository;
@@ -122,6 +123,29 @@ public class TransactionServiceImpl implements TransactionService {
                     .orderedBy(transaction.getUser().getEmail())
                     .build();
         }).toList();
+    }
+
+    @Override
+    public TransactionDto getTransactionById(int transactionId) {
+        Transaction transaction = this.transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction", "id", transactionId));
+
+        return this.convertToDto(transaction);
+    }
+
+    private TransactionDto convertToDto(Transaction transaction) {
+        return TransactionDto
+                .builder()
+                .id(transaction.getId())
+                .date(transaction.getDate())
+                .name(transaction.getName())
+                .description(transaction.getDescription())
+                .amount(transaction.getAmount())
+                .status(transaction.getStatus())
+                .paymentMethod(transaction.getPaymentMethod())
+                .orderItems(this.orderItemService.convertListToDto(transaction.getOrderItems()))
+                .orderedBy(transaction.getUser().getEmail())
+                .build();
     }
 
     private User getCurrentUser() {
