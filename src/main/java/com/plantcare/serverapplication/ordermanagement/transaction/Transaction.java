@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
+import com.plantcare.serverapplication.ordermanagement.orderitem.OrderItem;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,4 +47,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transaction")
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

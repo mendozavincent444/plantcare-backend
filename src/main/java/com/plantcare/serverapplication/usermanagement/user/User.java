@@ -3,7 +3,6 @@ package com.plantcare.serverapplication.usermanagement.user;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
-import com.plantcare.serverapplication.ordermanagement.order.Order;
 import com.plantcare.serverapplication.ordermanagement.transaction.Transaction;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import jakarta.persistence.*;
@@ -68,9 +67,6 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "orderedByUser")
-    private List<Order> orders = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "farmer")
     private List<HarvestLog> harvestedLog = new ArrayList<>();
