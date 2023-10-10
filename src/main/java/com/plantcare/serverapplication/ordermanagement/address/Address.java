@@ -2,15 +2,13 @@ package com.plantcare.serverapplication.ordermanagement.address;
 
 import com.plantcare.serverapplication.ordermanagement.transaction.Transaction;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "address")
 public class Address {
