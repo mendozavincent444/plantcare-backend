@@ -9,4 +9,6 @@ public interface SensorService {
     List<SensorDto> getAllSensorsByFarmId(int farmId);
 
     SensorDto getSensorById(int farmId, int sensorId);
+
+    void deleteSensorById(int farmId, int sensorId);
 }

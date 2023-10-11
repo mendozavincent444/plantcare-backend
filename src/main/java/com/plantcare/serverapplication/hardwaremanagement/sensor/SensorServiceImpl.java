@@ -76,6 +76,25 @@ public class SensorServiceImpl implements SensorService {
         return this.convertToDto(sensor);
     }
 
+    @Override
+    public void deleteSensorById(int farmId, int sensorId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        Sensor sensor = this.sensorRepository.findById(sensorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sensor", "id", sensorId));
+
+        farm.getSensors().remove(sensor);
+
+        this.sensorRepository.delete(sensor);
+    }
+
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
     }
