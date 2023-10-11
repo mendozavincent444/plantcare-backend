@@ -1,10 +1,8 @@
 package com.plantcare.serverapplication.hardwaremanagement.sensor;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,12 @@ public class SensorController {
         SensorDto sensor = this.sensorService.getSensorById(farmId, sensorId);
 
         return ResponseEntity.ok(sensor);
+    }
+
+    @DeleteMapping("/{sensorId}")
+    public ResponseEntity<MessageResponseDto> deleteSensorById(@PathVariable int farmId, @PathVariable int sensorId) {
+        this.sensorService.deleteSensorById(farmId, sensorId);
+
+        return ResponseEntity.ok(new MessageResponseDto("Sensor deleted successfully."));
     }
 }
