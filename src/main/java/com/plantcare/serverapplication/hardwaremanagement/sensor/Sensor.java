@@ -2,15 +2,13 @@ package com.plantcare.serverapplication.hardwaremanagement.sensor;
 
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "sensor")
 public class Sensor {

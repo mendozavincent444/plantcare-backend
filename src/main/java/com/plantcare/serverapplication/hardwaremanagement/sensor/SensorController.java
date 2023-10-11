@@ -16,6 +16,13 @@ public class SensorController {
         this.sensorService = sensorService;
     }
 
+    @PostMapping
+    public ResponseEntity<SensorDto> addSensor(@RequestBody SensorDto sensorDto, @PathVariable int farmId) {
+        SensorDto savedSensor = this.sensorService.addSensor(sensorDto, farmId);
+
+        return ResponseEntity.ok(savedSensor);
+    }
+
     @GetMapping
     public ResponseEntity<List<SensorDto>> getAllSensorsByFarmId(@PathVariable int farmId) {
         List<SensorDto> sensors = this.sensorService.getAllSensorsByFarmId(farmId);
