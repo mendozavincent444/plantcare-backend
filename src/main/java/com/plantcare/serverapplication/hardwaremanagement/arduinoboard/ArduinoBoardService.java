@@ -9,4 +9,5 @@ public interface ArduinoBoardService {
     ArduinoBoardDto convertToDto(ArduinoBoard arduinoBoard);
 
     List<ArduinoBoardDto> getAllArduinoBoardsByFarmId(int farmId);
+    void deleteArduinoBoardById(int farmId, int arduinoBoardId);
 }
