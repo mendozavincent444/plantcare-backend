@@ -7,4 +7,5 @@ public interface PumpService {
 
     PumpDto getPumpById(int farmId, int pumpId);
     void deletePumpById(int farmId, int pumpId);
+    PumpDto addPump(PumpDto pumpDto, int farmId);
 }
