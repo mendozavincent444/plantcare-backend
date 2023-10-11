@@ -44,7 +44,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         ArduinoBoard arduinoBoard = ArduinoBoard
                 .builder()
                 .name(arduinoBoardDto.getName())
-                .status(DeviceStatus.AVAILABLE)
+                .status(DeviceStatus.INACTIVE)
                 .farm(farm)
                 .build();
 
