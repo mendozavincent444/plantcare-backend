@@ -16,16 +16,45 @@ import java.util.List;
 public class SensorServiceImpl implements SensorService {
     private final UserRepository userRepository;
     private final SensorRepository sensorRepository;
+    private final SensorTypeRepository sensorTypeRepository;
     private final FarmRepository farmRepository;
 
     public SensorServiceImpl(
             UserRepository userRepository,
             SensorRepository sensorRepository,
+            SensorTypeRepository sensorTypeRepository,
             FarmRepository farmRepository
     ) {
         this.userRepository = userRepository;
         this.sensorRepository = sensorRepository;
+        this.sensorTypeRepository = sensorTypeRepository;
         this.farmRepository = farmRepository;
+    }
+
+    @Override
+    public SensorDto addSensor(SensorDto sensorDto, int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        SensorType sensorType = this.sensorTypeRepository.getSensorTypeByName(sensorDto.getSensorTypeName()).get();
+
+        Sensor sensor = Sensor
+                .builder()
+                .name(sensorDto.getName())
+                .status(sensorDto.getStatus())
+                .sensorType(sensorType)
+                .farm(farm)
+                .build();
+
+        Sensor savedSensor = this.sensorRepository.save(sensor);
+
+        return this.convertToDto(sensor);
     }
 
     @Override

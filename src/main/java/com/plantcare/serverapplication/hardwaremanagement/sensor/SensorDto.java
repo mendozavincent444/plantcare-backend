@@ -1,7 +1,9 @@
 package com.plantcare.serverapplication.hardwaremanagement.sensor;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Builder
 public class SensorDto {
     private int id;
