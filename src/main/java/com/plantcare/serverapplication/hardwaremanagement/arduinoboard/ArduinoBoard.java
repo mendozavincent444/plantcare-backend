@@ -2,6 +2,7 @@ package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.hardwaremanagement.arduinosensormapping.ArduinoSensorMapping;
+import com.plantcare.serverapplication.shared.DeviceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,8 +24,9 @@ public class ArduinoBoard {
     @Column(name = "name", nullable = false, length = 20)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    private DeviceStatus status;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "arduinoBoard")
     private Set<ArduinoSensorMapping> sensorMappings = new HashSet<>();

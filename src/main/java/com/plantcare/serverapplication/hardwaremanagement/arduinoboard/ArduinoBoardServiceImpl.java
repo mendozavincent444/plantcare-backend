@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -43,7 +44,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
         ArduinoBoard arduinoBoard = ArduinoBoard
                 .builder()
                 .name(arduinoBoardDto.getName())
-                .status(arduinoBoardDto.getStatus())
+                .status(DeviceStatus.AVAILABLE)
                 .farm(farm)
                 .build();
 
@@ -114,7 +115,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
                 .builder()
                 .id(arduinoBoard.getId())
                 .name(arduinoBoard.getName())
-                .status(arduinoBoard.getStatus())
+                .status(arduinoBoard.getStatus().name())
                 .build();
     }
 

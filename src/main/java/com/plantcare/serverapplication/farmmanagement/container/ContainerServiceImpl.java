@@ -11,6 +11,7 @@ import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBo
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardServiceImpl;
+import com.plantcare.serverapplication.shared.DeviceStatus;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,8 @@ public class ContainerServiceImpl implements ContainerService {
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        arduinoBoard.setStatus(DeviceStatus.IN_USE);
 
         Container newContainer = Container
                 .builder()
