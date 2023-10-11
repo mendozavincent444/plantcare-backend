@@ -17,7 +17,7 @@ public class ArduinoBoardController {
         this.arduinoBoardService = arduinoBoardService;
     }
 
-    @PostMapping("/{arduinoBoardId}")
+    @PostMapping
     public ResponseEntity<ArduinoBoardDto> addArduinoBoard(@RequestBody ArduinoBoardDto arduinoBoardDto, int farmId) {
 
         return ResponseEntity.ok(this.arduinoBoardService.addArduinoBoard(arduinoBoardDto, farmId));
