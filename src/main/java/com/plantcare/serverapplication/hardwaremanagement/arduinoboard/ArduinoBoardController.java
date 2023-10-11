@@ -1,12 +1,11 @@
 package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.processing.Messager;
 import java.util.List;
 
 @RestController
@@ -31,5 +30,13 @@ public class ArduinoBoardController {
         List<ArduinoBoardDto> arduinoBoards = this.arduinoBoardService.getAllArduinoBoardsByFarmId(farmId);
 
         return ResponseEntity.ok(arduinoBoards);
+    }
+
+    @DeleteMapping("/{arduinoBoardId}")
+    public ResponseEntity<MessageResponseDto> deleteArduinoBoardById(@PathVariable int farmId, @PathVariable int arduinoBoardId) {
+
+        this.arduinoBoardService.deleteArduinoBoardById(farmId, arduinoBoardId);
+
+        return ResponseEntity.ok(new MessageResponseDto("Arduino board deleted successfully."));
     }
 }
