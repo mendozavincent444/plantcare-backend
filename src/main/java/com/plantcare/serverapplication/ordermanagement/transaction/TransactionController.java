@@ -38,4 +38,14 @@ public class TransactionController {
 
         return ResponseEntity.ok(transaction);
     }
+
+    @GetMapping("/{transactionId}/approve")
+    public ResponseEntity<TransactionDto> approveTransactionById(@PathVariable int transactionId) {
+
+        TransactionDto transaction = this.transactionService.approveTransactionById(transactionId);
+
+        return ResponseEntity.ok(transaction);
+    }
+
+
 }
