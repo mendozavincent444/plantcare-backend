@@ -133,6 +133,22 @@ public class TransactionServiceImpl implements TransactionService {
         return this.convertToDto(transaction);
     }
 
+    @Override
+    public TransactionDto approveTransactionById(int transactionId) {
+        Transaction transaction = this.transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction", "id", transactionId));
+
+        if (transaction.getStatus().equals("Approved")) {
+            // throw exception
+        }
+
+        transaction.setStatus("Approved");
+
+        Transaction approvedTransaction = this.transactionRepository.save(transaction);
+
+        return this.convertToDto(approvedTransaction);
+    }
+
     private TransactionDto convertToDto(Transaction transaction) {
         return TransactionDto
                 .builder()
