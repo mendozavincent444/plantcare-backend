@@ -24,7 +24,7 @@ public class ArduinoBoardController {
     }
 
     @GetMapping("/{arduinoBoardId}")
-    public ResponseEntity<ArduinoBoardDto> getArduinoBoardById(int farmId, int arduinoBoardId) {
+    public ResponseEntity<ArduinoBoardDto> getArduinoBoardById(@PathVariable int farmId, @PathVariable int arduinoBoardId) {
 
         return ResponseEntity.ok(this.arduinoBoardService.getArduinoBoardById(farmId, arduinoBoardId));
     }
