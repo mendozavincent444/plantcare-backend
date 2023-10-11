@@ -79,6 +79,29 @@ public class PumpServiceImpl implements PumpService {
         this.pumpRepository.delete(pump);
     }
 
+    @Override
+    public PumpDto addPump(PumpDto pumpDto, int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        Pump pump = Pump
+                .builder()
+                .name(pumpDto.getName())
+                .status(pumpDto.getStatus())
+                .farm(farm)
+                .build();
+
+        Pump savedPump = this.pumpRepository.save(pump);
+
+        return this.convertToDto(savedPump);
+    }
+
 
     private PumpDto convertToDto(Pump pump) {
         return PumpDto
