@@ -11,11 +11,16 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/farms/{farmId}/arduinoboards")
 public class ArduinoBoardController {
-
     private final ArduinoBoardService arduinoBoardService;
 
     public ArduinoBoardController(ArduinoBoardService arduinoBoardService) {
         this.arduinoBoardService = arduinoBoardService;
+    }
+
+    @PostMapping("/{arduinoBoardId}")
+    public ResponseEntity<ArduinoBoardDto> addArduinoBoard(@RequestBody ArduinoBoardDto arduinoBoardDto, int farmId) {
+
+        return ResponseEntity.ok(this.arduinoBoardService.addArduinoBoard(arduinoBoardDto, farmId));
     }
 
     @GetMapping("/{arduinoBoardId}")

@@ -2,12 +2,8 @@ package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.hardwaremanagement.arduinosensormapping.ArduinoSensorMapping;
-import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "arduino_board")
 public class ArduinoBoard {

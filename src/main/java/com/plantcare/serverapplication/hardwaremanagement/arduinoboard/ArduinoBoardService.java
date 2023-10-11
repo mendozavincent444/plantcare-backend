@@ -3,6 +3,7 @@ package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 import java.util.List;
 
 public interface ArduinoBoardService {
+    ArduinoBoardDto addArduinoBoard(ArduinoBoardDto arduinoBoardDto, int farmId);
 
     ArduinoBoardDto getArduinoBoardById(int farmId, int arduinoBoardId);
 

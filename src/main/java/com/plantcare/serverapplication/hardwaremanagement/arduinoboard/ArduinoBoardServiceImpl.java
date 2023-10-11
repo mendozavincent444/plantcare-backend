@@ -30,6 +30,29 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
     }
 
     @Override
+    public ArduinoBoardDto addArduinoBoard(ArduinoBoardDto arduinoBoardDto, int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        ArduinoBoard arduinoBoard = ArduinoBoard
+                .builder()
+                .name(arduinoBoardDto.getName())
+                .status(arduinoBoardDto.getStatus())
+                .farm(farm)
+                .build();
+
+        ArduinoBoard savedArduinoBoard = this.arduinoBoardRepository.save(arduinoBoard);
+
+        return this.convertToDto(savedArduinoBoard);
+    }
+
+    @Override
     public ArduinoBoardDto getArduinoBoardById(int farmId, int arduinoBoardId) {
         User currentUser = this.getCurrentUser();
 
