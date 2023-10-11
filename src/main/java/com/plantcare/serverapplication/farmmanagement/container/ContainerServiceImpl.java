@@ -55,7 +55,7 @@ public class ContainerServiceImpl implements ContainerService {
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        arduinoBoard.setStatus(DeviceStatus.IN_USE);
+        arduinoBoard.setStatus(DeviceStatus.ACTIVE);
 
         Container newContainer = Container
                 .builder()
@@ -88,6 +88,8 @@ public class ContainerServiceImpl implements ContainerService {
         List<Integer> containerIds = deleteContainersDto.getContainerIds();
 
         List<Container> containers = this.containerRepository.findAllById(containerIds);
+
+        containers.forEach((container -> container.getArduinoBoard().setStatus(DeviceStatus.INACTIVE)));
 
         farm.getContainers().removeAll(containers);
 
