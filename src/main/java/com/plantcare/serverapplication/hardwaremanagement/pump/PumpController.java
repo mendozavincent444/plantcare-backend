@@ -1,10 +1,8 @@
 package com.plantcare.serverapplication.hardwaremanagement.pump;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,12 @@ public class PumpController {
         PumpDto pump = this.pumpService.getPumpById(farmId, pumpId);
 
         return ResponseEntity.ok(pump);
+    }
+
+    @DeleteMapping("/{pumpId}")
+    public ResponseEntity<MessageResponseDto> deletePumpById(@PathVariable int farmId, @PathVariable int pumpId) {
+        this.pumpService.deletePumpById(farmId, pumpId);
+
+        return ResponseEntity.ok(new MessageResponseDto("Pump deleted successfully."));
     }
 }
