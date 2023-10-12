@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +48,7 @@ public class SensorServiceImpl implements SensorService {
         Sensor sensor = Sensor
                 .builder()
                 .name(sensorDto.getName())
-                .status(sensorDto.getStatus())
+                .status(DeviceStatus.INACTIVE)
                 .sensorType(sensorType)
                 .farm(farm)
                 .build();
@@ -67,7 +68,7 @@ public class SensorServiceImpl implements SensorService {
                 .builder()
                 .id(sensor.getId())
                 .name(sensor.getName())
-                .status(sensor.getStatus())
+                .status(sensor.getStatus().name())
                 .sensorTypeName(sensor.getSensorType().getName())
                 .build();
     }

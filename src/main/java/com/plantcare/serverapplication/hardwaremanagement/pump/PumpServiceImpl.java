@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -93,7 +94,7 @@ public class PumpServiceImpl implements PumpService {
         Pump pump = Pump
                 .builder()
                 .name(pumpDto.getName())
-                .status(pumpDto.getStatus())
+                .status(DeviceStatus.INACTIVE)
                 .farm(farm)
                 .build();
 
@@ -108,7 +109,7 @@ public class PumpServiceImpl implements PumpService {
                 .builder()
                 .id(pump.getId())
                 .name(pump.getName())
-                .status(pump.getStatus())
+                .status(pump.getStatus().name())
                 .build();
     }
 
