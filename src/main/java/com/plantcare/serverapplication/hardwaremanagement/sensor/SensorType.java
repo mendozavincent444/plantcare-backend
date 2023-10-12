@@ -17,6 +17,6 @@ public class SensorType {
     @Id
     private int id;
 
-    @Column(name = "name", nullable = false, length = 20)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 }
