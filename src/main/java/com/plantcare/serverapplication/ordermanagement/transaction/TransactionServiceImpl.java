@@ -112,17 +112,7 @@ public class TransactionServiceImpl implements TransactionService {
     public List<TransactionDto> getAllTransactions() {
         List<Transaction> transactions = this.transactionRepository.findAll();
 
-        return transactions.stream().map(transaction -> {
-            return TransactionDto
-                    .builder()
-                    .id(transaction.getId())
-                    .date(transaction.getDate())
-                    .name(transaction.getName())
-                    .amount(transaction.getAmount())
-                    .status(transaction.getStatus())
-                    .orderedBy(transaction.getUser().getEmail())
-                    .build();
-        }).toList();
+        return transactions.stream().map(transaction -> convertToDtoForList(transaction)).toList();
     }
 
     @Override
@@ -149,6 +139,15 @@ public class TransactionServiceImpl implements TransactionService {
         return this.convertToDto(approvedTransaction);
     }
 
+    @Override
+    public List<TransactionDto> getAllTransactionsByAdmin() {
+        User currentUser = this.getCurrentUser();
+
+        List<Transaction> transactions = currentUser.getTransactions();
+
+        return transactions.stream().map(transaction -> this.convertToDtoForList(transaction)).toList();
+    }
+
     private TransactionDto convertToDto(Transaction transaction) {
         return TransactionDto
                 .builder()
@@ -160,6 +159,19 @@ public class TransactionServiceImpl implements TransactionService {
                 .status(transaction.getStatus())
                 .paymentMethod(transaction.getPaymentMethod())
                 .orderItems(this.orderItemService.convertListToDto(transaction.getOrderItems()))
+                .orderedBy(transaction.getUser().getEmail())
+                .build();
+    }
+
+    // to be used by api for displaying list of transactions, no need for other in-depth transaction entity fields
+    private TransactionDto convertToDtoForList(Transaction transaction) {
+        return TransactionDto
+                .builder()
+                .id(transaction.getId())
+                .date(transaction.getDate())
+                .name(transaction.getName())
+                .amount(transaction.getAmount())
+                .status(transaction.getStatus())
                 .orderedBy(transaction.getUser().getEmail())
                 .build();
     }

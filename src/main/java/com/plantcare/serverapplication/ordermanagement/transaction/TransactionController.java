@@ -24,9 +24,16 @@ public class TransactionController {
         return new ResponseEntity<>(new MessageResponseDto("Transaction created successfully."), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<TransactionDto>> getAllTransactions() {
         List<TransactionDto> transactions = this.transactionService.getAllTransactions();
+
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionDto>> getAllTransactionsByAdmin() {
+        List<TransactionDto> transactions = this.transactionService.getAllTransactionsByAdmin();
 
         return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
