@@ -9,4 +9,5 @@ public interface TransactionService {
     List<TransactionDto> getAllTransactions();
     TransactionDto getTransactionById(int transactionId);
     TransactionDto approveTransactionById(int transactionId);
+    List<TransactionDto> getAllTransactionsByAdmin();
 }
