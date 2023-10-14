@@ -31,7 +31,7 @@ public class FarmController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FarmDto>> getAllFarmsByAdmin() {
+    public ResponseEntity<List<FarmDto>> getAllFarms() {
 
         return ResponseEntity.ok(this.farmService.getAllFarms());
     }
