@@ -7,7 +7,6 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;

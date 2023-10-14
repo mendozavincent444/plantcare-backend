@@ -13,6 +13,5 @@ public interface PlantService {
     void deletePlantById(int farmId, int plantId);
 
     PlantDto updatePlant(PlantDto plantDto, int farmId, int plantId);
-
-    PlantDto mapToDto(Plant plant);
+    PlantDto convertToDto(Plant plant);
 }
