@@ -6,14 +6,10 @@ import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantService;
-import com.plantcare.serverapplication.farmmanagement.plant.PlantServiceImpl;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
-import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardServiceImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
-import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -122,7 +118,7 @@ public class ContainerServiceImpl implements ContainerService {
                 .id(container.getId())
                 .name(container.getName())
                 .arduinoBoardDto(this.arduinoBoardService.convertToDto(container.getArduinoBoard()))
-                .plantDto(this.plantService.mapToDto(container.getPlant()))
+                .plantDto(this.plantService.convertToDto(container.getPlant()))
                 .farmId(container.getFarm().getId())
                 .build();
 

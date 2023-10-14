@@ -1,16 +1,12 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
-import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
-import com.plantcare.serverapplication.hardwaremanagement.sensor.Sensor;
-import com.plantcare.serverapplication.hardwaremanagement.sensor.SensorService;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;

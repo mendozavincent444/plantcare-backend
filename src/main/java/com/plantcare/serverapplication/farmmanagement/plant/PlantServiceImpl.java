@@ -6,7 +6,6 @@ import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -20,18 +19,15 @@ public class PlantServiceImpl implements PlantService {
     private final PlantRepository plantRepository;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
     public PlantServiceImpl(
             PlantRepository plantRepository,
             FarmRepository farmRepository,
-            UserRepository userRepository,
-            ModelMapper modelMapper
+            UserRepository userRepository
     ) {
         this.plantRepository = plantRepository;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -79,7 +75,7 @@ public class PlantServiceImpl implements PlantService {
         Plant plant = this.plantRepository.findById(plantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
-        return this.mapToDto(plant);
+        return this.convertToDto(plant);
     }
 
     @Override
@@ -97,7 +93,7 @@ public class PlantServiceImpl implements PlantService {
         List<Plant> plants = this.plantRepository.findAllByFarmId(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plant", "farm id", farmId));
 
-        return plants.stream().map(plant -> this.mapToDto(plant)).collect(Collectors.toList());
+        return plants.stream().map(plant -> this.convertToDto(plant)).collect(Collectors.toList());
     }
 
     @Override
@@ -147,20 +143,11 @@ public class PlantServiceImpl implements PlantService {
         return this.convertToDto(updatedPlant);
     }
 
-    @Override
-    public PlantDto mapToDto(Plant plant) {
-        return this.modelMapper.map(plant, PlantDto.class);
-    }
-
-    private Plant mapToEntity(PlantDto plantDto) {
-        return this.modelMapper.map(plantDto, Plant.class);
-    }
-
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
     }
 
-    private PlantDto convertToDto(Plant plant) {
+    public PlantDto convertToDto(Plant plant) {
         return PlantDto
                 .builder()
                 .id(plant.getId())
