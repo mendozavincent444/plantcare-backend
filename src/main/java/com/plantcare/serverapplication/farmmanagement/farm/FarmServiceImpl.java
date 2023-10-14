@@ -21,17 +21,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class FarmServiceImpl implements FarmService {
-
     private final UserService userService;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
 
-    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository, ModelMapper modelMapper) {
+    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository) {
         this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -144,16 +141,7 @@ public class FarmServiceImpl implements FarmService {
                 .filter(user -> user.getRole().getRoleName().equals(RoleEnum.ROLE_FARMER))
                 .collect(Collectors.toList());
 
-        return farmers.stream().map(farmer -> {
-           return UserDto
-                   .builder()
-                   .id(farmer.getId())
-                   .email(farmer.getEmail())
-                   .isAccountNonLocked(farmer.isAccountNonLocked())
-                   .firstName(farmer.getFirstName())
-                   .lastName(farmer.getLastName())
-                   .build();
-        }).collect(Collectors.toList());
+        return farmers.stream().map(farmer -> this.userService.convertToDto(farmer)).collect(Collectors.toList());
     }
 
     @Override
@@ -172,16 +160,7 @@ public class FarmServiceImpl implements FarmService {
                 .filter(user -> user.getRole().getRoleName().equals(RoleEnum.ROLE_ADMIN))
                 .collect(Collectors.toList());
 
-        return farmers.stream().map(farmer -> {
-            return UserDto
-                    .builder()
-                    .id(farmer.getId())
-                    .email(farmer.getEmail())
-                    .isAccountNonLocked(farmer.isAccountNonLocked())
-                    .firstName(farmer.getFirstName())
-                    .lastName(farmer.getLastName())
-                    .build();
-        }).collect(Collectors.toList());
+        return farmers.stream().map(farmer -> this.userService.convertToDto(farmer)).collect(Collectors.toList());
     }
 
     @Override
@@ -218,10 +197,6 @@ public class FarmServiceImpl implements FarmService {
                 .location(farm.getLocation())
                 .owner(this.userService.convertToDto(farm.getOwner()))
                 .build();
-    }
-
-    private Farm mapToEntity(FarmDto farmDto) {
-        return this.modelMapper.map(farmDto, Farm.class);
     }
 
     private User getCurrentUser() {
