@@ -104,7 +104,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> getTasksByContainerId(int containerId) {
+    public List<TaskDto> getTasksByContainerId(int farmId, int containerId) {
         List<Task> tasks = this.taskRepository.findAllByContainerId(containerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "container id", containerId));
 
