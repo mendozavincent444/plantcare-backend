@@ -22,7 +22,7 @@ public class TaskController {
             @PathVariable int containerId,
             @PathVariable int farmId
     ) {
-        List<TaskDto> savedTasks = this.taskService.addTasks(taskDto, containerId, farmId);
+        List<TaskDto> savedTasks = this.taskService.addTasks(taskDto, farmId, containerId);
 
         return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }
