@@ -9,7 +9,11 @@ import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLogRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.HarvestLogDto;
+import com.plantcare.serverapplication.usermanagement.user.User;
+import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ public class TaskServiceImpl implements TaskService {
     private final PlantRepository plantRepository;
     private final ContainerRepository containerRepository;
     private final FarmRepository farmRepository;
+    private final UserRepository userRepository;
     private final HarvestLogRepository harvestLogRepository;
 
     public TaskServiceImpl(
@@ -30,17 +35,21 @@ public class TaskServiceImpl implements TaskService {
             PlantRepository plantRepository,
             ContainerRepository containerRepository,
             FarmRepository farmRepository,
+            UserRepository userRepository,
             HarvestLogRepository harvestLogRepository
     ) {
         this.taskRepository = taskRepository;
         this.plantRepository = plantRepository;
         this.containerRepository = containerRepository;
         this.farmRepository = farmRepository;
+        this.userRepository = userRepository;
         this.harvestLogRepository = harvestLogRepository;
     }
 
     @Override
     public List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId) {
+
+        User currentUser = this.getCurrentUser();
 
         int numberOfTasks = taskDto.getNumberOfTasks();
 
@@ -63,6 +72,7 @@ public class TaskServiceImpl implements TaskService {
                     Task.builder()
                             .datePlanted(taskDto.getDatePlanted())
                             .harvestDate(taskDto.getHarvestDate())
+                            .farmer(currentUser)
                             .status(TaskStatus.GROWING)
                             .plant(plant)
                             .container(container)
@@ -187,9 +197,15 @@ public class TaskServiceImpl implements TaskService {
                 .id(task.getId())
                 .datePlanted(task.getDatePlanted())
                 .harvestDate(task.getDatePlanted())
-                .status(task.getStatus().getName())
+                .status(task.getStatus().name())
                 .plantId(task.getPlant().getId())
                 .containerId(task.getContainer().getId())
                 .build();
+    }
+
+    private User getCurrentUser() {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }
