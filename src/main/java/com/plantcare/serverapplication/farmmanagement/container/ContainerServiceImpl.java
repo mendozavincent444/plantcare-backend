@@ -93,7 +93,7 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public ContainerDto updateContainer(ContainerDto containerDto, int containerId) {
+    public ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId) {
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
 
