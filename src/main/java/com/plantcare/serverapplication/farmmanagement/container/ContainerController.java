@@ -38,8 +38,12 @@ public class ContainerController {
     }
 
     @PutMapping("/{containerId}")
-    public ResponseEntity<ContainerDto> updateContainer(@RequestBody ContainerDto containerDto, int containerId) {
-        ContainerDto updatedContainer = this.containerService.updateContainer(containerDto, containerId);
+    public ResponseEntity<ContainerDto> updateContainer(
+            @RequestBody ContainerDto containerDto,
+            @PathVariable int farmId,
+            @PathVariable int containerId
+    ) {
+        ContainerDto updatedContainer = this.containerService.updateContainer(containerDto, containerId, farmId);
 
         return new ResponseEntity<>(updatedContainer, HttpStatus.OK);
     }
