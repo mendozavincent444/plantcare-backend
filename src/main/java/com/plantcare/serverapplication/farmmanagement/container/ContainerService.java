@@ -9,5 +9,5 @@ public interface ContainerService {
 
     void deleteContainerListById(DeleteContainersDto deleteContainersDto, int farmId);
 
-    ContainerDto updateContainer(ContainerDto containerDto, int containerId, int farmId);
+    ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId);
 }

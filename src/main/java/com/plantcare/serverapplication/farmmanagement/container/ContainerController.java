@@ -43,7 +43,7 @@ public class ContainerController {
             @PathVariable int farmId,
             @PathVariable int containerId
     ) {
-        ContainerDto updatedContainer = this.containerService.updateContainer(containerDto, containerId, farmId);
+        ContainerDto updatedContainer = this.containerService.updateContainer(containerDto, farmId, containerId);
 
         return new ResponseEntity<>(updatedContainer, HttpStatus.OK);
     }
