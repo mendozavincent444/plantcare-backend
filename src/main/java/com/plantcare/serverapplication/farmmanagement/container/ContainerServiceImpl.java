@@ -95,7 +95,9 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId) {
 
+        // fix status of container
         Container container = this.containerRepository.findById(containerId).orElseThrow();
+
 
         ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardDto().getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", containerDto.getArduinoBoardDto().getId()));
