@@ -27,8 +27,9 @@ public class Task {
     @Column(name = "harvest_date", nullable = false)
     private Date harvestDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    private TaskStatus status;
 
     @OneToOne
     @JoinColumn(name = "farmer_id", nullable = false)

@@ -63,7 +63,7 @@ public class TaskServiceImpl implements TaskService {
                     Task.builder()
                             .datePlanted(taskDto.getDatePlanted())
                             .harvestDate(taskDto.getHarvestDate())
-                            .status(taskDto.getStatus())
+                            .status(TaskStatus.GROWING)
                             .plant(plant)
                             .container(container)
                             .build()
@@ -187,7 +187,7 @@ public class TaskServiceImpl implements TaskService {
                 .id(task.getId())
                 .datePlanted(task.getDatePlanted())
                 .harvestDate(task.getDatePlanted())
-                .status(task.getStatus())
+                .status(task.getStatus().getName())
                 .plantId(task.getPlant().getId())
                 .containerId(task.getContainer().getId())
                 .build();
