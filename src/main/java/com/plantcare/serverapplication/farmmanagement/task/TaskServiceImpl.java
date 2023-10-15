@@ -49,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId) {
 
+        // fix - if farm is accessible and container has all the tasks
         User currentUser = this.getCurrentUser();
 
         int numberOfTasks = taskDto.getNumberOfTasks();
@@ -88,24 +89,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void deleteTasks(TaskIdsDto taskIdsDto, int containerId, int farmId) {
+    public void deleteTasks(TaskIdsDto taskIdsDto, int farmId) {
+        // fix - if farm is accessible and container has all the tasks
         List<Integer> taskIds = taskIdsDto.getTaskIds();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        Container container = this.containerRepository.findById(containerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
-
         List<Task> tasks = this.taskRepository.findAllById(taskIds);
 
-        container.getTasks().removeAll(tasks);
+        for (Task task: tasks) {
+            Container container = task.getContainer();
+            container.getTasks().remove(task);
+        }
 
         this.taskRepository.deleteAllById(taskIds);
     }
 
     @Override
     public List<TaskDto> getAllTasksFromAllContainers(int farmId) {
+        // fix - if farm is accessible and container has all the tasks
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -119,6 +122,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDto> getTasksByContainerId(int farmId, int containerId) {
+        // fix - if farm is accessible and container has all the tasks
         List<Task> tasks = this.taskRepository.findAllByContainerId(containerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "container id", containerId));
 
@@ -127,6 +131,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDto updateTask(TaskDto taskDto, int taskToUpdateId, int containerId) {
+
+        // fix - if farm is accessible and container has all the tasks
         Task task = this.taskRepository.findById(taskToUpdateId)
                 .orElseThrow(() -> new ResourceNotFoundException("Task", "id", taskToUpdateId));
 

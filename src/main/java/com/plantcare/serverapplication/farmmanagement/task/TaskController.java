@@ -27,13 +27,12 @@ public class TaskController {
         return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/containers/{containerId}/tasks")
+    @DeleteMapping("/tasks")
     public ResponseEntity<String> deleteTasks(
             @RequestBody TaskIdsDto taskIdsDto,
-            @PathVariable int containerId,
             @PathVariable int farmId
     ) {
-        this.taskService.deleteTasks(taskIdsDto, containerId, farmId);
+        this.taskService.deleteTasks(taskIdsDto, farmId);
 
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }

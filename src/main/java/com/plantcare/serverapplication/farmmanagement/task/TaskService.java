@@ -8,7 +8,7 @@ public interface TaskService {
 
     List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId);
 
-    void deleteTasks(TaskIdsDto taskIdsDto, int containerId, int farmId);
+    void deleteTasks(TaskIdsDto taskIdsDto, int farmId);
 
     List<TaskDto> getAllTasksFromAllContainers(int farmId);
 
