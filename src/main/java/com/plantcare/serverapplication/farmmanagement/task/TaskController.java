@@ -18,11 +18,11 @@ public class TaskController {
 
     @PostMapping("/containers/{containerId}/tasks")
     public ResponseEntity<List<TaskDto>> addTasks(
-            @RequestBody TaskOperationDto taskOperationsDto,
+            @RequestBody TaskDto taskDto,
             @PathVariable int containerId,
             @PathVariable int farmId
     ) {
-        List<TaskDto> savedTasks = this.taskService.addTasks(taskOperationsDto, containerId, farmId);
+        List<TaskDto> savedTasks = this.taskService.addTasks(taskDto, containerId, farmId);
 
         return new ResponseEntity<>(savedTasks, HttpStatus.CREATED);
     }

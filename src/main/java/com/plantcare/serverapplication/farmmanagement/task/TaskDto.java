@@ -34,4 +34,5 @@ public class TaskDto {
     private int containerId;
     @NotNull
     private int farmId;
+    private int numberOfTasks;
 }

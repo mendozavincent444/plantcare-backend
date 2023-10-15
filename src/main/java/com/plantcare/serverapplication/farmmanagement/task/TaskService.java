@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TaskService {
 
-    List<TaskDto> addTasks(TaskOperationDto taskRequestDto, int farmId, int containerId);
+    List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId);
 
     void deleteTasks(TaskIdsDto taskIdsDto, int containerId, int farmId);
 

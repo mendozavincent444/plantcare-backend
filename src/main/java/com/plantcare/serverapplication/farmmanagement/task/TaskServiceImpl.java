@@ -40,31 +40,35 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<TaskDto> addTasks(TaskOperationDto taskRequestDto, int farmId, int containerId) {
+    public List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId) {
 
-        List<TaskDto> taskDtoList = taskRequestDto.getTaskDtoList();
+        int numberOfTasks = taskDto.getNumberOfTasks();
 
         Container container = this.containerRepository.findById(containerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
 
+        // fix - check if farm is accessible by user
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
-        int plantId = taskDtoList.get(0).getPlantId();
+        int plantId = taskDto.getPlantId();
 
         Plant plant = this.plantRepository.findById(plantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", plantId));
 
-        List<Task> tasks = taskDtoList.stream().map((taskDto -> {
-            return Task
-                    .builder()
-                    .datePlanted(taskDto.getDatePlanted())
-                    .harvestDate(taskDto.getHarvestDate())
-                    .status(taskDto.getStatus())
-                    .plant(plant)
-                    .container(container)
-                    .build();
-        })).collect(Collectors.toList());
+        List<Task> tasks = new ArrayList<>();
+
+        for (int i = 0; i < numberOfTasks; i++) {
+            tasks.add(
+                    Task.builder()
+                            .datePlanted(taskDto.getDatePlanted())
+                            .harvestDate(taskDto.getHarvestDate())
+                            .status(taskDto.getStatus())
+                            .plant(plant)
+                            .container(container)
+                            .build()
+            );
+        }
 
         container.getTasks().addAll(tasks);
 
