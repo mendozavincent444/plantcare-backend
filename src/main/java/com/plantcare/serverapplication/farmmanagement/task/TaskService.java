@@ -12,7 +12,7 @@ public interface TaskService {
 
     List<TaskDto> getAllTasksFromAllContainers(int farmId);
 
-    List<TaskDto> getTasksByContainerId(int containerId);
+    List<TaskDto> getTasksByContainerId(int farmId, int containerId);
 
     TaskDto updateTask(TaskDto taskDto, int taskId, int containerId);
 

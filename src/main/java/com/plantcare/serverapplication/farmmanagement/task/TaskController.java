@@ -38,7 +38,7 @@ public class TaskController {
         return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
     }
     @GetMapping("/containers/tasks/all")
-    public ResponseEntity<List<TaskDto>> getAllTasksFromAllContainers(int farmId) {
+    public ResponseEntity<List<TaskDto>> getAllTasksFromAllContainers(@PathVariable int farmId) {
 
         List<TaskDto> tasks = this.taskService.getAllTasksFromAllContainers(farmId);
 
@@ -46,9 +46,9 @@ public class TaskController {
     }
 
     @GetMapping("/containers/{containerId}/tasks")
-    public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(int containerId) {
+    public ResponseEntity<List<TaskDto>> getAllTasksByContainerId(@PathVariable int farmId, @PathVariable int containerId) {
 
-        List<TaskDto> tasks = this.taskService.getTasksByContainerId(containerId);
+        List<TaskDto> tasks = this.taskService.getTasksByContainerId(farmId, containerId);
 
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
