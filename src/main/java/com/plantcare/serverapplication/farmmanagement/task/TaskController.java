@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
 import com.plantcare.serverapplication.shared.HarvestLogDto;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
+import jakarta.mail.Message;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +30,13 @@ public class TaskController {
     }
 
     @DeleteMapping("/tasks")
-    public ResponseEntity<String> deleteTasks(
+    public ResponseEntity<MessageResponseDto> deleteTasks(
             @RequestBody TaskIdsDto taskIdsDto,
             @PathVariable int farmId
     ) {
         this.taskService.deleteTasks(taskIdsDto, farmId);
 
-        return new ResponseEntity<>("Tasks successfully deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponseDto("Tasks successfully deleted."), HttpStatus.OK);
     }
     @GetMapping("/containers/tasks/all")
     public ResponseEntity<List<TaskDto>> getAllTasksFromAllContainers(@PathVariable int farmId) {
