@@ -79,8 +79,6 @@ public class AuthServiceImpl implements AuthService {
 
         User currentUser = this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 
-        String role = userDetails.getAuthorities().stream().toList().get(0).getAuthority();
-
         UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.builder()
                 .id(currentUser.getId())
                 .firstName(currentUser.getFirstName())
