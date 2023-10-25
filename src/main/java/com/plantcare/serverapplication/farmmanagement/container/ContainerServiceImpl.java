@@ -97,23 +97,32 @@ public class ContainerServiceImpl implements ContainerService {
 
         Container container = this.containerRepository.findById(containerId).orElseThrow();
 
-        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(containerDto.getArduinoBoardDto().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", containerDto.getArduinoBoardDto().getId()));
+        int newArduinoBoardId = containerDto.getArduinoBoardDto().getId();
+        int newPlantId = containerDto.getPlantDto().getId();
 
-        ArduinoBoard oldArduinoBoard = container.getArduinoBoard();
+        // if user updated arduino board
+        if (newArduinoBoardId != 0) {
+            ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(newArduinoBoardId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Arduino Board", "id", newArduinoBoardId));
 
-        if (oldArduinoBoard != arduinoBoard) {
-            container.setArduinoBoard(arduinoBoard);
+            ArduinoBoard oldArduinoBoard = container.getArduinoBoard();
 
-            oldArduinoBoard.setStatus(DeviceStatus.INACTIVE);
-            arduinoBoard.setStatus(DeviceStatus.ACTIVE);
+            if (oldArduinoBoard != arduinoBoard) {
+                container.setArduinoBoard(arduinoBoard);
+
+                oldArduinoBoard.setStatus(DeviceStatus.INACTIVE);
+                arduinoBoard.setStatus(DeviceStatus.ACTIVE);
+            }
         }
 
-        Plant plant = this.plantRepository.findById(containerDto.getPlantDto().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantDto().getId()));
+        // if user updated plant
+        if (newPlantId != 0) {
+            Plant plant = this.plantRepository.findById(containerDto.getPlantDto().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantDto().getId()));
 
-        container.setName(containerDto.getName());
-        container.setPlant(plant);
+            container.setName(containerDto.getName());
+            container.setPlant(plant);
+        }
 
         Container updatedContainer = this.containerRepository.save(container);
 
