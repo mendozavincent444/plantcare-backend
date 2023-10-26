@@ -99,6 +99,7 @@ public class ContainerServiceImpl implements ContainerService {
 
         int newArduinoBoardId = containerDto.getArduinoBoardDto().getId();
         int newPlantId = containerDto.getPlantDto().getId();
+        String newContainerName = containerDto.getName();
 
         // if user updated arduino board
         if (newArduinoBoardId != 0) {
@@ -120,8 +121,11 @@ public class ContainerServiceImpl implements ContainerService {
             Plant plant = this.plantRepository.findById(containerDto.getPlantDto().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Plant", "id", containerDto.getPlantDto().getId()));
 
-            container.setName(containerDto.getName());
             container.setPlant(plant);
+        }
+
+        if (!newContainerName.isBlank()) {
+            container.setName(containerDto.getName());
         }
 
         Container updatedContainer = this.containerRepository.save(container);
