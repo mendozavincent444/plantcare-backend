@@ -5,6 +5,7 @@ import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
 import com.plantcare.serverapplication.ordermanagement.transaction.Transaction;
 import com.plantcare.serverapplication.usermanagement.role.Role;
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -70,4 +71,8 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "farmer")
     private List<HarvestLog> harvestedLog = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "subscription_id")
+    private Subscription subscription;
 }
