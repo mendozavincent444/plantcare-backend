@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.usermanagement.subscription;
 
+import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,7 @@ public class Subscription {
 
     @Column(name = "end_date", nullable = false)
     private Date endDate;
+
+    @OneToOne(mappedBy = "subscription")
+    private User user;
 }
