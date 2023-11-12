@@ -1,12 +1,12 @@
 package com.plantcare.serverapplication.usermanagement.subscription;
 
+import com.plantcare.serverapplication.usermanagement.subscriptiontype.SubscriptionType;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
