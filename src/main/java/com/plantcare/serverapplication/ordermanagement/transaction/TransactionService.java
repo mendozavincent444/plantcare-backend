@@ -1,11 +1,12 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
-import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.usermanagement.subscription.PurchaseSubscriptionDto;
 
 import java.util.List;
 
 public interface TransactionService {
-    void createTransaction(PurchaseDto purchaseDto);
+    void createTransactionByProducts(PurchaseProductDto purchaseDto);
+    void createTransactionBySubscription(PurchaseSubscriptionDto purchaseSubscriptionDto);
     List<TransactionDto> getAllTransactions();
     TransactionDto getTransactionById(int transactionId);
     TransactionDto approveTransactionById(int transactionId);

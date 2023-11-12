@@ -5,4 +5,5 @@ import java.util.List;
 public interface SubscriptionTypeService {
 
     List<SubscriptionType> getAllSubscriptionTypes();
+    SubscriptionType getSubscriptionTypeById(int subscriptionTypeId);
 }

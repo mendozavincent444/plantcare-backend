@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 @Getter
-public class PurchaseDto {
+public class PurchaseProductDto {
     List<OrderItemDto> orderItems;
     AddressDto shippingAddressDto;
     AddressDto billingAddressDto;

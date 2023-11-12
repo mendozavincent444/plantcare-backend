@@ -34,18 +34,19 @@ public class Transaction {
     @JoinColumn(name = "billing_address_id", nullable = false)
     private Address billingAddress;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "shipping_address_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", length = 512, nullable = false)
     private String description;
 
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
     @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
 
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;

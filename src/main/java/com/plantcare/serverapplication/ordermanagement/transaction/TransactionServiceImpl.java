@@ -9,6 +9,11 @@ import com.plantcare.serverapplication.ordermanagement.orderitem.OrderItemDto;
 import com.plantcare.serverapplication.ordermanagement.orderitem.OrderItemService;
 import com.plantcare.serverapplication.ordermanagement.product.ProductService;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.usermanagement.subscription.PurchaseSubscriptionDto;
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
+import com.plantcare.serverapplication.usermanagement.subscription.SubscriptionRepository;
+import com.plantcare.serverapplication.usermanagement.subscriptiontype.SubscriptionType;
+import com.plantcare.serverapplication.usermanagement.subscriptiontype.SubscriptionTypeRepository;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
@@ -16,36 +21,41 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final SubscriptionTypeRepository subscriptionTypeRepository;
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
-    private final UserService userService;
     private final ProductService productService;
     private final OrderItemService orderItemService;
 
     public TransactionServiceImpl(
             TransactionRepository transactionRepository,
+            SubscriptionRepository subscriptionRepository,
+            SubscriptionTypeRepository subscriptionTypeRepository,
             AddressRepository addressRepository,
             UserRepository userRepository,
-            UserService userService,
             ProductService productService,
             OrderItemService orderItemService
     ) {
         this.transactionRepository = transactionRepository;
+        this.subscriptionRepository = subscriptionRepository;
+        this.subscriptionTypeRepository = subscriptionTypeRepository;
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
         this.productService = productService;
         this.orderItemService = orderItemService;
     }
 
     @Override
-    public void createTransaction(PurchaseDto purchaseDto) {
+    public void createTransactionByProducts(PurchaseProductDto purchaseDto) {
 
         User currentUser = this.getCurrentUser();
 
@@ -53,6 +63,7 @@ public class TransactionServiceImpl implements TransactionService {
         AddressDto billingAddressDto = purchaseDto.getBillingAddressDto();
         List<OrderItemDto> orderItemDtos = purchaseDto.getOrderItems();
 
+        // fix - include Address ID
         Address shippingAddress = Address
                 .builder()
                 .city(shippingAddressDto.getCity())
@@ -61,6 +72,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .zipCode(shippingAddressDto.getZipCode())
                 .build();
 
+        // fix - include address ID
         Address billingAddress = Address
                 .builder()
                 .city(billingAddressDto.getCity())
@@ -88,7 +100,7 @@ public class TransactionServiceImpl implements TransactionService {
             totalAmountCost = totalAmountCost.add(BigDecimal.valueOf(orderItem.getQuantity()).multiply(orderItem.getUnitPrice()));
         }
 
-        Transaction transaction = Transaction
+        Transaction newTransaction = Transaction
                 .builder()
                 .date(new Date())
                 .name("Buy products")
@@ -96,16 +108,84 @@ public class TransactionServiceImpl implements TransactionService {
                 .shippingAddress(savedShippingAddress)
                 .description("Buy devices for hydroponics farming")
                 .amount(totalAmountCost)
-                .status("Pending")
+                .status(TransactionStatus.PENDING)
                 .paymentMethod(purchaseDto.getPaymentMethod())
                 .user(currentUser)
                 .orderItems(orderItems)
                 .build();
 
-        orderItems.forEach(orderItem -> orderItem.setTransaction(transaction));
+        orderItems.forEach(orderItem -> orderItem.setTransaction(newTransaction));
 
-        this.transactionRepository.save(transaction);
+        this.transactionRepository.save(newTransaction);
 
+    }
+
+    @Override
+    public void createTransactionBySubscription(PurchaseSubscriptionDto purchaseSubscriptionDto) {
+        User currentUser = this.getCurrentUser();
+
+        SubscriptionType subscriptionType = this.subscriptionTypeRepository.findById(purchaseSubscriptionDto.getSubscriptionTypeId())
+                .orElseThrow();
+
+        AddressDto billingAddressDto = purchaseSubscriptionDto.getBillingAddressDto();
+
+        // fix - include address ID
+        Address billingAddress = Address
+                .builder()
+                .city(billingAddressDto.getCity())
+                .province(billingAddressDto.getProvince())
+                .street(billingAddressDto.getStreet())
+                .zipCode(billingAddressDto.getZipCode())
+                .build();
+
+        Address savedBillingAddress = this.addressRepository.save(billingAddress);
+
+        Transaction newTransaction = Transaction
+                .builder()
+                .date(new Date())
+                .name(subscriptionType.getName())
+                .billingAddress(savedBillingAddress)
+                .description(subscriptionType.getSubscriptionBenefits())
+                .amount(purchaseSubscriptionDto.getPrice())
+                .status(TransactionStatus.APPROVED)
+                .paymentMethod(purchaseSubscriptionDto.getPaymentMethod())
+                .user(currentUser)
+                .build();
+
+
+        Subscription newSubscription = this.setUserSubscription(currentUser, subscriptionType);
+
+        this.subscriptionRepository.save(newSubscription);
+        this.transactionRepository.save(newTransaction);
+    }
+
+    private Subscription setUserSubscription(User currentUser, SubscriptionType subscriptionType) {
+
+        Date startDate = new Date();
+        Date endDate;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        if (subscriptionType.getName().contains("Monthly")) {
+
+            calendar.add(Calendar.MONTH, 1);
+        } else if (subscriptionType.getName().contains("Yearly")) {
+
+            calendar.add(Calendar.YEAR, 1);
+        }
+
+        endDate = calendar.getTime();
+
+        Subscription subscription = Subscription
+                .builder()
+                .subscriptionType(subscriptionType)
+                .startDate(startDate)
+                .endDate(endDate)
+                .user(currentUser)
+                .build();
+
+        return subscription;
     }
 
     @Override
@@ -128,11 +208,11 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = this.transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", "id", transactionId));
 
-        if (transaction.getStatus().equals("Approved")) {
+        if (transaction.getStatus().name().equals("APPROVED")) {
             // throw exception
         }
 
-        transaction.setStatus("Approved");
+        transaction.setStatus(TransactionStatus.APPROVED);
 
         Transaction approvedTransaction = this.transactionRepository.save(transaction);
 
@@ -145,7 +225,9 @@ public class TransactionServiceImpl implements TransactionService {
 
         List<Transaction> transactions = currentUser.getTransactions();
 
-        return transactions.stream().map(transaction -> this.convertToDtoForList(transaction)).toList();
+        return transactions.stream()
+                .map(transaction -> this.convertToDtoForList(transaction))
+                .toList();
     }
 
     private TransactionDto convertToDto(Transaction transaction) {
@@ -156,7 +238,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .name(transaction.getName())
                 .description(transaction.getDescription())
                 .amount(transaction.getAmount())
-                .status(transaction.getStatus())
+                .status(transaction.getStatus().name())
                 .paymentMethod(transaction.getPaymentMethod())
                 .orderItems(this.orderItemService.convertListToDto(transaction.getOrderItems()))
                 .orderedBy(transaction.getUser().getEmail())
@@ -171,7 +253,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .date(transaction.getDate())
                 .name(transaction.getName())
                 .amount(transaction.getAmount())
-                .status(transaction.getStatus())
+                .status(transaction.getStatus().name())
                 .orderedBy(transaction.getUser().getEmail())
                 .build();
     }
