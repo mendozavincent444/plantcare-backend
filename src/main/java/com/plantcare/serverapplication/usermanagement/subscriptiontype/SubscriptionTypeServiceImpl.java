@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.usermanagement.subscriptiontype;
 
+import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,5 +16,12 @@ public class SubscriptionTypeServiceImpl implements SubscriptionTypeService {
     @Override
     public List<SubscriptionType> getAllSubscriptionTypes() {
         return this.subscriptionTypeRepository.findAll();
+    }
+
+    @Override
+    public SubscriptionType getSubscriptionTypeById(int subscriptionTypeId) {
+
+        return this.subscriptionTypeRepository.findById(subscriptionTypeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Subscription Type", "id", subscriptionTypeId));
     }
 }

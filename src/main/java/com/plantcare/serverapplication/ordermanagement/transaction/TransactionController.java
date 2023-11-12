@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
 import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.usermanagement.subscription.PurchaseSubscriptionDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +18,17 @@ public class TransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<MessageResponseDto> createTransaction(@RequestBody PurchaseDto purchaseDto) {
+    public ResponseEntity<MessageResponseDto> createTransactionByProducts(@RequestBody PurchaseProductDto purchaseDto) {
 
-        this.transactionService.createTransaction(purchaseDto);
+        this.transactionService.createTransactionByProducts(purchaseDto);
+
+        return new ResponseEntity<>(new MessageResponseDto("Transaction created successfully."), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/subscription")
+    public ResponseEntity<MessageResponseDto> createTransactionBySubscription(@RequestBody PurchaseSubscriptionDto purchaseSubscriptionDto) {
+
+        this.transactionService.createTransactionBySubscription(purchaseSubscriptionDto);
 
         return new ResponseEntity<>(new MessageResponseDto("Transaction created successfully."), HttpStatus.CREATED);
     }
