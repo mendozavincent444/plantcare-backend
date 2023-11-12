@@ -21,8 +21,8 @@ public class Subscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "subscription_type", nullable = false, length = 10)
+    @OneToOne
+    @JoinColumn(name = "subscription_type_id", nullable = false)
     private SubscriptionType subscriptionType;
 
     @Column(name = "start_date", nullable = false)

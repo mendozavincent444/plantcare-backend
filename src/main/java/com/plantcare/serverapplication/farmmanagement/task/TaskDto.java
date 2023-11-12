@@ -1,12 +1,5 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
-import com.plantcare.serverapplication.farmmanagement.container.Container;
-import com.plantcare.serverapplication.farmmanagement.farm.Farm;
-import com.plantcare.serverapplication.farmmanagement.plant.Plant;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
