@@ -1,4 +1,4 @@
-package com.plantcare.serverapplication.usermanagement.subscription;
+package com.plantcare.serverapplication.usermanagement.subscriptiontype;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
