@@ -9,6 +9,7 @@ import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,12 @@ public class User {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "reset_token", length = 50)
+    private String resetToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
 
     @OneToOne
     @JoinColumn(name = "role_id", nullable = false)

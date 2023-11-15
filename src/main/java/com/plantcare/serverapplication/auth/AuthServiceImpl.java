@@ -19,6 +19,8 @@ import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import jakarta.mail.Message;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,8 +32,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
     private final JwtUtils jwtUtils;
 
     public AuthServiceImpl(
@@ -53,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
             UserDetailsServiceImpl userDetailsService,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
+            JavaMailSender javaMailSender,
             JwtUtils jwtUtils
     ) {
         this.authenticationManager = authenticationManager;
@@ -62,6 +68,7 @@ public class AuthServiceImpl implements AuthService {
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.javaMailSender = javaMailSender;
         this.jwtUtils = jwtUtils;
     }
 
@@ -226,6 +233,70 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         return userInfoResponseDto;
+    }
+
+
+    @Override
+    public MessageResponseDto forgotPasswordRequest(ForgotPasswordRequestDto forgotPasswordRequestDto) {
+
+        String email = forgotPasswordRequestDto.getEmail();
+
+        if (!this.userRepository.existsByEmail(email)) {
+            throw new BadCredentialsException("User with the given email does not exist.");
+        }
+
+        String resetToken = this.generateResetToken();
+        LocalDateTime tokenExpirationDate = this.generateTokenExpiration();
+
+        User user = this.userRepository.findByEmail(email).get();
+
+        user.setResetToken(resetToken);
+        user.setTokenExpiration(tokenExpirationDate);
+
+        this.userRepository.save(user);
+
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Password Reset");
+        mailMessage.setFrom("plantcare@gmail.com");
+        mailMessage.setText("To complete the password reset process, please click here: " +
+                "http://localhost:4200/confirm-reset?token=" + resetToken);
+
+        javaMailSender.send(mailMessage);
+
+        return new MessageResponseDto("Request to reset password received. Check your inbox for the reset link.");
+    }
+
+    @Override
+    public MessageResponseDto forgotPasswordReset(String resetToken, String newPassword) {
+
+        if (!this.userRepository.existsByResetToken(resetToken)) {
+            throw new BadCredentialsException("Invalid reset token.");
+        }
+
+        User user = this.userRepository.findByResetToken(resetToken).get();
+
+        if (LocalDateTime.now().isAfter(user.getTokenExpiration())) {
+            throw new BadCredentialsException("Reset token has Expired.");
+        }
+
+        user.setPassword(this.passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setTokenExpiration(null);
+
+        this.userRepository.save(user);
+
+        return new MessageResponseDto("Password changed successfully.");
+    }
+
+    private String generateResetToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    private LocalDateTime generateTokenExpiration() {
+        return LocalDateTime.now().plusHours(24);
     }
 
     private User getCurrentUser() {
