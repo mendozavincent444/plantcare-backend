@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 
 @RestController
@@ -70,6 +71,23 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, authServiceUpdatePasswordData.getUpdatedJwtCookie())
                 .body(authServiceUpdatePasswordData.getMessageResponseDto());
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<MessageResponseDto> forgotPasswordRequest(@RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
+
+        MessageResponseDto messageResponseDto = this.authService.forgotPasswordRequest(forgotPasswordRequestDto);
+
+        return ResponseEntity.ok(messageResponseDto);
+    }
+
+    @PostMapping("/confirm-request")
+    public ResponseEntity<MessageResponseDto> confirmPasswordRequest(@RequestParam("token") String token, @RequestBody ForgotPasswordRequestDto forgotPasswordRequestDto) {
+
+        MessageResponseDto messageResponseDto = this.authService.forgotPasswordReset(token, forgotPasswordRequestDto.getNewPassword());
+
+        return ResponseEntity.ok(messageResponseDto);
+    }
+
 
     @PutMapping("/update-profile")
     public ResponseEntity<?> updateUserProfile(@RequestBody UserDto userDto) {
