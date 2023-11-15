@@ -255,18 +255,27 @@ public class AuthServiceImpl implements AuthService {
 
         this.userRepository.save(user);
 
-
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
         mailMessage.setTo(email);
         mailMessage.setSubject("Password Reset");
-        mailMessage.setFrom("plantcare@gmail.com");
-        mailMessage.setText("To complete the password reset process, please click here: " +
-                "http://localhost:4200/confirm-reset?token=" + resetToken);
 
-        javaMailSender.send(mailMessage);
+        javaMailSender.send(this.initializeRequestEmailText(user, mailMessage, resetToken));
 
         return new MessageResponseDto("Request to reset password received. Check your inbox for the reset link.");
+    }
+
+    private SimpleMailMessage initializeRequestEmailText(User user, SimpleMailMessage mailMessage, String resetToken) {
+
+        if (user.getRole().getRoleName().equals(RoleEnum.ROLE_FARMER)) {
+            mailMessage.setText("To complete the password reset process, get the token: " + resetToken);
+
+        } else {
+            mailMessage.setText("To complete the password reset process, please click here: " +
+                    "http://localhost:4200/confirm-reset?token=" + resetToken);
+        }
+
+        return mailMessage;
     }
 
     @Override
