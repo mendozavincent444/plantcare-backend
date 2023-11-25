@@ -23,6 +23,7 @@ public class TaskDto {
     private String status;
     @NotNull
     private int plantId;
+    private String plantName;
     @NotNull
     private int containerId;
     @NotNull
