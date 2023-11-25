@@ -205,6 +205,7 @@ public class TaskServiceImpl implements TaskService {
                 .harvestDate(task.getHarvestDate())
                 .status(task.getStatus().name())
                 .plantId(task.getPlant().getId())
+                .plantName(task.getPlant().getName())
                 .containerId(task.getContainer().getId())
                 .build();
     }
