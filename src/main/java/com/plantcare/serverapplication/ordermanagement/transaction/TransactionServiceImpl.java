@@ -159,7 +159,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.transactionRepository.save(newTransaction);
     }
 
-    private Subscription setUserSubscription(User currentUser, SubscriptionType subscriptionType) {
+    public Subscription setUserSubscription(User currentUser, SubscriptionType subscriptionType) {
 
         Date startDate = new Date();
         Date endDate;
