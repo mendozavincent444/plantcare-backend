@@ -17,6 +17,7 @@ import com.plantcare.serverapplication.usermanagement.subscriptiontype.Subscript
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -123,6 +124,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void createTransactionBySubscription(PurchaseSubscriptionDto purchaseSubscriptionDto) {
         User currentUser = this.getCurrentUser();
+
+        if (currentUser.getSubscription() != null) {
+            throw new BadCredentialsException("User already has a subscription.");
+        }
 
         SubscriptionType subscriptionType = this.subscriptionTypeRepository.findById(purchaseSubscriptionDto.getSubscriptionTypeId())
                 .orElseThrow();
