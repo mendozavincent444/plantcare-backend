@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.usermanagement.user;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 
 import java.util.List;
@@ -14,4 +15,5 @@ public interface UserService {
 
     UserDto convertToDto(User user);
     UserDto getAdminByUsername(String username);
+    MessageResponseDto editAllowNotifications();
 }

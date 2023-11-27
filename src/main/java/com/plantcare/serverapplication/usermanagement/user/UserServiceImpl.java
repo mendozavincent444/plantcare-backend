@@ -2,6 +2,7 @@ package com.plantcare.serverapplication.usermanagement.user;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -81,6 +82,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow();
 
         return this.convertToDto(admin);
+    }
+
+    @Override
+    public MessageResponseDto editAllowNotifications() {
+
+        User currentUser = this.getCurrentUser();
+
+        if (currentUser.isAllowNotifications()) {
+            currentUser.setAllowNotifications(false);
+        } else {
+            currentUser.setAllowNotifications(true);
+        }
+
+        return new MessageResponseDto("Notification settings changed.");
     }
 
     private User getCurrentUser() {
