@@ -13,4 +13,5 @@ public class UserInfoResponseDto {
     private String email;
     private String firstName;
     private String lastName;
+    private boolean allowNotifications;
 }

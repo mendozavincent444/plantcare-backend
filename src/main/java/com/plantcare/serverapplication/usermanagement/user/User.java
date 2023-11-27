@@ -82,4 +82,7 @@ public class User {
     @OneToOne
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
+
+    @Column(name = "is_allow_notifications")
+    private boolean isAllowNotifications;
 }

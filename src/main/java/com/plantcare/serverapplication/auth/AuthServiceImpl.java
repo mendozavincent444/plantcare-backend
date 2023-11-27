@@ -92,6 +92,7 @@ public class AuthServiceImpl implements AuthService {
                 .lastName(currentUser.getLastName())
                 .email(currentUser.getEmail())
                 .username(currentUser.getUsername())
+                .allowNotifications(currentUser.isAllowNotifications())
                 .role(currentUser.getRole().getRoleName().name())
                 .build();
 
@@ -120,6 +121,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(registerRequestDto.getUsername())
                 .firstName(registerRequestDto.getFirstName())
                 .lastName(registerRequestDto.getLastName())
+                .isAllowNotifications(true)
                 .password(this.passwordEncoder.encode(registerRequestDto.getPassword()))
                 .build();
 

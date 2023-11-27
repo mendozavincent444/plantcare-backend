@@ -37,6 +37,14 @@ public class UserController {
         return ResponseEntity.ok(currentUser);
     }
 
+    @PatchMapping("/notification-toggle")
+    public ResponseEntity<MessageResponseDto> editAllowNotifications() {
+
+        MessageResponseDto messageResponseDto = this.userService.editAllowNotifications();
+
+        return ResponseEntity.ok(messageResponseDto);
+    }
+
 
     @GetMapping("/roles/{roleId}")
     public ResponseEntity<List<UserDto>> getAllAdmins(@PathVariable int roleId) {
