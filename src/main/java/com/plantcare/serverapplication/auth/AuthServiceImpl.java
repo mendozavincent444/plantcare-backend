@@ -15,6 +15,8 @@ import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.role.RoleRepository;
 import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
+import com.plantcare.serverapplication.usermanagement.subscription.SubscriptionService;
+import com.plantcare.serverapplication.usermanagement.subscription.SubscriptionServiceImpl;
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
@@ -45,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
+    private final SubscriptionService subscriptionService;
     private final UserDetailsPasswordServiceImpl userDetailsPasswordService;
     private final UserDetailsServiceImpl userDetailsService;
     private final RoleRepository roleRepository;
@@ -56,6 +59,7 @@ public class AuthServiceImpl implements AuthService {
             AuthenticationManager authenticationManager,
             UserRepository userRepository,
             FarmRepository farmRepository,
+            SubscriptionService subscriptionService,
             UserDetailsPasswordServiceImpl userDetailsPasswordService,
             UserDetailsServiceImpl userDetailsService,
             RoleRepository roleRepository,
@@ -66,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.farmRepository = farmRepository;
+        this.subscriptionService = subscriptionService;
         this.userDetailsPasswordService = userDetailsPasswordService;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
@@ -99,21 +104,13 @@ public class AuthServiceImpl implements AuthService {
                 .build();
 
         if (currentUser.getSubscription() != null) {
-            userInfoResponseDto.setSubscription(this.mapToSubscriptionDto(currentUser.getSubscription()));
+            userInfoResponseDto.setSubscription(this.subscriptionService.mapToSubscriptionDto(currentUser.getSubscription()));
         }
 
         return new AuthServiceLoginData(jwtCookie.toString(), userInfoResponseDto);
     }
 
-    private SubscriptionDto mapToSubscriptionDto(Subscription subscription) {
-        return SubscriptionDto
-                .builder()
-                .id(subscription.getId())
-                .startDate(subscription.getStartDate())
-                .endDate(subscription.getEndDate())
-                .subscriptionType(subscription.getSubscriptionType())
-                .build();
-    }
+
 
     @Override
     public MessageResponseDto registerUser(RegisterRequestDto registerRequestDto) {
