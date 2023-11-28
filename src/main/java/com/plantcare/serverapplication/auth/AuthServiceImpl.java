@@ -8,11 +8,13 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.security.service.UserDetailsPasswordServiceImpl;
 import com.plantcare.serverapplication.security.service.UserDetailsServiceImpl;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.shared.SubscriptionDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.role.RoleRepository;
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
@@ -91,12 +93,23 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(currentUser.getFirstName())
                 .lastName(currentUser.getLastName())
                 .email(currentUser.getEmail())
+                .subscription(this.mapToSubscriptionDto(currentUser.getSubscription()))
                 .username(currentUser.getUsername())
                 .allowNotifications(currentUser.isAllowNotifications())
                 .role(currentUser.getRole().getRoleName().name())
                 .build();
 
         return new AuthServiceLoginData(jwtCookie.toString(), userInfoResponseDto);
+    }
+
+    private SubscriptionDto mapToSubscriptionDto(Subscription subscription) {
+        return SubscriptionDto
+                .builder()
+                .id(subscription.getId())
+                .startDate(subscription.getStartDate())
+                .endDate(subscription.getEndDate())
+                .subscriptionType(subscription.getSubscriptionType())
+                .build();
     }
 
     @Override

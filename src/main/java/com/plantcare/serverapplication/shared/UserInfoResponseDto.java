@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.shared;
 
 
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import lombok.*;
 
 @Getter
@@ -14,4 +15,5 @@ public class UserInfoResponseDto {
     private String firstName;
     private String lastName;
     private boolean allowNotifications;
+    private SubscriptionDto subscription;
 }
