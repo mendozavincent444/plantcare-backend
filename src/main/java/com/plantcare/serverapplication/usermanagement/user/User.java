@@ -83,6 +83,6 @@ public class User {
     @JoinColumn(name = "subscription_id")
     private Subscription subscription;
 
-    @Column(name = "is_allow_notifications")
+    @Column(name = "is_allow_notifications", nullable = false)
     private boolean isAllowNotifications;
 }
