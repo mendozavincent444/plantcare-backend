@@ -24,6 +24,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(SubscriptionNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleSubscriptionNotFoundException(SubscriptionNotFoundException exception, WebRequest webRequest) {
+
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorDetails> handleBadCredentialsException(BadCredentialsException exception, WebRequest webRequest) {
