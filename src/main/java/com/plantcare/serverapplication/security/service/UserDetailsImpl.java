@@ -2,6 +2,7 @@ package com.plantcare.serverapplication.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plantcare.serverapplication.usermanagement.user.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,18 +20,21 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
 
     private boolean accountNonLocked;
+    @Getter
+    private boolean allowNotifications;
 
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(int id, String username, String email, boolean accountNonLocked, String password,
+    public UserDetailsImpl(int id, String username, String email, boolean accountNonLocked, boolean allowNotifications, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.accountNonLocked = accountNonLocked;
+        this.allowNotifications = allowNotifications;
         this.password = password;
         this.authorities = authorities;
     }
@@ -43,6 +47,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getUsername(),
                 user.getEmail(),
                 user.isAccountNonLocked(),
+                user.isAllowNotifications(),
                 user.getPassword(),
                 authorities);
     }
