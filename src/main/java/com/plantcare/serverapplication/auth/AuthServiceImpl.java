@@ -93,11 +93,14 @@ public class AuthServiceImpl implements AuthService {
                 .firstName(currentUser.getFirstName())
                 .lastName(currentUser.getLastName())
                 .email(currentUser.getEmail())
-                .subscription(this.mapToSubscriptionDto(currentUser.getSubscription()))
                 .username(currentUser.getUsername())
                 .allowNotifications(currentUser.isAllowNotifications())
                 .role(currentUser.getRole().getRoleName().name())
                 .build();
+
+        if (currentUser.getSubscription() != null) {
+            userInfoResponseDto.setSubscription(this.mapToSubscriptionDto(currentUser.getSubscription()));
+        }
 
         return new AuthServiceLoginData(jwtCookie.toString(), userInfoResponseDto);
     }

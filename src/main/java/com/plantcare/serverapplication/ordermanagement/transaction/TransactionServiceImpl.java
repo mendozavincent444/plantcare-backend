@@ -160,6 +160,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         Subscription newSubscription = this.setUserSubscription(currentUser, subscriptionType);
 
+        currentUser.setSubscription(newSubscription);
+
         this.subscriptionRepository.save(newSubscription);
         this.transactionRepository.save(newTransaction);
     }
