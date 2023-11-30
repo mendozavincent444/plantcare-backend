@@ -54,16 +54,8 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "sender")
-    private List<Notification> sentNotifications = new ArrayList<>();
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_notification",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id")
-    )
-    private List<Notification> receivedNotifications = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Notification> notifications = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinTable(
@@ -73,10 +65,10 @@ public class User {
     )
     private List<Farm> farms = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY ,cascade = CascadeType.ALL, mappedBy = "farmer")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "farmer")
     private List<HarvestLog> harvestedLog = new ArrayList<>();
 
     @OneToOne
