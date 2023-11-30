@@ -1,3 +1,2 @@
 ALTER TABLE user
-ADD reset_token VARCHAR(50) NULL,
-ADD token_expiration DATETIME NULL;
+ADD is_allow_notifications TINYINT(1) NOT NULL;

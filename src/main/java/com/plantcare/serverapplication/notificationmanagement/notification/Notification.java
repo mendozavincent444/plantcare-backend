@@ -23,17 +23,13 @@ public class Notification {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", length = 255, nullable = false)
     private String content;
 
-    @Column(name = "status", nullable = false, length = 20)
-    private String status;
-
-    @Column(name = "type", nullable = false, length = 20)
-    private String type;
+    @Column(name = "title", length = 50, nullable = false)
+    private String title;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
-
+    @JoinColumn(name = "user_id")
+    private User user;
 }
