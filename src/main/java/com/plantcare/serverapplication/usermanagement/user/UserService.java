@@ -16,4 +16,5 @@ public interface UserService {
     UserDto convertToDto(User user);
     UserDto getAdminByUsername(String username);
     MessageResponseDto editAllowNotifications();
+    User getCurrentUser();
 }
