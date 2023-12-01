@@ -1,6 +1,8 @@
 package com.plantcare.serverapplication.ordermanagement.transaction;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
+import com.plantcare.serverapplication.notificationmanagement.notification.NotificationRepository;
 import com.plantcare.serverapplication.ordermanagement.address.Address;
 import com.plantcare.serverapplication.ordermanagement.address.AddressDto;
 import com.plantcare.serverapplication.ordermanagement.address.AddressRepository;
@@ -36,6 +38,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final UserRepository userRepository;
     private final ProductService productService;
     private final OrderItemService orderItemService;
+    private final NotificationRepository notificationRepository;
 
     public TransactionServiceImpl(
             TransactionRepository transactionRepository,
@@ -44,7 +47,8 @@ public class TransactionServiceImpl implements TransactionService {
             AddressRepository addressRepository,
             UserRepository userRepository,
             ProductService productService,
-            OrderItemService orderItemService
+            OrderItemService orderItemService,
+            NotificationRepository notificationRepository
     ) {
         this.transactionRepository = transactionRepository;
         this.subscriptionRepository = subscriptionRepository;
@@ -53,6 +57,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.userRepository = userRepository;
         this.productService = productService;
         this.orderItemService = orderItemService;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -115,6 +120,15 @@ public class TransactionServiceImpl implements TransactionService {
                 .orderItems(orderItems)
                 .build();
 
+        Notification notification = Notification
+                .builder()
+                .title("Products Transaction")
+                .date(new Date())
+                .content("You have ordered products for farming.")
+                .build();
+
+        notification.setUser(currentUser);
+
         orderItems.forEach(orderItem -> orderItem.setTransaction(newTransaction));
 
         this.transactionRepository.save(newTransaction);
@@ -157,6 +171,14 @@ public class TransactionServiceImpl implements TransactionService {
                 .user(currentUser)
                 .build();
 
+        Notification notification = Notification
+                .builder()
+                .title("Subscription")
+                .date(new Date())
+                .content("You have officially subscribed to Plantcare premium.")
+                .build();
+
+        notification.setUser(currentUser);
 
         Subscription newSubscription = this.setUserSubscription(currentUser, subscriptionType);
 
@@ -164,6 +186,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         this.subscriptionRepository.save(newSubscription);
         this.transactionRepository.save(newTransaction);
+        this.notificationRepository.save(notification);
     }
 
     public Subscription setUserSubscription(User currentUser, SubscriptionType subscriptionType) {
