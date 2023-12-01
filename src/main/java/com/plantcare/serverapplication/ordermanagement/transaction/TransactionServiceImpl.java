@@ -244,6 +244,17 @@ public class TransactionServiceImpl implements TransactionService {
 
         transaction.setStatus(TransactionStatus.APPROVED);
 
+        User user = transaction.getUser();
+
+        Notification notification = Notification
+                .builder()
+                .title("Approved Transaction")
+                .date(new Date())
+                .content("Admin has approved your transaction.")
+                .build();
+
+        notification.setUser(user);
+
         Transaction approvedTransaction = this.transactionRepository.save(transaction);
 
         return this.convertToDto(approvedTransaction);
