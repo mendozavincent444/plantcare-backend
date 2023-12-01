@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
         return new MessageResponseDto("Notification settings changed.");
     }
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
