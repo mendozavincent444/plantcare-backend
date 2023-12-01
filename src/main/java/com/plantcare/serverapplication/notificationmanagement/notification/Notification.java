@@ -2,10 +2,7 @@ package com.plantcare.serverapplication.notificationmanagement.notification;
 
 import com.plantcare.serverapplication.usermanagement.user.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -13,6 +10,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "notification")
 public class Notification {
