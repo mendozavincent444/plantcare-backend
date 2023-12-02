@@ -162,7 +162,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<HarvestLogDto> harvestTasksByTaskIds(TaskIdsDto taskIdsDto, int farmId, int containerId) {
+    public List<HarvestLogDto> harvestTasksByTaskIds(TaskIdsDto taskIdsDto, int farmId) {
 
         // fix - if farm is accessible and container has all the tasks
 
