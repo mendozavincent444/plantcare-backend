@@ -16,5 +16,5 @@ public interface TaskService {
 
     TaskDto updateTask(TaskDto taskDto, int taskId, int containerId);
 
-    List<HarvestLogDto> harvestTasksByTaskIds(TaskIdsDto taskIdsDto, int farmId, int containerId);
+    List<HarvestLogDto> harvestTasksByTaskIds(TaskIdsDto taskIdsDto, int farmId);
 }

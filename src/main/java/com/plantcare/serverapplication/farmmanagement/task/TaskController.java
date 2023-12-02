@@ -65,14 +65,13 @@ public class TaskController {
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
     }
 
-    @PostMapping("/containers/{containerId}/tasks/harvest")
+    @PostMapping("/tasks/harvest")
     public ResponseEntity<List<HarvestLogDto>> harvestTasksById(
             @RequestBody TaskIdsDto taskIdsDto,
-            @PathVariable int farmId,
-            @PathVariable int containerId
-            ) {
+            @PathVariable int farmId
+    ) {
 
-        List<HarvestLogDto> harvestLogDtos = this.taskService.harvestTasksByTaskIds(taskIdsDto, farmId, containerId);
+        List<HarvestLogDto> harvestLogDtos = this.taskService.harvestTasksByTaskIds(taskIdsDto, farmId);
 
         return new ResponseEntity<>(harvestLogDtos, HttpStatus.CREATED);
     }
