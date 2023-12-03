@@ -178,7 +178,7 @@ public class TaskServiceImpl implements TaskService {
             return HarvestLog
                     .builder()
                     .harvestedDate(new Date())
-                    .task(task)
+                    .plantName(task.getPlant().getName())
                     .farmer(task.getFarmer())
                     .farm(farm)
                     .build();
@@ -191,7 +191,7 @@ public class TaskServiceImpl implements TaskService {
                     .builder()
                     .id(harvestLog.getId())
                     .harvestedDate(harvestLog.getHarvestedDate())
-                    .plantName(harvestLog.getTask().getPlant().getName())
+                    .plantName(harvestLog.getPlantName())
                     .farmerLastName(harvestLog.getFarmer().getLastName())
                     .build();
         })).toList();
