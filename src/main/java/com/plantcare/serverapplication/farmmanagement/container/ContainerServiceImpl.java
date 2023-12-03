@@ -85,7 +85,12 @@ public class ContainerServiceImpl implements ContainerService {
 
         List<Container> containers = this.containerRepository.findAllById(containerIds);
 
-        containers.forEach((container -> container.getArduinoBoard().setStatus(DeviceStatus.INACTIVE)));
+        containers.forEach((container -> {
+            if (container.getArduinoBoard() != null) {
+                container.getArduinoBoard().setStatus(DeviceStatus.INACTIVE);
+            }
+            container.getTasks().clear();
+        }));
 
         farm.getContainers().removeAll(containers);
 
