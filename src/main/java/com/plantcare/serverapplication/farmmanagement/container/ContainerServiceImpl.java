@@ -10,6 +10,7 @@ import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBo
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
 import com.plantcare.serverapplication.shared.DeviceStatus;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -98,9 +99,27 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
+    public MessageResponseDto setMainArduinoBoard(int containerId, int arduinoBoardId) {
+
+        Container container = this.containerRepository.findById(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
+
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(arduinoBoardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Arduino board", "id", arduinoBoardId));
+
+        arduinoBoard.setStatus(DeviceStatus.ACTIVE);
+
+        container.setArduinoBoard(arduinoBoard);
+
+        return new MessageResponseDto("Main Arduino Board set successfully.");
+    }
+
+
+    @Override
     public ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId) {
 
-        Container container = this.containerRepository.findById(containerId).orElseThrow();
+        Container container = this.containerRepository.findById(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
 
         int newArduinoBoardId = containerDto.getArduinoBoardDto().getId();
         int newPlantId = containerDto.getPlantDto().getId();

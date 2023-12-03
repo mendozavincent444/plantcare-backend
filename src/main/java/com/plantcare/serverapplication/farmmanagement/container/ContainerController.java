@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +31,21 @@ public class ContainerController {
     }
 
     @DeleteMapping
-    public ResponseEntity<String> deleteContainerListById(@RequestBody DeleteContainersDto deleteContainersDto, @PathVariable int farmId) {
+    public ResponseEntity<MessageResponseDto> deleteContainerListById(@RequestBody DeleteContainersDto deleteContainersDto, @PathVariable int farmId) {
 
         this.containerService.deleteContainerListById(deleteContainersDto, farmId);
 
-        return new ResponseEntity<>("All items deleted.", HttpStatus.OK);
+        return new ResponseEntity<>(new MessageResponseDto("All items deleted."), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{containerId}/arduino-board/{arduinoBoardId}")
+    public ResponseEntity<MessageResponseDto> setMainArduinoBoard(
+            @PathVariable int containerId,
+            @PathVariable int arduinoBoard
+    ) {
+        MessageResponseDto messageResponseDto = this.containerService.setMainArduinoBoard(containerId, arduinoBoard);
+
+        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }
 
     @PutMapping("/{containerId}")
