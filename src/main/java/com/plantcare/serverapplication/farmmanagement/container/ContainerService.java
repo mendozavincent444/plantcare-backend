@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.container;
 
+import com.plantcare.serverapplication.shared.MessageResponseDto;
+
 import java.util.List;
 
 public interface ContainerService {
@@ -8,6 +10,8 @@ public interface ContainerService {
     List<ContainerDto> getAllContainersByFarmId(int farmId);
 
     void deleteContainerListById(DeleteContainersDto deleteContainersDto, int farmId);
+
+    MessageResponseDto setMainArduinoBoard(int containerId, int arduinoBoardId);
 
     ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId);
 }
