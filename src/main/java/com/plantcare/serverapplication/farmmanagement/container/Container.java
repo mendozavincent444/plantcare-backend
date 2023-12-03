@@ -37,6 +37,6 @@ public class Container {
     @JoinColumn(name = "farm_id", nullable = false)
     private Farm farm;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "container")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "container", orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 }

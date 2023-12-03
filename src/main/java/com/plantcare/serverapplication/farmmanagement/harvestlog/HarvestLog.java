@@ -23,7 +23,7 @@ public class HarvestLog {
     @Column(name = "harvested_date", nullable = false)
     private Date harvestedDate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "task_id", nullable = false)
     private Task task;
 

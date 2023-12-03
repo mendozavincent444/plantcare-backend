@@ -39,7 +39,7 @@ public class Task {
     @JoinColumn(name = "plant_id", nullable = false)
     private Plant plant;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "container_id", nullable = false)
     private Container container;
 }
