@@ -114,6 +114,19 @@ public class ContainerServiceImpl implements ContainerService {
         return new MessageResponseDto("Main Arduino Board set successfully.");
     }
 
+    @Override
+    public MessageResponseDto removeMainArduinoBoard(int containerId) {
+        Container container = this.containerRepository.findById(containerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
+
+        ArduinoBoard arduinoBoard = container.getArduinoBoard();
+        arduinoBoard.setStatus(DeviceStatus.INACTIVE);
+
+        container.setArduinoBoard(null);
+
+        return new MessageResponseDto("Main Arduino Board removed successfully.");
+    }
+
 
     @Override
     public ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId) {

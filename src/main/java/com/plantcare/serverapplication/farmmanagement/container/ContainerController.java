@@ -48,6 +48,13 @@ public class ContainerController {
         return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }
 
+    @PatchMapping("/{containerId}")
+    public ResponseEntity<MessageResponseDto> removeMainArduinoBoard(@PathVariable int containerId) {
+        MessageResponseDto messageResponseDto = this.containerService.removeMainArduinoBoard(containerId);
+
+        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
+    }
+
     @PutMapping("/{containerId}")
     public ResponseEntity<ContainerDto> updateContainer(
             @RequestBody ContainerDto containerDto,
