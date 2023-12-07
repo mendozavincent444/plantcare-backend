@@ -51,6 +51,7 @@ public class HarvestLogServiceImpl implements HarvestLogService {
         return HarvestLogDto
                 .builder()
                 .id(harvestLog.getId())
+                .plantName(harvestLog.getPlantName())
                 .harvestedDate(harvestLog.getHarvestedDate())
                 .farmerLastName(harvestLog.getFarmer().getLastName())
                 .build();
