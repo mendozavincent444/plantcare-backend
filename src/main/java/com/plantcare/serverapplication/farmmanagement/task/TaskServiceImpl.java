@@ -184,6 +184,8 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         }).toList();
 
+        this.taskRepository.deleteAll(tasksToHarvest);
+
         List<HarvestLog> savedHarvestLogs = this.harvestLogRepository.saveAll(harvestLogList);
 
         return savedHarvestLogs.stream().map((harvestLog -> {
