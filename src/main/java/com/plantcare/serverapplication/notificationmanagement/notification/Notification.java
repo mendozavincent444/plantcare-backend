@@ -27,7 +27,6 @@ public class Notification {
     @Column(name = "title", length = 50, nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "is_read_notification", nullable = false)
+    private boolean isReadNotification;
 }

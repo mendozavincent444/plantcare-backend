@@ -1,10 +1,9 @@
 package com.plantcare.serverapplication.notificationmanagement.notification;
 
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +23,16 @@ public class NotificationController {
         List<NotificationDto> notifications = this.notificationService.getAllNotifications();
 
         return new ResponseEntity<>(notifications, HttpStatus.OK);
+    }
+
+    @PostMapping("/by-farm/{farmId}")
+    public ResponseEntity<NotificationDto> addNotification(
+            @RequestBody NotificationDto notificationRequest,
+            @PathVariable int farmId
+    ) {
+
+        NotificationDto notificationDto = this.notificationService.addNotification(notificationRequest, farmId);
+
+        return new ResponseEntity<>(notificationDto, HttpStatus.CREATED);
     }
 }

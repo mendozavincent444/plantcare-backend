@@ -127,7 +127,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .content("You have ordered products for farming.")
                 .build();
 
-        notification.setUser(currentUser);
+        // fix
+        //notification.setUser(currentUser);
 
         orderItems.forEach(orderItem -> orderItem.setTransaction(newTransaction));
 
@@ -178,7 +179,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .content("You have officially subscribed to Plantcare premium.")
                 .build();
 
-        notification.setUser(currentUser);
+        // fix
+        //notification.setUser(currentUser);
 
         Subscription newSubscription = this.setUserSubscription(currentUser, subscriptionType);
 
@@ -253,7 +255,8 @@ public class TransactionServiceImpl implements TransactionService {
                 .content("Admin has approved your transaction.")
                 .build();
 
-        notification.setUser(user);
+        // fix
+        //notification.setUser(user);
 
         Transaction approvedTransaction = this.transactionRepository.save(transaction);
 
