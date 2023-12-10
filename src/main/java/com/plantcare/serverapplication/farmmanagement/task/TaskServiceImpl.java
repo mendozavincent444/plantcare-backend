@@ -9,10 +9,13 @@ import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLog;
 import com.plantcare.serverapplication.farmmanagement.harvestlog.HarvestLogRepository;
 import com.plantcare.serverapplication.farmmanagement.plant.Plant;
 import com.plantcare.serverapplication.farmmanagement.plant.PlantRepository;
+import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
+import com.plantcare.serverapplication.notificationmanagement.notification.NotificationRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.HarvestLogDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,7 @@ public class TaskServiceImpl implements TaskService {
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
     private final HarvestLogRepository harvestLogRepository;
+    private final NotificationRepository notificationRepository;
 
     public TaskServiceImpl(
             TaskRepository taskRepository,
@@ -36,7 +40,8 @@ public class TaskServiceImpl implements TaskService {
             ContainerRepository containerRepository,
             FarmRepository farmRepository,
             UserRepository userRepository,
-            HarvestLogRepository harvestLogRepository
+            HarvestLogRepository harvestLogRepository,
+            NotificationRepository notificationRepository
     ) {
         this.taskRepository = taskRepository;
         this.plantRepository = plantRepository;
@@ -44,6 +49,7 @@ public class TaskServiceImpl implements TaskService {
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
         this.harvestLogRepository = harvestLogRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -83,6 +89,16 @@ public class TaskServiceImpl implements TaskService {
 
         container.getTasks().addAll(tasks);
 
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Add Task")
+                .content("Added " + tasks.size() + " new task/s.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateTasksNotifications(farm, notification);
+
         List<Task> savedTasks = this.taskRepository.saveAllAndFlush(tasks);
 
         return savedTasks.stream().map(task -> this.convertToDto(task)).collect(Collectors.toList());
@@ -102,6 +118,16 @@ public class TaskServiceImpl implements TaskService {
             Container container = task.getContainer();
             container.getTasks().remove(task);
         }
+
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Delete Task")
+                .content("Deleted " + tasks.size() + " task/s.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateTasksNotifications(farm, notification);
 
         this.taskRepository.deleteAllById(taskIds);
     }
@@ -144,6 +170,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setPlant(plant);
 
+        Farm farm = newContainer.getFarm();
 
         if (task.getContainer() != newContainer) {
 
@@ -155,6 +182,16 @@ public class TaskServiceImpl implements TaskService {
             task.setContainer(newContainer);
             newContainer.getTasks().add(task);
         }
+
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Update Task")
+                .content(task.getPlant() + " task updated successfully.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateTasksNotifications(farm, notification);
 
         this.taskRepository.save(task);
 
@@ -184,6 +221,16 @@ public class TaskServiceImpl implements TaskService {
                     .build();
         }).toList();
 
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Harvest Task")
+                .content("Harvested " + tasksToHarvest.size() + " task/s.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateTasksNotifications(farm, notification);
+
         this.taskRepository.deleteAll(tasksToHarvest);
 
         List<HarvestLog> savedHarvestLogs = this.harvestLogRepository.saveAll(harvestLogList);
@@ -197,6 +244,14 @@ public class TaskServiceImpl implements TaskService {
                     .farmerLastName(harvestLog.getFarmer().getLastName())
                     .build();
         })).toList();
+    }
+
+    private void generateTasksNotifications(Farm farm, Notification notification) {
+        Notification savedNotification = this.notificationRepository.save(notification);
+
+        List<User> users = farm.getUsers();
+
+        users.forEach(user -> user.getNotifications().add(savedNotification));
     }
 
     private TaskDto convertToDto(Task task) {
