@@ -9,10 +9,14 @@ import com.plantcare.serverapplication.farmmanagement.plant.PlantService;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
+import com.plantcare.serverapplication.notificationmanagement.notification.Notification;
+import com.plantcare.serverapplication.notificationmanagement.notification.NotificationRepository;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
+import com.plantcare.serverapplication.usermanagement.user.User;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +28,7 @@ public class ContainerServiceImpl implements ContainerService {
     private final FarmRepository farmRepository;
     private final ArduinoBoardService arduinoBoardService;
     private final PlantService plantService;
+    private final NotificationRepository notificationRepository;
 
     public ContainerServiceImpl(
             ContainerRepository containerRepository,
@@ -31,7 +36,8 @@ public class ContainerServiceImpl implements ContainerService {
             PlantRepository plantRepository,
             FarmRepository farmRepository,
             ArduinoBoardService arduinoBoardService,
-            PlantService plantService
+            PlantService plantService,
+            NotificationRepository notificationRepository
     ) {
         this.containerRepository = containerRepository;
         this.arduinoBoardRepository = arduinoBoardRepository;
@@ -39,6 +45,7 @@ public class ContainerServiceImpl implements ContainerService {
         this.farmRepository = farmRepository;
         this.arduinoBoardService = arduinoBoardService;
         this.plantService = plantService;
+        this.notificationRepository = notificationRepository;
     }
 
     @Override
@@ -63,6 +70,16 @@ public class ContainerServiceImpl implements ContainerService {
                 .build();
 
         farm.getContainers().add(newContainer);
+
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Add Container")
+                .content(newContainer.getName() + " container added successfully.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateContainersNotifications(farm, notification);
 
         newContainer = this.containerRepository.saveAndFlush(newContainer);
 
@@ -94,6 +111,16 @@ public class ContainerServiceImpl implements ContainerService {
         }));
 
         farm.getContainers().removeAll(containers);
+
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Delete Container")
+                .content("Deleted " + containers.size() + " container/s.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateContainersNotifications(farm, notification);
 
         this.containerRepository.deleteAllById(containerIds);
     }
@@ -134,6 +161,8 @@ public class ContainerServiceImpl implements ContainerService {
         Container container = this.containerRepository.findById(containerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Container", "id", containerId));
 
+        Farm farm = container.getFarm();
+
         int newArduinoBoardId = containerDto.getArduinoBoardDto().getId();
         int newPlantId = containerDto.getPlantDto().getId();
         String newContainerName = containerDto.getName();
@@ -165,9 +194,27 @@ public class ContainerServiceImpl implements ContainerService {
             container.setName(containerDto.getName());
         }
 
+        Notification notification = Notification
+                .builder()
+                .date(new Date())
+                .title("Update Container")
+                .content(container.getName() + " container updated successfully.")
+                .isReadNotification(false)
+                .build();
+
+        this.generateContainersNotifications(farm, notification);
+
         Container updatedContainer = this.containerRepository.save(container);
 
         return this.convertToDto(updatedContainer);
+    }
+
+    private void generateContainersNotifications(Farm farm, Notification notification) {
+        Notification savedNotification = this.notificationRepository.save(notification);
+
+        List<User> users = farm.getUsers();
+
+        users.forEach(user -> user.getNotifications().add(savedNotification));
     }
 
     private ContainerDto convertToDto(Container container) {
