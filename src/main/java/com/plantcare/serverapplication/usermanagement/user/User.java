@@ -54,8 +54,6 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<Notification> notifications = new ArrayList<>();
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
     @JoinTable(
@@ -64,6 +62,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "farm_id", referencedColumnName = "id")
     )
     private List<Farm> farms = new ArrayList<>();
+
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH }, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_notification",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "id")
+    )
+    private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
