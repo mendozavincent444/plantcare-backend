@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
             currentUser.setAllowNotifications(true);
         }
 
+        this.userRepository.save(currentUser);
         return new MessageResponseDto("Notification settings changed.");
     }
 
