@@ -3,6 +3,7 @@ package com.plantcare.serverapplication.notificationmanagement.notification;
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
@@ -61,6 +62,19 @@ public class NotificationServiceImpl implements NotificationService {
         this.userRepository.saveAll(users);
 
         return this.mapToDto(savedNotification);
+    }
+
+    @Override
+    public MessageResponseDto toggleIsReadNotifications(int notificationId) {
+
+        Notification notification = this.notificationRepository.findById(notificationId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Notification", notificationId));
+
+        notification.setReadNotification(true);
+
+        this.notificationRepository.save(notification);
+
+        return new MessageResponseDto("Notification read.");
     }
 
     private NotificationDto mapToDto(Notification notification) {
