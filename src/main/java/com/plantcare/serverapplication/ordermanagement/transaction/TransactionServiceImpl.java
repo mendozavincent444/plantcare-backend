@@ -125,10 +125,13 @@ public class TransactionServiceImpl implements TransactionService {
                 .title("Products Transaction")
                 .date(new Date())
                 .content("You have ordered products for farming.")
+                .isReadNotification(false)
                 .build();
 
-        // fix
-        //notification.setUser(currentUser);
+
+        Notification savedNotification = this.notificationRepository.save(notification);
+
+        currentUser.getNotifications().add(savedNotification);
 
         orderItems.forEach(orderItem -> orderItem.setTransaction(newTransaction));
 
@@ -177,10 +180,13 @@ public class TransactionServiceImpl implements TransactionService {
                 .title("Subscription")
                 .date(new Date())
                 .content("You have officially subscribed to Plantcare premium.")
+                .isReadNotification(false)
                 .build();
 
-        // fix
-        //notification.setUser(currentUser);
+        Notification savedNotification = this.notificationRepository.save(notification);
+
+        currentUser.getNotifications().add(savedNotification);
+
 
         Subscription newSubscription = this.setUserSubscription(currentUser, subscriptionType);
 
@@ -240,6 +246,8 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = this.transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction", "id", transactionId));
 
+        User currentUser = transaction.getUser();
+
         if (transaction.getStatus().name().equals("APPROVED")) {
             // throw exception
         }
@@ -253,10 +261,13 @@ public class TransactionServiceImpl implements TransactionService {
                 .title("Approved Transaction")
                 .date(new Date())
                 .content("Admin has approved your transaction.")
+                .isReadNotification(false)
                 .build();
 
-        // fix
-        //notification.setUser(user);
+
+        Notification savedNotification = this.notificationRepository.save(notification);
+
+        currentUser.getNotifications().add(savedNotification);
 
         Transaction approvedTransaction = this.transactionRepository.save(transaction);
 
