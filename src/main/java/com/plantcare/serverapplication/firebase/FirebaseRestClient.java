@@ -4,11 +4,14 @@ import com.plantcare.serverapplication.shared.ArduinoBoardData;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.net.URL;
+
 @Service
 public class FirebaseRestClient {
 
-    private static final String baseUrl = "https://plantcare-4b96e-default-rtdb.asia-southeast1.firebasedatabase.app/farm/";
-    private static final String urlSuffix = ".json";
+    private static final String BASE_URL = "https://plantcare-4b96e-default-rtdb.asia-southeast1.firebasedatabase.app/farm/";
+    private static final String URL_SUFFIX = ".json";
     private final RestTemplate restTemplate;
 
     public FirebaseRestClient(RestTemplate restTemplate) {
@@ -20,7 +23,7 @@ public class FirebaseRestClient {
 
         ArduinoBoardData arduinoBoardData = this.initializeArduinoBoardData();
 
-        this.restTemplate.postForObject(baseUrl + farmId + "/arduinoBoard" + arduinoBoardId + urlSuffix,
+        this.restTemplate.postForObject(BASE_URL + farmId + "/arduinoBoard" + arduinoBoardId + URL_SUFFIX,
                 new HttpEntity<>(arduinoBoardData),
                 String.class
         );
@@ -28,7 +31,7 @@ public class FirebaseRestClient {
 
     public void deleteArduinoBoardFromFirebaseDb(int farmId, int arduinoBoardId) {
 
-        this.restTemplate.delete(baseUrl + farmId + "/arduinoBoard" + arduinoBoardId + urlSuffix);
+        this.restTemplate.delete(BASE_URL + farmId + "/arduinoBoard" + arduinoBoardId + URL_SUFFIX);
     }
 
 
