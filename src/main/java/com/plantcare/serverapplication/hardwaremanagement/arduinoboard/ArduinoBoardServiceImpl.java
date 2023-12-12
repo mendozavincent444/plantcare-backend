@@ -111,6 +111,8 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
         farm.getArduinoBoards().remove(arduinoBoard);
 
+        this.firebaseRestClient.deleteArduinoBoardFromFirebaseDb(farmId, arduinoBoardId);
+
         this.arduinoBoardRepository.delete(arduinoBoard);
     }
 
