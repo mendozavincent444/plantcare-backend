@@ -3,6 +3,7 @@ package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
+import com.plantcare.serverapplication.firebase.FirebaseRestClient;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
@@ -18,15 +19,18 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
     private final ArduinoBoardRepository arduinoBoardRepository;
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
+    private final FirebaseRestClient firebaseRestClient;
 
     public ArduinoBoardServiceImpl(
             ArduinoBoardRepository arduinoBoardRepository,
             UserRepository userRepository,
-            FarmRepository farmRepository
+            FarmRepository farmRepository,
+            FirebaseRestClient firebaseRestClient
     ) {
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.userRepository = userRepository;
         this.farmRepository = farmRepository;
+        this.firebaseRestClient = firebaseRestClient;
     }
 
     @Override
@@ -48,6 +52,8 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
                 .build();
 
         ArduinoBoard savedArduinoBoard = this.arduinoBoardRepository.save(arduinoBoard);
+
+        this.firebaseRestClient.addArduinoBoardToFirebaseDb(farmId, savedArduinoBoard.getId());
 
         return this.convertToDto(savedArduinoBoard);
     }
