@@ -122,6 +122,22 @@ public class FarmServiceImpl implements FarmService {
     }
 
     @Override
+    public List<UserDto> getAllUsersByFarmId(int farmId) {
+        User currentUser = this.getCurrentUser();
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        if (!isValidFarmAccess(currentUser, farm)) {
+            throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        List<User> users = farm.getUsers();
+
+        return users.stream().map(user -> this.userService.convertToDto(user)).toList();
+    }
+
+    @Override
     public List<UserDto> getAllFarmersByFarmId(int farmId) {
         User currentUser = this.getCurrentUser();
 

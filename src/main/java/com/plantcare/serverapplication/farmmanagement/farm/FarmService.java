@@ -19,6 +19,7 @@ public interface FarmService {
 
     FarmDto updateFarm(FarmDto farmDto, int farmId, int newOwnerId);
 
+    List<UserDto> getAllUsersByFarmId(int farmId);
     List<UserDto> getAllFarmersByFarmId(int farmId);
 
     void removeFarmerByFarm(int farmId, int farmerId);
