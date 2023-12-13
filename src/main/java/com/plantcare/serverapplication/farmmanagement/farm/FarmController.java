@@ -2,7 +2,7 @@ package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
-import com.sun.mail.iap.Response;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +56,14 @@ public class FarmController {
         List<UserDto> farmers = this.farmService.getAllFarmersByFarmId(farmId);
 
         return ResponseEntity.ok(farmers);
+    }
+
+    @GetMapping("/{farmId}/all-users")
+    public ResponseEntity<List<UserDto>> getAllUsersByFarmId(@PathVariable int farmId) {
+
+        List<UserDto> users = this.farmService.getAllUsersByFarmId(farmId);
+
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{farmId}/admins")

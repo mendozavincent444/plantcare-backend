@@ -112,6 +112,7 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .email(user.getEmail())
                 .isAccountNonLocked(user.isAccountNonLocked())
+                .isAllowNotifications(user.isAllowNotifications())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
