@@ -1,7 +1,12 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.farmmanagement.container.Container;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.DeviceStatus;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.user.User;
@@ -20,11 +25,50 @@ public class FarmServiceImpl implements FarmService {
     private final UserService userService;
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
+    private final ArduinoBoardRepository arduinoBoardRepository;
 
-    public FarmServiceImpl(UserService userService, FarmRepository farmRepository, UserRepository userRepository) {
+    public FarmServiceImpl(
+            UserService userService,
+            FarmRepository farmRepository,
+            UserRepository userRepository,
+            ArduinoBoardRepository arduinoBoardRepository) {
         this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
+        this.arduinoBoardRepository = arduinoBoardRepository;
+    }
+
+    @Override
+    public FarmDto setMainArduinoBoard(int farmId, int arduinoBoardId) {
+
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        ArduinoBoard arduinoBoard = this.arduinoBoardRepository.findById(arduinoBoardId)
+                .orElseThrow(() -> new ResourceNotFoundException("Arduino board", "id", arduinoBoardId));
+
+        farm.setMainArduinoBoard(arduinoBoard);
+        arduinoBoard.setStatus(DeviceStatus.ACTIVE);
+
+        Farm savedFarm = this.farmRepository.save(farm);
+
+        return this.convertToDto(savedFarm);
+    }
+
+    @Override
+    public FarmDto removeMainArduinoBoard(int farmId) {
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        ArduinoBoard arduinoBoard = farm.getMainArduinoBoard();
+
+        arduinoBoard.setStatus(DeviceStatus.INACTIVE);
+
+        farm.setMainArduinoBoard(null);
+
+        Farm savedFarm = this.farmRepository.save(farm);
+
+        return this.convertToDto(savedFarm);
     }
 
     @Override

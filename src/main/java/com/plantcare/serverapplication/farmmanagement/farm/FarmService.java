@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
+import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
@@ -25,4 +26,7 @@ public interface FarmService {
     void removeFarmerByFarm(int farmId, int farmerId);
 
     List<UserDto> getAllAdminsByFarmId(int farmId);
+    FarmDto setMainArduinoBoard(int farmId, int arduinoBoardId);
+
+    FarmDto removeMainArduinoBoard(int farmId);
 }
