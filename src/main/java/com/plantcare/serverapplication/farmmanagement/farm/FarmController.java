@@ -43,6 +43,7 @@ public class FarmController {
 
         return ResponseEntity.ok(new MessageResponseDto("Farm deleted successfully."));
     }
+
     @PutMapping("/{farmId}/new-owner/{newOwnerId}")
     public ResponseEntity<FarmDto> updateFarm(@RequestBody FarmDto farmDto, @PathVariable int farmId, @PathVariable int newOwnerId) {
 
@@ -78,5 +79,22 @@ public class FarmController {
         this.farmService.removeFarmerByFarm(farmId, farmerId);
 
         return ResponseEntity.ok(new MessageResponseDto("Farmer/s successfully removed from farm."));
+    }
+
+    @PatchMapping("/{farmId}/arduino-board/{arduinoBoardId}")
+    public ResponseEntity<FarmDto> setMainArduinoBoard(
+            @PathVariable int containerId,
+            @PathVariable int arduinoBoardId
+    ) {
+        FarmDto farmDto = this.farmService.setMainArduinoBoard(containerId, arduinoBoardId);
+
+        return new ResponseEntity<>(farmDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{farmId}")
+    public ResponseEntity<FarmDto> removeMainArduinoBoard(@PathVariable int farmId) {
+        FarmDto farmDto = this.farmService.removeMainArduinoBoard(farmId);
+
+        return new ResponseEntity<>(farmDto, HttpStatus.OK);
     }
 }
