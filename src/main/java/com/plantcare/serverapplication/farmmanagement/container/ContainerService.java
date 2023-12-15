@@ -11,7 +11,5 @@ public interface ContainerService {
 
     void deleteContainerListById(DeleteContainersDto deleteContainersDto, int farmId);
 
-    MessageResponseDto setMainArduinoBoard(int containerId, int arduinoBoardId);
-
     ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId);
 }
