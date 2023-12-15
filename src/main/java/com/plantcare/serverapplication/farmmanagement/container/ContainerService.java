@@ -13,7 +13,5 @@ public interface ContainerService {
 
     MessageResponseDto setMainArduinoBoard(int containerId, int arduinoBoardId);
 
-    MessageResponseDto removeMainArduinoBoard(int containerId);
-
     ContainerDto updateContainer(ContainerDto containerDto, int farmId, int containerId);
 }
