@@ -83,10 +83,10 @@ public class FarmController {
 
     @PatchMapping("/{farmId}/arduino-board/{arduinoBoardId}")
     public ResponseEntity<FarmDto> setMainArduinoBoard(
-            @PathVariable int containerId,
+            @PathVariable int farmId,
             @PathVariable int arduinoBoardId
     ) {
-        FarmDto farmDto = this.farmService.setMainArduinoBoard(containerId, arduinoBoardId);
+        FarmDto farmDto = this.farmService.setMainArduinoBoard(farmId, arduinoBoardId);
 
         return new ResponseEntity<>(farmDto, HttpStatus.OK);
     }
