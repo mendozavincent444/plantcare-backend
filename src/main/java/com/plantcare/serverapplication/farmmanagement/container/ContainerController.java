@@ -38,16 +38,6 @@ public class ContainerController {
         return new ResponseEntity<>(new MessageResponseDto("All items deleted."), HttpStatus.OK);
     }
 
-    @PatchMapping("/{containerId}/arduino-board/{arduinoBoardId}")
-    public ResponseEntity<MessageResponseDto> setMainArduinoBoard(
-            @PathVariable int containerId,
-            @PathVariable int arduinoBoard
-    ) {
-        MessageResponseDto messageResponseDto = this.containerService.setMainArduinoBoard(containerId, arduinoBoard);
-
-        return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
-    }
-
     @PutMapping("/{containerId}")
     public ResponseEntity<ContainerDto> updateContainer(
             @RequestBody ContainerDto containerDto,
