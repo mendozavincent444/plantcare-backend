@@ -41,15 +41,9 @@ public class JwtUtils {
         }
     }
 
-    public ResponseCookie generateJwtCookieWeb(UserDetailsImpl userPrincipal) {
+    public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(24 * 60 * 60).httpOnly(true).sameSite("None").secure(true).build();
-        return cookie;
-    }
-
-    public ResponseCookie generateJwtCookieMobile(UserDetailsImpl userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/").maxAge(24 * 60 * 60).httpOnly(true).build();
         return cookie;
     }
 
