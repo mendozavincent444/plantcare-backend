@@ -89,7 +89,13 @@ public class AuthServiceImpl implements AuthService {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        ResponseCookie jwtCookie = this.jwtUtils.generateJwtCookie(userDetails);
+        ResponseCookie jwtCookie;
+
+        if ("Web".equals(loginRequestDto.getDevice())) {
+            jwtCookie = this.jwtUtils.generateJwtCookieWeb(userDetails);
+        } else {
+            jwtCookie = this.jwtUtils.generateJwtCookieMobile(userDetails);
+        }
 
         User currentUser = this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 
@@ -222,7 +228,13 @@ public class AuthServiceImpl implements AuthService {
                 .authenticate(new UsernamePasswordAuthenticationToken(updatedUserDetails.getUsername(), updatePasswordDto.getNewPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        ResponseCookie jwtCookie = this.jwtUtils.generateJwtCookie(updatedUserDetails);
+        ResponseCookie jwtCookie;
+
+        if ("Web".equals(updatePasswordDto.getDevice())) {
+            jwtCookie = this.jwtUtils.generateJwtCookieWeb(userDetails);
+        } else {
+            jwtCookie = this.jwtUtils.generateJwtCookieMobile(userDetails);
+        }
 
         MessageResponseDto messageResponseDto = new MessageResponseDto("Password updated successfully!");
 
