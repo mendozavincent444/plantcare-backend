@@ -10,5 +10,5 @@ public interface NotificationService {
 
     NotificationDto addNotification(NotificationDto notificationDto, int farmId);
 
-    MessageResponseDto toggleIsReadNotifications(int notificationId);
+    MessageResponseDto toggleIsReadNotifications(ToggleNotificationDto toggleNotificationDto, int notificationId);
 }
