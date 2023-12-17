@@ -23,7 +23,7 @@ public class FirebaseRestClient {
 
         ArduinoBoardData arduinoBoardData = this.initializeArduinoBoardData();
 
-        this.restTemplate.postForObject(BASE_URL + farmId + "/arduinoBoard" + arduinoBoardId + URL_SUFFIX,
+        this.restTemplate.put(BASE_URL + farmId + "/arduinoBoard/" + arduinoBoardId + URL_SUFFIX,
                 new HttpEntity<>(arduinoBoardData),
                 String.class
         );
@@ -43,6 +43,7 @@ public class FirebaseRestClient {
                 .currentTds(500.0)
                 .currentTemperature(30.0)
                 .currentpH(7.0)
+                .currentWaterLevel(60.0)
                 .maxTDS(800.0)
                 .maxpH(8.0)
                 .minTDS(400.0)
