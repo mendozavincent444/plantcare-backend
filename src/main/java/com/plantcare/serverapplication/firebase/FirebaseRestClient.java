@@ -31,7 +31,7 @@ public class FirebaseRestClient {
 
     public void deleteArduinoBoardFromFirebaseDb(int farmId, int arduinoBoardId) {
 
-        this.restTemplate.delete(BASE_URL + farmId + "/arduinoBoard" + arduinoBoardId + URL_SUFFIX);
+        this.restTemplate.delete(BASE_URL + farmId + "/arduinoBoard/" + arduinoBoardId + URL_SUFFIX);
     }
 
 
