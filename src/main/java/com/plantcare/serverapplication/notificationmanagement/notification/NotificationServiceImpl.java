@@ -65,12 +65,14 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public MessageResponseDto toggleIsReadNotifications(int notificationId) {
+    public MessageResponseDto toggleIsReadNotifications(ToggleNotificationDto toggleNotificationDto, int notificationId) {
 
         Notification notification = this.notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResourceNotFoundException("id", "Notification", notificationId));
 
-        notification.setReadNotification(true);
+        boolean isReadNotification = toggleNotificationDto.isReadNotification();
+
+        notification.setReadNotification(isReadNotification);
 
         this.notificationRepository.save(notification);
 

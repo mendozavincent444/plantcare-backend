@@ -41,9 +41,9 @@ public class NotificationController {
 
 
     @PatchMapping("/{notificationId}/toggle-is-read-notification")
-    public ResponseEntity<MessageResponseDto> toggleIsReadNotifications(@PathVariable int notificationId) {
+    public ResponseEntity<MessageResponseDto> toggleIsReadNotifications(@RequestBody ToggleNotificationDto toggleNotificationDto, @PathVariable int notificationId) {
 
-        MessageResponseDto messageResponseDto = this.notificationService.toggleIsReadNotifications(notificationId);
+        MessageResponseDto messageResponseDto = this.notificationService.toggleIsReadNotifications(toggleNotificationDto, notificationId);
 
         return new ResponseEntity<>(messageResponseDto, HttpStatus.OK);
     }
