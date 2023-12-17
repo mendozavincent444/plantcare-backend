@@ -10,9 +10,9 @@ import java.util.Date;
 @Setter
 @Builder
 public class NotificationDto {
-
     private int id;
     private Date date;
     private String content;
     private String title;
+    private boolean isReadNotification;
 }
