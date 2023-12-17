@@ -85,17 +85,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MessageResponseDto editAllowNotifications() {
+    public MessageResponseDto editAllowNotifications(ToggleAllowNotifications toggleAllowNotifications) {
 
         User currentUser = this.getCurrentUser();
 
-        if (currentUser.isAllowNotifications()) {
-            currentUser.setAllowNotifications(false);
-        } else {
-            currentUser.setAllowNotifications(true);
-        }
+        boolean isAllowNotifications = toggleAllowNotifications.isAllowNotifications();
+
+        currentUser.setAllowNotifications(isAllowNotifications);
 
         this.userRepository.save(currentUser);
+
         return new MessageResponseDto("Notification settings changed.");
     }
 

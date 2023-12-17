@@ -38,9 +38,9 @@ public class UserController {
     }
 
     @PatchMapping("/notification-toggle")
-    public ResponseEntity<MessageResponseDto> editAllowNotifications() {
+    public ResponseEntity<MessageResponseDto> editAllowNotifications(@RequestBody ToggleAllowNotifications toggleAllowNotifications) {
 
-        MessageResponseDto messageResponseDto = this.userService.editAllowNotifications();
+        MessageResponseDto messageResponseDto = this.userService.editAllowNotifications(toggleAllowNotifications);
 
         return ResponseEntity.ok(messageResponseDto);
     }
