@@ -92,7 +92,7 @@ public class TaskServiceImpl implements TaskService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Add Task")
+                .title("Add Task - " + farm.getName())
                 .content("Added " + tasks.size() + " new task/s.")
                 .isReadNotification(false)
                 .build();
@@ -122,7 +122,7 @@ public class TaskServiceImpl implements TaskService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Delete Task")
+                .title("Delete Task - " + farm.getName())
                 .content("Deleted " + tasks.size() + " task/s.")
                 .isReadNotification(false)
                 .build();
@@ -186,7 +186,7 @@ public class TaskServiceImpl implements TaskService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Update Task")
+                .title("Update Task - " + farm.getName())
                 .content(task.getPlant().getName() + " task updated successfully.")
                 .isReadNotification(false)
                 .build();
@@ -224,7 +224,7 @@ public class TaskServiceImpl implements TaskService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Harvest Task")
+                .title("Harvest Task - " + farm.getName())
                 .content("Harvested " + tasksToHarvest.size() + " task/s.")
                 .isReadNotification(false)
                 .build();
