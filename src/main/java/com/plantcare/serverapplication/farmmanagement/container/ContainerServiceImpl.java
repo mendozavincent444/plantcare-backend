@@ -74,7 +74,7 @@ public class ContainerServiceImpl implements ContainerService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Add Container")
+                .title("Add Container - " + farm.getName())
                 .content(newContainer.getName() + " container added successfully.")
                 .isReadNotification(false)
                 .build();
@@ -115,7 +115,7 @@ public class ContainerServiceImpl implements ContainerService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Delete Container")
+                .title("Delete Container - " + farm.getName())
                 .content("Deleted " + containers.size() + " container/s.")
                 .isReadNotification(false)
                 .build();
@@ -167,7 +167,7 @@ public class ContainerServiceImpl implements ContainerService {
         Notification notification = Notification
                 .builder()
                 .date(new Date())
-                .title("Update Container")
+                .title("Update Container - " + farm.getName())
                 .content(container.getName() + " container updated successfully.")
                 .isReadNotification(false)
                 .build();
