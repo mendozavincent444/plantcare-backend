@@ -187,7 +187,7 @@ public class TaskServiceImpl implements TaskService {
                 .builder()
                 .date(new Date())
                 .title("Update Task")
-                .content(task.getPlant() + " task updated successfully.")
+                .content(task.getPlant().getName() + " task updated successfully.")
                 .isReadNotification(false)
                 .build();
 
