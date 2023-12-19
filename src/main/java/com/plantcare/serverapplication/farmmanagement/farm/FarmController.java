@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardDto;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import org.apache.coyote.Response;
@@ -89,6 +91,15 @@ public class FarmController {
         FarmDto farmDto = this.farmService.setMainArduinoBoard(farmId, arduinoBoardId);
 
         return new ResponseEntity<>(farmDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{farmId}/arduino-board")
+    public ResponseEntity<ArduinoBoardDto> getMainArduinoBoard(
+            @PathVariable int farmId
+    ) {
+        ArduinoBoardDto arduinoBoardDto = this.farmService.getMainArduinoBoardByFarmId(farmId);
+
+        return new ResponseEntity<>(arduinoBoardDto, HttpStatus.OK);
     }
 
     @PatchMapping("/{farmId}")

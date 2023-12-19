@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardDto;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
@@ -29,4 +30,5 @@ public interface FarmService {
     FarmDto setMainArduinoBoard(int farmId, int arduinoBoardId);
 
     FarmDto removeMainArduinoBoard(int farmId);
+    ArduinoBoardDto getMainArduinoBoardByFarmId(int farmId);
 }

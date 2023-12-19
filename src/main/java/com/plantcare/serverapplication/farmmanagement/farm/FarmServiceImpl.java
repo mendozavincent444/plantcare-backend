@@ -3,7 +3,9 @@ package com.plantcare.serverapplication.farmmanagement.farm;
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardDto;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardRepository;
+import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardService;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
@@ -12,6 +14,7 @@ import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -26,16 +29,19 @@ public class FarmServiceImpl implements FarmService {
     private final FarmRepository farmRepository;
     private final UserRepository userRepository;
     private final ArduinoBoardRepository arduinoBoardRepository;
+    private final ArduinoBoardService arduinoBoardService;
 
     public FarmServiceImpl(
             UserService userService,
             FarmRepository farmRepository,
             UserRepository userRepository,
-            ArduinoBoardRepository arduinoBoardRepository) {
+            ArduinoBoardRepository arduinoBoardRepository,
+            ArduinoBoardService arduinoBoardService) {
         this.userService = userService;
         this.farmRepository = farmRepository;
         this.userRepository = userRepository;
         this.arduinoBoardRepository = arduinoBoardRepository;
+        this.arduinoBoardService = arduinoBoardService;
     }
 
     @Override
@@ -69,6 +75,20 @@ public class FarmServiceImpl implements FarmService {
         Farm savedFarm = this.farmRepository.save(farm);
 
         return this.convertToDto(savedFarm);
+    }
+
+    @Override
+    public ArduinoBoardDto getMainArduinoBoardByFarmId(int farmId) {
+        Farm farm = this.farmRepository.findById(farmId)
+                .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
+
+        ArduinoBoard mainArduinoBoard = farm.getMainArduinoBoard();
+
+        if (mainArduinoBoard == null) {
+            throw new ResourceNotFoundException("Main Arduino Board", "farm", farmId);
+        }
+
+        return this.arduinoBoardService.convertToDto(mainArduinoBoard);
     }
 
     @Override
