@@ -19,6 +19,7 @@ public class FirebaseRestClient {
     }
 
 
+
     public void addArduinoBoardToFirebaseDb(int farmId, int arduinoBoardId) {
 
         ArduinoBoardData arduinoBoardData = this.initializeArduinoBoardData();
@@ -34,8 +35,14 @@ public class FirebaseRestClient {
         this.restTemplate.delete(BASE_URL + farmId + "/arduinoBoard/" + arduinoBoardId + URL_SUFFIX);
     }
 
+    public ArduinoBoardData getArduinoBoardFromFirebaseDb(int farmId, int arduinoBoardId) {
+        return this.restTemplate.getForObject(BASE_URL + farmId + "/arduinoBoard/" + arduinoBoardId + URL_SUFFIX, ArduinoBoardData.class);
+    }
+
+
 
     private ArduinoBoardData initializeArduinoBoardData() {
+
 
         return ArduinoBoardData
                 .builder()
