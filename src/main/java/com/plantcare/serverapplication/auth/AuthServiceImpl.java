@@ -294,7 +294,7 @@ public class AuthServiceImpl implements AuthService {
         mailMessage.setTo(email);
         mailMessage.setSubject("Password Reset");
         mailMessage.setText("To complete the password reset process, please click here: " +
-                    "http://localhost:4200/confirm-reset?token=" + resetToken);
+                    "https://www.crandel.online/confirm-reset?token=" + resetToken);
 
         return mailMessage;
     }
