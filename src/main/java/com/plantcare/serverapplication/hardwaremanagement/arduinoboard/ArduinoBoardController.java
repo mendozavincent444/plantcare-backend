@@ -1,5 +1,7 @@
 package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
+import com.plantcare.serverapplication.firebase.FirebaseRestClient;
+import com.plantcare.serverapplication.shared.ArduinoBoardData;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +14,12 @@ import java.util.List;
 @RequestMapping("api/v1/farms/{farmId}/arduinoboards")
 public class ArduinoBoardController {
     private final ArduinoBoardService arduinoBoardService;
+    private final FirebaseRestClient firebaseRestClient;
 
-    public ArduinoBoardController(ArduinoBoardService arduinoBoardService) {
+    public ArduinoBoardController(ArduinoBoardService arduinoBoardService,
+                                  FirebaseRestClient firebaseRestClient) {
         this.arduinoBoardService = arduinoBoardService;
+        this.firebaseRestClient = firebaseRestClient;
     }
 
     @PostMapping
@@ -43,5 +48,12 @@ public class ArduinoBoardController {
         this.arduinoBoardService.deleteArduinoBoardById(farmId, arduinoBoardId);
 
         return ResponseEntity.ok(new MessageResponseDto("Arduino board deleted successfully."));
+    }
+
+    @GetMapping("/{arduinoBoardId}/data")
+    public ResponseEntity<ArduinoBoardData> getArduinoBoardData(@PathVariable int farmId, @PathVariable int arduinoBoardId) {
+        ArduinoBoardData arduinoBoardData = this.firebaseRestClient.getArduinoBoardFromFirebaseDb(farmId, arduinoBoardId);
+
+        return ResponseEntity.ok(arduinoBoardData);
     }
 }

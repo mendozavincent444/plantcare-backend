@@ -1,10 +1,11 @@
 package com.plantcare.serverapplication.shared;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Builder
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ArduinoBoardData {
     private double currentHumidity;
     private double currentTds;
