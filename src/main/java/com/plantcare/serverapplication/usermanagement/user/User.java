@@ -8,6 +8,7 @@ import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", length = 255, nullable = false)
     private String password;
 
     @Column(name = "reset_token", length = 50)

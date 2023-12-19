@@ -4,6 +4,7 @@ import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.shared.UserInfoResponseDto;
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +63,7 @@ public class AuthController {
     }
 
     @PostMapping("/update-password")
-    public ResponseEntity<?> changePassword(@RequestBody UpdatePasswordDto updatePasswordDto) {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) {
 
         AuthServiceUpdatePasswordData authServiceUpdatePasswordData = this.authService.changePassword(updatePasswordDto);
 
