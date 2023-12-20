@@ -116,18 +116,10 @@ public class AuthServiceImpl implements AuthService {
         return new AuthServiceLoginData(jwtCookie.toString(), userInfoResponseDto);
     }
 
-
-
     @Override
     public MessageResponseDto registerUser(RegisterRequestDto registerRequestDto) {
 
-        if (this.userRepository.existsByUsername(registerRequestDto.getUsername())) {
-            throw new BadCredentialsException("Username is already taken!");
-        }
-
-        if (this.userRepository.existsByEmail(registerRequestDto.getEmail())) {
-            throw new BadCredentialsException("Email is already in use!");
-        }
+        this.validateUser(registerRequestDto.getUsername(), registerRequestDto.getEmail());
 
         String role = registerRequestDto.getRole();
 
@@ -174,6 +166,11 @@ public class AuthServiceImpl implements AuthService {
         }
 
         List<BulkRegisterFarmerRequestDto> requestDtos = BulkRegisterCSVHelper.csvToBulkRegisterFarmerRequest(file.getInputStream());
+
+
+        requestDtos.forEach((request) -> {
+            this.validateUser(request.getUsername(), request.getEmail());
+        });
 
         Farm farm = this.farmRepository.findById(farmId).orElseThrow();
 
@@ -288,6 +285,17 @@ public class AuthServiceImpl implements AuthService {
 
         return new MessageResponseDto("Request to reset password received. Check your inbox for the reset link.");
     }
+
+    private void validateUser(String username, String email) {
+        if (this.userRepository.existsByUsername(username)) {
+            throw new BadCredentialsException("Username is already taken!");
+        }
+
+        if (this.userRepository.existsByEmail(email)) {
+            throw new BadCredentialsException("Email is already in use!");
+        }
+    }
+
 
     private SimpleMailMessage initializeRequestEmailText(String email, SimpleMailMessage mailMessage, String resetToken) {
 
