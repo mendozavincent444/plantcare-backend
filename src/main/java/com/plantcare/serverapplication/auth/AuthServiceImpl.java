@@ -187,6 +187,7 @@ public class AuthServiceImpl implements AuthService {
                     .username(request.getUsername())
                     .firstName(request.getFirstName())
                     .lastName(request.getLastName())
+                    .isAllowNotifications(true)
                     .password(this.passwordEncoder.encode(request.getPassword()))
                     .role(role)
                     .build();
