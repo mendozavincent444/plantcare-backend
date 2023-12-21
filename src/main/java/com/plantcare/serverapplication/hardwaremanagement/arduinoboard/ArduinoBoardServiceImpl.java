@@ -1,11 +1,13 @@
 package com.plantcare.serverapplication.hardwaremanagement.arduinoboard;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.exception.SubscriptionNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.farm.Farm;
 import com.plantcare.serverapplication.farmmanagement.farm.FarmRepository;
 import com.plantcare.serverapplication.firebase.FirebaseRestClient;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,11 +39,17 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
     public ArduinoBoardDto addArduinoBoard(ArduinoBoardDto arduinoBoardDto, int farmId) {
         User currentUser = this.getCurrentUser();
 
+        Subscription userSubscription = currentUser.getSubscription();
+
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
         if (!isValidFarmAccess(currentUser, farm)) {
             throw new ResourceAccessException("User access to resource is forbidden");
+        }
+
+        if (!farm.getArduinoBoards().isEmpty() && userSubscription == null) {
+            throw new SubscriptionNotFoundException("Premium subscription is required to add more Arduino Boards.");
         }
 
         ArduinoBoard arduinoBoard = ArduinoBoard
