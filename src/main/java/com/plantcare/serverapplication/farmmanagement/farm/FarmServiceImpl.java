@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.farmmanagement.farm;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.exception.SubscriptionNotFoundException;
 import com.plantcare.serverapplication.farmmanagement.container.Container;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoard;
 import com.plantcare.serverapplication.hardwaremanagement.arduinoboard.ArduinoBoardDto;
@@ -11,6 +12,7 @@ import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
+import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
 import com.plantcare.serverapplication.usermanagement.user.UserService;
@@ -119,6 +121,12 @@ public class FarmServiceImpl implements FarmService {
     public FarmDto addFarm(FarmDto farmDto) {
 
         User currentUser = this.getCurrentUser();
+
+        Subscription userSubscription = currentUser.getSubscription();
+
+        if (!currentUser.getFarms().isEmpty() && userSubscription == null) {
+            throw new SubscriptionNotFoundException("Premium subscription is required to add more farms.");
+        }
 
         Farm farm = Farm
                 .builder()
