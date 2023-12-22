@@ -1,5 +1,6 @@
 package com.plantcare.serverapplication.farmmanagement.task;
 
+import com.plantcare.serverapplication.shared.UserDto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -29,4 +30,5 @@ public class TaskDto {
     @NotNull
     private int farmId;
     private int numberOfTasks;
+    private UserDto farmer;
 }
