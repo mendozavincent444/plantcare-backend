@@ -15,6 +15,7 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.HarvestLogDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class TaskServiceImpl implements TaskService {
     private final UserRepository userRepository;
     private final HarvestLogRepository harvestLogRepository;
     private final NotificationRepository notificationRepository;
+    private final UserService userService;
 
     public TaskServiceImpl(
             TaskRepository taskRepository,
@@ -41,7 +43,8 @@ public class TaskServiceImpl implements TaskService {
             FarmRepository farmRepository,
             UserRepository userRepository,
             HarvestLogRepository harvestLogRepository,
-            NotificationRepository notificationRepository
+            NotificationRepository notificationRepository,
+            UserService userService
     ) {
         this.taskRepository = taskRepository;
         this.plantRepository = plantRepository;
@@ -50,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
         this.userRepository = userRepository;
         this.harvestLogRepository = harvestLogRepository;
         this.notificationRepository = notificationRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -264,6 +268,7 @@ public class TaskServiceImpl implements TaskService {
                 .plantId(task.getPlant().getId())
                 .plantName(task.getPlant().getName())
                 .containerId(task.getContainer().getId())
+                .farmer(this.userService.convertToDto(task.getFarmer()))
                 .build();
     }
 
