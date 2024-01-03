@@ -7,6 +7,7 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -17,20 +18,23 @@ public class PumpServiceImpl implements PumpService {
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
     private final PumpRepository pumpRepository;
+    private final UserService userService;
 
     public PumpServiceImpl(
             UserRepository userRepository,
             FarmRepository farmRepository,
-            PumpRepository pumpRepository
+            PumpRepository pumpRepository,
+            UserService userService
     ) {
         this.userRepository = userRepository;
         this.farmRepository = farmRepository;
         this.pumpRepository = pumpRepository;
+        this.userService = userService;
     }
 
     @Override
     public List<PumpDto> getAllPumpsByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -46,7 +50,7 @@ public class PumpServiceImpl implements PumpService {
 
     @Override
     public PumpDto getPumpById(int farmId, int pumpId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -63,7 +67,7 @@ public class PumpServiceImpl implements PumpService {
 
     @Override
     public void deletePumpById(int farmId, int pumpId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -82,7 +86,7 @@ public class PumpServiceImpl implements PumpService {
 
     @Override
     public PumpDto addPump(PumpDto pumpDto, int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -115,11 +119,5 @@ public class PumpServiceImpl implements PumpService {
 
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }
