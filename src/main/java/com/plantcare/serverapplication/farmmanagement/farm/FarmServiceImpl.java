@@ -120,7 +120,7 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmDto addFarm(FarmDto farmDto) {
 
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Subscription userSubscription = currentUser.getSubscription();
 
@@ -146,16 +146,16 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public List<FarmDto> getAllFarms() {
 
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         return currentUser.getFarms().stream().map((farm -> this.convertToDto(farm))).collect(Collectors.toList());
     }
 
     @Override
     public void deleteFarmById(int farmId) {
-        
-        User currentUser = this.getCurrentUser();
-        
+
+        User currentUser = this.userService.getCurrentUser();
+
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
 
@@ -172,7 +172,7 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public FarmDto updateFarm(FarmDto farmDto, int farmId, int newOwnerId) {
 
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -195,7 +195,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public List<UserDto> getAllUsersByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -211,7 +211,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public List<UserDto> getAllFarmersByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -230,7 +230,7 @@ public class FarmServiceImpl implements FarmService {
 
     @Override
     public List<UserDto> getAllAdminsByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -250,7 +250,7 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public void removeFarmerByFarm(int farmId, int farmerId) {
 
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -281,11 +281,5 @@ public class FarmServiceImpl implements FarmService {
                 .location(farm.getLocation())
                 .owner(this.userService.convertToDto(farm.getOwner()))
                 .build();
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }

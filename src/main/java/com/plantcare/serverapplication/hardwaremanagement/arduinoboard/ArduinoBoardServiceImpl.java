@@ -10,6 +10,7 @@ import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.subscription.Subscription;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -22,22 +23,25 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
     private final UserRepository userRepository;
     private final FarmRepository farmRepository;
     private final FirebaseRestClient firebaseRestClient;
+    private final UserService userService;
 
     public ArduinoBoardServiceImpl(
             ArduinoBoardRepository arduinoBoardRepository,
             UserRepository userRepository,
             FarmRepository farmRepository,
-            FirebaseRestClient firebaseRestClient
+            FirebaseRestClient firebaseRestClient,
+            UserService userService
     ) {
         this.arduinoBoardRepository = arduinoBoardRepository;
         this.userRepository = userRepository;
         this.farmRepository = farmRepository;
         this.firebaseRestClient = firebaseRestClient;
+        this.userService = userService;
     }
 
     @Override
     public ArduinoBoardDto addArduinoBoard(ArduinoBoardDto arduinoBoardDto, int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Subscription userSubscription = currentUser.getSubscription();
 
@@ -68,7 +72,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     @Override
     public ArduinoBoardDto getArduinoBoardById(int farmId, int arduinoBoardId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -85,7 +89,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     @Override
     public List<ArduinoBoardDto> getAllArduinoBoardsByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -101,7 +105,7 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     @Override
     public void deleteArduinoBoardById(int farmId, int arduinoBoardId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -137,11 +141,5 @@ public class ArduinoBoardServiceImpl implements ArduinoBoardService {
 
     private boolean isValidFarmAccess(User currentUser, Farm farm) {
         return currentUser.getFarms().contains(farm);
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }

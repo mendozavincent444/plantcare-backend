@@ -6,6 +6,7 @@ import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.SubscriptionDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,21 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
+    private final UserService userService;
 
-    public SubscriptionServiceImpl(UserRepository userRepository, SubscriptionRepository subscriptionRepository) {
+    public SubscriptionServiceImpl(
+            UserRepository userRepository,
+            SubscriptionRepository subscriptionRepository,
+            UserService userService
+    ) {
         this.userRepository = userRepository;
         this.subscriptionRepository = subscriptionRepository;
+        this.userService = userService;
     }
 
     @Override
     public MessageResponseDto cancelSubscription() {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         this.validateSubscription(currentUser);
 
@@ -36,7 +43,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public SubscriptionDto getSubscription() {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         this.validateSubscription(currentUser);
 
@@ -59,9 +66,4 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
     }
 
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
-    }
 }

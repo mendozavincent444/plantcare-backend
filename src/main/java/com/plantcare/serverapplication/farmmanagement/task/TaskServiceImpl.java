@@ -60,7 +60,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDto> addTasks(TaskDto taskDto, int farmId, int containerId) {
 
         // fix - if farm is accessible and container has all the tasks
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         int numberOfTasks = taskDto.getNumberOfTasks();
 
@@ -270,11 +270,5 @@ public class TaskServiceImpl implements TaskService {
                 .containerId(task.getContainer().getId())
                 .farmer(this.userService.convertToDto(task.getFarmer()))
                 .build();
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }

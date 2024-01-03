@@ -20,6 +20,7 @@ import com.plantcare.serverapplication.usermanagement.subscription.SubscriptionS
 import com.plantcare.serverapplication.usermanagement.user.UpdatePasswordDto;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import jakarta.mail.Message;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
     private final SubscriptionService subscriptionService;
     private final UserDetailsPasswordServiceImpl userDetailsPasswordService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserService userService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
@@ -62,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
             SubscriptionService subscriptionService,
             UserDetailsPasswordServiceImpl userDetailsPasswordService,
             UserDetailsServiceImpl userDetailsService,
+            UserService userService,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
             JavaMailSender javaMailSender,
@@ -72,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
         this.farmRepository = farmRepository;
         this.subscriptionService = subscriptionService;
         this.userDetailsPasswordService = userDetailsPasswordService;
+        this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -241,7 +245,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public UserInfoResponseDto updateUserInfo(UserDto userDto) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         currentUser.setFirstName(userDto.getFirstName());
         currentUser.setLastName(userDto.getLastName());
@@ -336,11 +340,5 @@ public class AuthServiceImpl implements AuthService {
 
     private LocalDateTime generateTokenExpiration() {
         return LocalDateTime.now().plusHours(24);
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }

@@ -7,6 +7,7 @@ import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.DeviceStatus;
 import com.plantcare.serverapplication.usermanagement.user.User;
 import com.plantcare.serverapplication.usermanagement.user.UserRepository;
+import com.plantcare.serverapplication.usermanagement.user.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
@@ -15,26 +16,26 @@ import java.util.List;
 
 @Service
 public class SensorServiceImpl implements SensorService {
-    private final UserRepository userRepository;
     private final SensorRepository sensorRepository;
     private final SensorTypeRepository sensorTypeRepository;
     private final FarmRepository farmRepository;
+    private final UserService userService;
 
     public SensorServiceImpl(
-            UserRepository userRepository,
             SensorRepository sensorRepository,
             SensorTypeRepository sensorTypeRepository,
-            FarmRepository farmRepository
+            FarmRepository farmRepository,
+            UserService userService
     ) {
-        this.userRepository = userRepository;
         this.sensorRepository = sensorRepository;
         this.sensorTypeRepository = sensorTypeRepository;
         this.farmRepository = farmRepository;
+        this.userService = userService;
     }
 
     @Override
     public SensorDto addSensor(SensorDto sensorDto, int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -75,7 +76,7 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public List<SensorDto> getAllSensorsByFarmId(int farmId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -91,7 +92,7 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public SensorDto getSensorById(int farmId, int sensorId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -108,7 +109,7 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public void deleteSensorById(int farmId, int sensorId) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         Farm farm = this.farmRepository.findById(farmId)
                 .orElseThrow(() -> new ResourceNotFoundException("Farm", "id", farmId));
@@ -129,9 +130,4 @@ public class SensorServiceImpl implements SensorService {
         return currentUser.getFarms().contains(farm);
     }
 
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
-    }
 }

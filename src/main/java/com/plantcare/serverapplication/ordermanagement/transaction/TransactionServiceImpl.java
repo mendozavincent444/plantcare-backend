@@ -35,35 +35,35 @@ public class TransactionServiceImpl implements TransactionService {
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionTypeRepository subscriptionTypeRepository;
     private final AddressRepository addressRepository;
-    private final UserRepository userRepository;
     private final ProductService productService;
     private final OrderItemService orderItemService;
     private final NotificationRepository notificationRepository;
+    private final UserService userService;
 
     public TransactionServiceImpl(
             TransactionRepository transactionRepository,
             SubscriptionRepository subscriptionRepository,
             SubscriptionTypeRepository subscriptionTypeRepository,
             AddressRepository addressRepository,
-            UserRepository userRepository,
             ProductService productService,
             OrderItemService orderItemService,
-            NotificationRepository notificationRepository
+            NotificationRepository notificationRepository,
+            UserService userService
     ) {
         this.transactionRepository = transactionRepository;
         this.subscriptionRepository = subscriptionRepository;
         this.subscriptionTypeRepository = subscriptionTypeRepository;
         this.addressRepository = addressRepository;
-        this.userRepository = userRepository;
         this.productService = productService;
         this.orderItemService = orderItemService;
         this.notificationRepository = notificationRepository;
+        this.userService = userService;
     }
 
     @Override
     public void createTransactionByProducts(PurchaseProductDto purchaseDto) {
 
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         AddressDto shippingAddressDto = purchaseDto.getShippingAddressDto();
         AddressDto billingAddressDto = purchaseDto.getBillingAddressDto();
@@ -141,7 +141,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void createTransactionBySubscription(PurchaseSubscriptionDto purchaseSubscriptionDto) {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         if (currentUser.getSubscription() != null) {
             throw new BadCredentialsException("User already has a subscription.");
@@ -276,7 +276,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getAllTransactionsByAdmin() {
-        User currentUser = this.getCurrentUser();
+        User currentUser = this.userService.getCurrentUser();
 
         List<Transaction> transactions = currentUser.getTransactions();
 
@@ -311,11 +311,5 @@ public class TransactionServiceImpl implements TransactionService {
                 .status(transaction.getStatus().name())
                 .orderedBy(transaction.getUser().getEmail())
                 .build();
-    }
-
-    private User getCurrentUser() {
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return this.userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
     }
 }
