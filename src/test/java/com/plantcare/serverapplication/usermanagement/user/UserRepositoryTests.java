@@ -11,9 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest(properties = {
-        "spring.flyway.enabled=false"
+        "spring.flyway.enabled=false",
+        "spring.jpa.hibernate.ddl-auto=create",
+        "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect",
 })
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryTests {
 
     @Autowired
@@ -26,6 +27,8 @@ public class UserRepositoryTests {
     public void givenUsername_whenFindByUsername_thenUser() {
 
         Role role = new Role(1, RoleEnum.ROLE_ADMIN);
+        Role savedRole = this.roleRepository.save(role);
+
 
         User user = User.builder()
                 .email("benjamin@yahoo.com")
@@ -34,7 +37,7 @@ public class UserRepositoryTests {
                 .firstName("Benjamin")
                 .lastName("Brown")
                 .password("sample")
-                .role(role)
+                .role(savedRole)
                 .isAllowNotifications(true)
                 .build();
         User savedUser = this.userRepository.save(user);
