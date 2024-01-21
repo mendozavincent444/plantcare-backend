@@ -26,9 +26,8 @@ public class UserRepositoryTests {
     @Test
     public void givenUsername_whenFindByUsername_thenUser() {
 
-        Role role = new Role(1, RoleEnum.ROLE_ADMIN);
+        Role role = new Role(2, RoleEnum.ROLE_ADMIN);
         Role savedRole = this.roleRepository.save(role);
-
 
         User user = User.builder()
                 .email("benjamin@yahoo.com")
