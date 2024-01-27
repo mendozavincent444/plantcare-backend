@@ -3,6 +3,7 @@ package com.plantcare.serverapplication.usermanagement.user;
 import com.plantcare.serverapplication.usermanagement.role.Role;
 import com.plantcare.serverapplication.usermanagement.role.RoleEnum;
 import com.plantcare.serverapplication.usermanagement.role.RoleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,13 @@ public class UserRepositoryTests {
     @Autowired
     private RoleRepository roleRepository;
 
-    @DisplayName("JUnit test for finding user by username")
-    @Test
-    public void givenUsername_whenFindByUsername_thenUser() {
-
+    private User user;
+    @BeforeEach
+    public void setup() {
         Role role = new Role(2, RoleEnum.ROLE_ADMIN);
         Role savedRole = this.roleRepository.save(role);
 
-        User user = User.builder()
+        this.user = User.builder()
                 .email("benjamin@yahoo.com")
                 .isAccountNonLocked(true)
                 .username("benj123")
@@ -39,11 +39,28 @@ public class UserRepositoryTests {
                 .role(savedRole)
                 .isAllowNotifications(true)
                 .build();
-        User savedUser = this.userRepository.save(user);
+    }
 
-        User searchedUser = this.userRepository.findByUsername(user.getUsername()).get();
+    @DisplayName("JUnit test for finding user by username")
+    @Test
+    public void givenUsername_whenFindByUsername_thenUser() {
+
+        User savedUser = this.userRepository.save(this.user);
+
+        User searchedUser = this.userRepository.findByUsername(this.user.getUsername()).get();
+
+        assertThat(searchedUser).isNotNull();
+        assertThat(savedUser).isEqualTo(searchedUser);
+    }
+    @DisplayName("JUnit test for finding user by email")
+    @Test
+    public void givenEmail_whenFindByEmail_thenReturnUser() {
+        User savedUser = this.userRepository.save(this.user);
+
+        User searchedUser = this.userRepository.findByEmail(this.user.getEmail()).get();
 
         assertThat(searchedUser).isNotNull();
         assertThat(savedUser).isEqualTo(searchedUser);
     }
 }
+
