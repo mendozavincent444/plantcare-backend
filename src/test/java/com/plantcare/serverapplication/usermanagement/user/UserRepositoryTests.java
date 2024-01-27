@@ -37,6 +37,7 @@ public class UserRepositoryTests {
                 .lastName("Brown")
                 .password("sample")
                 .role(savedRole)
+                .resetToken("ABCDEFGHIJKL")
                 .isAllowNotifications(true)
                 .build();
     }
@@ -58,6 +59,17 @@ public class UserRepositoryTests {
         User savedUser = this.userRepository.save(this.user);
 
         User searchedUser = this.userRepository.findByEmail(this.user.getEmail()).get();
+
+        assertThat(searchedUser).isNotNull();
+        assertThat(savedUser).isEqualTo(searchedUser);
+    }
+
+    @DisplayName("JUnit test for finding user by reset token")
+    @Test
+    public void givenResetToken_whenFindByResetToken_thenReturnUser() {
+        User savedUser = this.userRepository.save(this.user);
+
+        User searchedUser = this.userRepository.findByResetToken(this.user.getResetToken()).get();
 
         assertThat(searchedUser).isNotNull();
         assertThat(savedUser).isEqualTo(searchedUser);
