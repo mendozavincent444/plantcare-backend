@@ -56,10 +56,10 @@ public class UserController {
 
 
     @PutMapping("/admins/{adminId}/ban")
-    public ResponseEntity<UserDto> banAdmin(
+    public ResponseEntity<UserDto> deactivateAdmin(
             @PathVariable int adminId
     ) {
-        UserDto bannedAdmin = this.userService.banAdmin(adminId);
+        UserDto bannedAdmin = this.userService.deactivateAdmin(adminId);
 
         return ResponseEntity.ok(bannedAdmin);
     }

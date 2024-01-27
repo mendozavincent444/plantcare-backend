@@ -9,7 +9,7 @@ public interface UserService {
     UserDto getCurrentUserProfile();
     List<UserDto> getAllAdmins(int roleId);
 
-    UserDto banAdmin(int adminId);
+    UserDto deactivateAdmin(int adminId);
 
     UserDto reactivateAdmin(int adminId);
 

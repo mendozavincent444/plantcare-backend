@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto banAdmin(UserDto admin, int adminId) {
+    public UserDto deactivateAdmin(int adminId) {
 
         User user = this.userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto reactivateAdmin(UserDto admin, int adminId) {
+    public UserDto reactivateAdmin(int adminId) {
 
         User user = this.userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
