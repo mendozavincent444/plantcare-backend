@@ -9,9 +9,9 @@ public interface UserService {
     UserDto getCurrentUserProfile();
     List<UserDto> getAllAdmins(int roleId);
 
-    UserDto banAdmin(UserDto admin, int adminId);
+    UserDto deactivateAdmin(int adminId);
 
-    UserDto reactivateAdmin(UserDto admin, int adminId);
+    UserDto reactivateAdmin(int adminId);
 
     UserDto convertToDto(User user);
     UserDto getAdminByUsername(String username);
