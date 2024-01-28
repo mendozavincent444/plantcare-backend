@@ -46,11 +46,8 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
 
-        if (user.isAccountNonLocked()) {
-            user.setAccountNonLocked(false);
-        } else {
-            //throw exception
-        }
+        boolean isAccountNonLocked = !user.isAccountNonLocked();
+        user.setAccountNonLocked(isAccountNonLocked);
 
         User savedUser = this.userRepository.save(user);
 
