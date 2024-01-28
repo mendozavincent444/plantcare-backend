@@ -1,6 +1,7 @@
 package com.plantcare.serverapplication.usermanagement.user;
 
 import com.plantcare.serverapplication.exception.ResourceNotFoundException;
+import com.plantcare.serverapplication.exception.UserAccountStatusException;
 import com.plantcare.serverapplication.security.service.UserDetailsImpl;
 import com.plantcare.serverapplication.shared.MessageResponseDto;
 import com.plantcare.serverapplication.shared.UserDto;
@@ -46,8 +47,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
 
-        boolean isAccountNonLocked = !user.isAccountNonLocked();
-        user.setAccountNonLocked(isAccountNonLocked);
+        boolean isAccountNonLocked = user.isAccountNonLocked();
+
+        if (!isAccountNonLocked) {
+            throw new UserAccountStatusException("User is already deactivated.");
+        }
+
+        user.setAccountNonLocked(false);
 
         User savedUser = this.userRepository.save(user);
 
@@ -60,11 +66,13 @@ public class UserServiceImpl implements UserService {
         User user = this.userRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", adminId));
 
-        if (user.isAccountNonLocked()) {
-            // throw exception
-        } else {
-            user.setAccountNonLocked(true);
+        boolean isAccountNonLocked = user.isAccountNonLocked();
+
+        if (isAccountNonLocked) {
+            throw new UserAccountStatusException("User is already activated");
         }
+
+        user.setAccountNonLocked(true);
 
         User savedUser = this.userRepository.save(user);
 
