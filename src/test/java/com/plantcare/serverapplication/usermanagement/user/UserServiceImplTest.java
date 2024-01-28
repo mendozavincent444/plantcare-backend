@@ -26,8 +26,6 @@ public class UserServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
 
     @DisplayName("Unit test for get all admins")
     @Test
@@ -61,5 +59,31 @@ public class UserServiceImplTest {
 
         assertThat(userDtos).isNotNull();
         userDtos.forEach((userDto) -> assertThat(userDto.getRole()).isEqualTo("ROLE_ADMIN"));
+    }
+
+    @DisplayName("Unit test for deactivating admin")
+    @Test
+    public void givenAdminId_whenDeactivatingAdmin_thenDeactivateAdmin() {
+        Role role = new Role(2, RoleEnum.ROLE_ADMIN);
+
+        User user = User.builder()
+                .id(1)
+                .email("benjamin@yahoo.com")
+                .isAccountNonLocked(true)
+                .username("admin")
+                .firstName("Benjamin")
+                .lastName("Brown")
+                .role(role)
+                .password("sample")
+                .isAllowNotifications(true)
+                .build();
+
+        given(this.userRepository.findById(1)).willReturn(Optional.of(user));
+        given(this.userRepository.save(user)).willReturn(user);
+
+        UserDto userDto = this.userServiceImpl.deactivateAdmin(1);
+
+        assertThat(userDto.getId()).isEqualTo(user.getId());
+        assertThat(userDto.isAccountNonLocked()).isEqualTo(false);
     }
 }
