@@ -54,4 +54,18 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.role", CoreMatchers.is("ROLE_ADMIN")));
     }
 
+    @Test
+    public void givenAdminId_whenReactivateAdmin_thenReturnStatusOk() throws Exception {
+
+        int adminId = 1;
+
+        given(this.userService.reactivateAdmin(adminId)).willReturn(any(UserDto.class));
+
+        ResultActions response = this.mockMvc.perform(MockMvcRequestBuilders
+                .put("/api/v1/users/admins/{adminId}/reactivate", adminId));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
 }
